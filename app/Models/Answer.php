@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Answer extends Model
 {
+    protected $guarded =[];
     use HasFactory;
 
-    public function feedbackForms(){
-        return $this->belongsTo(FeedbackForm::class);
+    public function questions(){
+        return $this->belongsTo(Question::class);
+    }
+    public function guests(){
+        return $this->belongsTo(Guest::class);
     }
 }

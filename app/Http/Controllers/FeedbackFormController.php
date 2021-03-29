@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
 use Auth;
@@ -16,7 +17,7 @@ class FeedbackFormController extends Controller
     public function index()
     {
         // Get all the posts ordered by published date
-        $feedbackForms = FeedbackForm::all();
+        $feedbackForms = FeedbackForm::latest()->get();
 
         return view('feedbackForm.index', compact('feedbackForms'));
     }
@@ -39,10 +40,23 @@ class FeedbackFormController extends Controller
      */
     public function store(Request $request)
     {
+
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
+        $this->validateFeedbackForm($request);
 
-        FeedbackForm::create($this->validateFeedbackForm($request));
+        $form = FeedbackForm::create([
+            'user_id' => request('user_id'),
+            'title' => request('title')
+        ]);
+
+    foreach(request('question') as $q){
+        $question = Question::create([
+          'form_id' => $form->id,
+          'question' => $q
+        ]);
+    }
+//        dd($request->all());
 
         return redirect('feedbackForm');
     }
@@ -99,12 +113,7 @@ class FeedbackFormController extends Controller
         return $request->validate([
             'title' => 'required',
             'user_id' => 'required',
-            'q1' => 'required',
-            'q2' => 'required',
-            'q3' => 'required',
-            'q4' => 'required',
-            'q5' => 'required',
-            'q6' => 'required'
+
         ]);
     }
 }

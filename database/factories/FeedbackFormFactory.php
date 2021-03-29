@@ -23,13 +23,7 @@ class FeedbackFormFactory extends Factory
     {
         return [
             'user_id' => 1,
-            'title' => $this->faker->title,
-            'q1' =>$this->faker->sentence,
-            'q2' =>$this->faker->sentence,
-            'q3' =>$this->faker->sentence,
-            'q4' =>$this->faker->sentence,
-            'q5' =>$this->faker->sentence,
-            'q6' =>$this->faker->sentence,
+            'title' => $this->faker->jobTitle
         ];
     }
 }

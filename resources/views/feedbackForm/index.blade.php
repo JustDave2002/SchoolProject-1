@@ -19,6 +19,7 @@
                             <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
                                 <h3 class="feature-title">{{$form->title}}</h3>
 
+                                <img src="https://www.zohowebstatic.com/sites/default/files/web.png" class="img-fluid" style="height: 200px">
 {{--                                <img src="{{$form->image}}" class="img-fluid" style="height: 200px">--}}
                             </a>
                         </div>

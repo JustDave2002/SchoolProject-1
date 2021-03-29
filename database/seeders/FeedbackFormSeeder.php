@@ -15,7 +15,7 @@ class FeedbackFormSeeder extends Seeder
     public function run()
     {
         FeedbackForm::factory()
-            ->count(10)
+            ->count(3)
             ->create();
     }
 }

@@ -11,17 +11,40 @@
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
             <div class="p-6 bg-white border-b border-gray-200">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Questions</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
                 @if(Auth::user()->id == $feedbackForm->user_id)
                 <div>{{$feedbackForm->title}}</div>
-                <div>{{$feedbackForm->q1}}</div>
-                <div>{{$feedbackForm->q2}}</div>
-                <div>{{$feedbackForm->q3}}</div>
-                <div>{{$feedbackForm->q4}}</div>
-                <div>{{$feedbackForm->q5}}</div>
-                <div>{{$feedbackForm->q6}}</div>
+                    <img src="https://www.zohowebstatic.com/sites/default/files/web.png" class="img-fluid" style="height: 600px">
+                    @foreach( $questions->form_id($feedbackForm->id)  as $question)
+
+                    @endforeach
 
                     @else
-                        You don't have permission to view this article.
+                        You don't have permission to view this Form.
                 @endif
 
             </div>

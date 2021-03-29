@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}">
-                        <img src="images\logo.png" width="35px" >
+                        <img src="\images\logo.png" width="35px" >
                     </a>
                 </div>
 
