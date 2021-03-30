@@ -22,7 +22,7 @@ class QuestionFactory extends Factory
     public function definition()
     {
         return [
-            'form_id'=>$this->faker->biasedNumberBetween(1,3),
+            'feedback_form_id'=>$this->faker->biasedNumberBetween(1,3),
             'question' =>$this->faker->sentence,
         ];
     }

@@ -15,7 +15,7 @@ class CreateQuestionsTable extends Migration
     {
         Schema::create('questions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('form_id')
+            $table->foreignId('feedback_form_id')
                 ->constrained('feedback_forms')
                 ->onDelete('cascade');
             $table->string('question');

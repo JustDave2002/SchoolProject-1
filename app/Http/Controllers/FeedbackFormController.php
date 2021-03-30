@@ -52,7 +52,7 @@ class FeedbackFormController extends Controller
 
     foreach(request('question') as $q){
         $question = Question::create([
-          'form_id' => $form->id,
+          'feedback_form_id' => $form->id,
           'question' => $q
         ]);
     }
