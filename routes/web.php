@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackFormController;
+use App\Http\Controllers\AnswerController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,5 +26,10 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
+
+Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
+
+Route::resource('answer', AnswerController::class)->middleware(['auth']);
+
 
 require __DIR__.'/auth.php';
