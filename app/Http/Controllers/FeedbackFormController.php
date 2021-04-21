@@ -40,7 +40,6 @@ class FeedbackFormController extends Controller
      */
     public function store(Request $request)
     {
-
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
         $this->validateFeedbackForm($request);
