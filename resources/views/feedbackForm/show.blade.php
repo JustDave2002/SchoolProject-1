@@ -15,7 +15,92 @@
 
                 <h1>{{$feedbackForm->title}}</h1>
                     <br>
-                    <img src="https://www.zohowebstatic.com/sites/default/files/web.png" class="img-fluid" style="height: 600px">
+
+                    <!DOCTYPE html>
+                    <html lang="en">
+                    <head>
+                        <meta charset="UTF-8">
+                        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+                        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+                        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+                        <title>Feedback</title>
+                    </head>
+                    <body>
+                    <div class="container">
+                        <canvas id="myChart"></canvas>
+                    </div>
+                    <script>
+                            let myChart = document.getElementById('myChart').getContext('2d');
+
+                            const data = {
+                                labels: ['Samenwerken', 'Profesioneel gedrag', 'Behulpzaamheid', 'Sociaal', 'Motivatie', 'Doorzettingsvermogen'],
+                                datasets: [
+                                    {
+                                        label: 'Teacher',
+                                        data: [1, 3, 4, 5, 3],
+                                        borderColor: '#777',
+                                        backgroundColor: 'rgba(255, 99, 132, 0.6)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Student',
+                                        data: [1, 2, 3, 4, 5],
+                                        borderColor: '#777',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Stage Begeleider',
+                                        data: [2, 5, 3, 3, 5],
+                                        borderColor: '#777',
+                                        backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            };
+
+                            // Global Options
+                            Chart.defaults.global.defaultFontFamily = 'Arial';
+                            Chart.defaults.global.defaultFontSize = 10;
+                            Chart.defaults.global.defaultFontColor = 'black';
+
+                            const options = {
+                                scale: {
+                                    ticks: {
+                                        min: 0,
+                                        max: 5,
+                                        stepSize: 1
+                                    }
+                                },
+                                legend: {
+                                    display: true,
+                                    position: 'right',
+                                    labels: {
+                                        fontColor: '#000',
+                                        fontSize: 12
+                                    }
+                                },
+                                layout: {
+                                    padding: {
+                                        left: 100,
+                                        right: 380,
+                                        bottom: 0,
+                                        top: 0
+                                    },
+                                }
+                            };
+
+
+                            let massPopChart = new Chart(myChart, {
+                                type: 'radar',
+                                options: options,
+                                data: data,
+                            });
+                    </script>
+
+                    </body>
+                    </html>
 
                     <table class="table">
                         <thead>
