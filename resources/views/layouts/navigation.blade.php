@@ -5,7 +5,7 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('feedbackForm.index') }}">
                         <img src="\images\logo.png" width="35px" >
                     </a>
                 </div>
