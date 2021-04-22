@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackForm;
+use App\Models\Answer;
 use Illuminate\Http\Request;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class AnswerController extends Controller
 {
@@ -38,22 +40,30 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
-        $this->validatePoints($request);
+//        $this->validatePoints($request);
 
-        $form = Answers::create([
-            'user_id' => request('user_id'),
-            'title' => request('title')
-        ]);
+        // validate function
+        //fix the user table
 
-        foreach(request('answer') as $a){
+
+        $questions = DB::table('Questions')->where('feedback_form_id', '=', $request->ID)->get('id');
+        $answers = request('answer');
+//        dd($questions);
+//        dd($request->all());
+
+
+        for($i=0; $i<count($questions); $i++) {
+
             $answer = Answer::create([
-                'feedback_form_id' => $form->id,
-                'answer' => $a
+                'question_id' => $questions[$i]->id,
+                'guest_id' => 1,
+                'answer' => $answers[$i]
             ]);
+            //echo $questions[$i]->id.'-'.$answers[$i].'<br>';
         }
+
 
         return redirect('feedbackForm');
     }

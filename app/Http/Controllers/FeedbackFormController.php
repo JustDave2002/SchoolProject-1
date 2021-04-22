@@ -68,7 +68,6 @@ class FeedbackFormController extends Controller
      */
     public function show(FeedbackForm $feedbackForm)
     {
-        dd($feedbackForm);
         return view('feedbackForm.show', ['feedbackForm' => $feedbackForm]);
     }
 
