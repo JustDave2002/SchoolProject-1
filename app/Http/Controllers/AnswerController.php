@@ -65,7 +65,7 @@ class AnswerController extends Controller
         }
 
 
-        return redirect('feedbackForm');
+        return redirect('feedbackForm')->with('message', 'Your feedback has been submitted!');
     }
 
     /**

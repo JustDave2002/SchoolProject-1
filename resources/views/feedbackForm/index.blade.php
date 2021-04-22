@@ -12,6 +12,11 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     You're logged in!
+                    @if(session()->has('message'))
+                        <div class="alert alert-success">
+                            {{ session()->get('message') }}
+                        </div>
+                    @endif
                     <div class="row">
                     @foreach(Auth::user()->feedbackForms as $form)
                         <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
