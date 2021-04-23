@@ -26,7 +26,7 @@
 {{--                        </div>--}}
                         <div class="form-group">
                             <label for="q1">Question</label><br>
-                            <input type="text" id="title" class="form-control" placeholder="Question 1" name="question[]" value="How good is Tom good at teamwork" required>
+                            <input type="text" id="title" class="form-control" placeholder="Question 1" name="question[]" value="How good is Tom good at teamwork">
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>

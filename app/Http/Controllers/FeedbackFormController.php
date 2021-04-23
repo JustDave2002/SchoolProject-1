@@ -43,10 +43,11 @@ class FeedbackFormController extends Controller
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
         $this->validateFeedbackForm($request);
+        dd($request->all());
 
         $form = FeedbackForm::create([
             'user_id' => request('user_id'),
-            'title' => request('title')
+            'title' => request('title'),
         ]);
 
     foreach(request('question') as $q){
@@ -112,7 +113,16 @@ class FeedbackFormController extends Controller
         return $request->validate([
             'title' => 'required',
             'user_id' => 'required',
-
+            'question' => 'required|array|min:6',
+            'question.*' => 'required|string|min:6',
         ]);
     }
 }
+
+
+
+
+
+
+
+
