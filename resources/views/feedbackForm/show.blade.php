@@ -28,17 +28,22 @@
                     </head>
                     <body>
                     <div class="container">
-                        <canvas id="myChart"></canvas>
+                        <canvas id="myChart" width="800" height="800"></canvas>
                     </div>
                     <script>
                             let myChart = document.getElementById('myChart').getContext('2d');
 
                             const data = {
-                                labels: ['Samenwerken', 'Profesioneel gedrag', 'Behulpzaamheid', 'Sociaal', 'Motivatie', 'Doorzettingsvermogen'],
+                                labels:[
+                                @foreach($feedbackForm->questions as $question)
+                                 '{{$question->question}}',
+                                @endforeach],
                                 datasets: [
                                     {
                                         label: 'Teacher',
-                                        data: [1, 3, 4, 5, 3],
+                                        data: [@foreach($question->answers as $answer)
+                                        '{{$answer->answer}}',
+                                            @endforeach],
                                         borderColor: '#777',
                                         backgroundColor: 'rgba(255, 99, 132, 0.6)',
                                         borderWidth: 1
@@ -75,7 +80,7 @@
                                 },
                                 legend: {
                                     display: true,
-                                    position: 'right',
+                                    position: 'bottom',
                                     labels: {
                                         fontColor: '#000',
                                         fontSize: 12
@@ -83,9 +88,9 @@
                                 },
                                 layout: {
                                     padding: {
-                                        left: 100,
-                                        right: 380,
-                                        bottom: 0,
+                                        left: 50,
+                                        right: 400,
+                                        bottom: 400,
                                         top: 0
                                     },
                                 }
@@ -121,14 +126,12 @@
                             @endforeach
                         </tr>
                     @endforeach
-
                     </tbody>
                 </table>
 
                     @else
                         You don't have permission to view this Form.
                 @endif
-
             </div>
         </div>
     </div>
