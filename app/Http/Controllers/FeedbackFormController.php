@@ -112,7 +112,7 @@ class FeedbackFormController extends Controller
             'title' => 'required',
             'user_id' => 'required',
             'question' => 'required|array|min:6',
-            'question.*' => 'required|string|min:6',
+            'question.*' => 'required|string',
         ]);
     }
 }
