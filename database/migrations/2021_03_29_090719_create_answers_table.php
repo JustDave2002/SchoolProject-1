@@ -19,8 +19,8 @@ class CreateAnswersTable extends Migration
                 ->constrained('questions')
                 ->onDelete('cascade');
 
-            $table->foreignId('guest_id')
-                ->constrained('guests')
+            $table->foreignId('answer_form_id')
+                ->constrained('answers')
                 ->onDelete('cascade');
 
             $table->string('answer');

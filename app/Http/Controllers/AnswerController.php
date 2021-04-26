@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackForm;
+use App\Models\answerForm;
 use App\Models\Answer;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
+
 
 class AnswerController extends Controller
 {
@@ -42,6 +44,12 @@ class AnswerController extends Controller
     {
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
+
+        $form = answerForm::create([
+            'user_id' => request('user_id'),
+            //'guest_id' => 'NULL',
+            'feedback_form_id' => request('ID'),
+        ]);
 //        $this->validatePoints($request);
 
         // validate function
@@ -51,14 +59,13 @@ class AnswerController extends Controller
         $questions = DB::table('Questions')->where('feedback_form_id', '=', $request->ID)->get('id');
         $answers = request('answer');
 //        dd($questions);
-//        dd($request->all());
 
 
         for($i=0; $i<count($questions); $i++) {
 
             $answer = Answer::create([
                 'question_id' => $questions[$i]->id,
-                'guest_id' => 1,
+                'answer_form_id' => $form->id,
                 'answer' => $answers[$i]
             ]);
             //echo $questions[$i]->id.'-'.$answers[$i].'<br>';

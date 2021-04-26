@@ -43,7 +43,6 @@ class FeedbackFormController extends Controller
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
         $this->validateFeedbackForm($request);
-        dd($request->all());
 
         $form = FeedbackForm::create([
             'user_id' => request('user_id'),
@@ -56,7 +55,6 @@ class FeedbackFormController extends Controller
           'question' => $q
         ]);
     }
-        dd($request->all());
 
         return redirect('feedbackForm');
     }
@@ -114,7 +112,7 @@ class FeedbackFormController extends Controller
             'title' => 'required',
             'user_id' => 'required',
             'question' => 'required|array|min:6',
-            'question.*' => 'required|string|min:6',
+            'question.*' => 'required|string',
         ]);
     }
 }
