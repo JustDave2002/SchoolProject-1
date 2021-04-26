@@ -55,6 +55,7 @@ class FeedbackFormController extends Controller
           'question' => $q
         ]);
     }
+//        dd($request->all());
 
         return redirect('feedbackForm');
     }
