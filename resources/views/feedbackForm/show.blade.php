@@ -21,18 +21,30 @@
                         <!DOCTYPE html>
                         <html lang="en">
                         <head>
+                            <!-- Js PDF -->
+                            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+                            <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
+                            <!-- Chart.js -->
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
                             <meta charset="UTF-8">
                             <meta name="viewport" content="width=device-width, initial-scale=1.0">
                             <meta http-equiv="X-UA-Compatible" content="ie=edge">
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
+
                             <link rel="stylesheet"
                                   href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
                             <title>Feedback</title>
                         </head>
                         <body>
-                        <div class="container">
-                            <canvas id="myChart" width="800" height="800"></canvas>
+                        <!-- PDF button -->
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>
+                        <!-- PDF section (everything in here will be in the PDF) -->
+                        <div class="canvas_div_pdf">
+                            <div class="container">
+                                <canvas id="myChart" width="800" height="800"></canvas>
+                            </div>
                         </div>
+                        <!-- Script for making the Chart.js -->
                         <script>
                             let myChart = document.getElementById('myChart').getContext('2d');
 
@@ -48,7 +60,7 @@
                                             @foreach($feedbackForm->questions as $question)
                                                 @foreach($question->answers as $answer)
                                                 '{{$answer->answer}}',
-                                                @endforeach
+                                            @endforeach
                                             @endforeach
                                         ],
                                         borderColor: '#777',
@@ -111,6 +123,39 @@
                             });
                         </script>
 
+                        <!-- Script for making the PDF download -->
+                        <script>
+                            function getPDF() {
+                                var HTML_Width = $(".canvas_div_pdf").width();
+                                var HTML_Height = $(".canvas_div_pdf").height();
+                                var top_left_margin = 15;
+                                var PDF_Width = HTML_Width + (top_left_margin * 2);
+                                var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+                                var canvas_image_width = HTML_Width;
+                                var canvas_image_height = HTML_Height;
+
+                                var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+
+                                html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
+                                    canvas.getContext('2d');
+
+                                    // console.log(canvas.height+"  "+canvas.width);
+
+                                    var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                                    var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+                                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+
+                                    for (var i = 1; i <= totalPDFPages; i++) {
+                                        pdf.addPage(PDF_Width, PDF_Height);
+                                        pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+                                    }
+
+                                    pdf.save("{{$feedbackForm->title}}.pdf");
+                                });
+                            };
+                        </script>
+
                         </body>
                         </html>
 
@@ -144,3 +189,4 @@
         </div>
     </div>
 </x-app-layout>
+

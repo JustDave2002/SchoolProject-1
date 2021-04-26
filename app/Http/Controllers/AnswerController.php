@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
 
+
 class AnswerController extends Controller
 {
     /**
@@ -17,9 +18,8 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        //
-    }
 
+    }
     /**
      * Show the form for creating a new resource.
      *
@@ -29,7 +29,6 @@ class AnswerController extends Controller
     {
         //dd($id);
         return view('answer.create',['feedbackForm' => $id]);
-
     }
 
     /**

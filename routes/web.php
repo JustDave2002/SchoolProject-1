@@ -31,5 +31,4 @@ Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middlewar
 
 Route::resource('answer', AnswerController::class)->middleware(['auth']);
 
-
 require __DIR__.'/auth.php';
