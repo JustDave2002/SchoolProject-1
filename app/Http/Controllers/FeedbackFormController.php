@@ -46,7 +46,7 @@ class FeedbackFormController extends Controller
 
         $form = FeedbackForm::create([
             'user_id' => request('user_id'),
-            'title' => request('title')
+            'title' => request('title'),
         ]);
 
     foreach(request('question') as $q){
@@ -55,7 +55,6 @@ class FeedbackFormController extends Controller
           'question' => $q
         ]);
     }
-//        dd($request->all());
 
         return redirect('feedbackForm');
     }
@@ -112,7 +111,16 @@ class FeedbackFormController extends Controller
         return $request->validate([
             'title' => 'required',
             'user_id' => 'required',
-
+            'question' => 'required|array|min:6',
+            'question.*' => 'required|string',
         ]);
     }
 }
+
+
+
+
+
+
+
+

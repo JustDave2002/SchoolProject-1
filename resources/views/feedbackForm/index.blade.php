@@ -11,21 +11,27 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    You're logged in!
-                    <div class="row">
-                    @foreach(Auth::user()->feedbackForms as $form)
-                        <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
-                             style="padding: 20px; border-radius: 25px; margin: 40px" >
-                            <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
-                                <h3 class="feature-title">{{$form->title}}</h3>
+                    @if(Auth::user()->role_id != NULL)
+                        <div class="row">
+                            @foreach(Auth::user()->feedbackForms as $form)
+                                <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
+                                     style="padding: 20px; border-radius: 25px; margin: 40px" >
+                                    <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
+                                        <h3 class="feature-title">{{$form->title}}</h3>
 
-                                <img src="https://www.zohowebstatic.com/sites/default/files/web.png" class="img-fluid" style="height: 200px">
-{{--                                <img src="{{$form->image}}" class="img-fluid" style="height: 200px">--}}
-                            </a>
+                                        <img src="https://www.zohowebstatic.com/sites/default/files/web.png" class="img-fluid" style="height: 200px">
+                                        {{--                                <img src="{{$form->image}}" class="img-fluid" style="height: 200px">--}}
+                                    </a>
+                                </div>
+                            @endforeach
                         </div>
-                    @endforeach
-                    </div>
-                    <button ><a href="{{route('feedbackForm.create')}}">create</a></button>
+                        <button ><a href="{{route('feedbackForm.create')}}">create</a></button>
+
+                    @else
+                        yo go to this page and fix that bs
+                        <button ><a href="/user">edit account</a></button>
+
+                    @endif
                 </div>
             </div>
         </div>

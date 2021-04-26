@@ -2,11 +2,9 @@
 
 namespace Database\Seeders;
 
-use App\Models\Answer;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\DB;
 
-class AnswerSeeder extends Seeder
+class AnswerFormSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,8 +13,6 @@ class AnswerSeeder extends Seeder
      */
     public function run()
     {
-        Answer::factory()
-            ->count(54)
-            ->create();
+        //
     }
 }

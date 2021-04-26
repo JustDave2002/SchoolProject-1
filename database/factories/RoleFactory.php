@@ -2,17 +2,17 @@
 
 namespace Database\Factories;
 
-use App\Models\FeedbackForm;
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class FeedbackFormFactory extends Factory
+class RoleFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = FeedbackForm::class;
+    protected $model = Role::class;
 
     /**
      * Define the model's default state.
@@ -22,8 +22,7 @@ class FeedbackFormFactory extends Factory
     public function definition()
     {
         return [
-            'user_id' => $this->faker->numberBetween(1,5),
-            'title' => $this->faker->jobTitle
+            //
         ];
     }
 }

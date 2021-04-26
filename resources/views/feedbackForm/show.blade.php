@@ -21,7 +21,9 @@
                         <thead>
                         <tr>
                             <th scope="col">Questions</th>
-                            <th scope="col">First</th>
+{{--                            @foreach($feedbackForm->questions->answers as $answer)--}}
+{{--                            <th scope="col">{{$answer->guests->function}}</th>--}}
+{{--                            @endforeach--}}
                             <th scope="col">Last</th>
                             <th scope="col">Handle</th>
                         </tr>
