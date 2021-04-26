@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackFormController;
 use App\Http\Controllers\AnswerController;
+use App\Http\Controllers\UserController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -30,6 +31,8 @@ Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['aut
 Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
 
 Route::resource('answer', AnswerController::class)->middleware(['auth']);
+
+Route::resource('user', UserController::class)->middleware(['auth']);
 
 
 require __DIR__.'/auth.php';

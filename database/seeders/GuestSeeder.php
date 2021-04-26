@@ -16,14 +16,15 @@ class GuestSeeder extends Seeder
     {
         DB::table('guests')->insert([
             [
-                'function' => "student",
+                'Name' => "Dave",
+                'role_id' => "1"
             ],
             [
-                'function' => "teacher",
-            ],
+                'Name' => "Elio",
+                'role_id' => "2"            ],
             [
-                'function' => "supervisor",
-            ]
+                'Name' => "person",
+                'role_id' => "3"            ]
         ]);
     }
 }
