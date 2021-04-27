@@ -23,7 +23,7 @@
                         <h1>{{$feedbackForm->title}}</h1>
                         <br>
                         <div class="container">
-                            <canvas id="myChart" width="800" height="800"></canvas>
+                            <canvas id="myChart" width="1500px" height="1000px" style="margin-bottom: 50px"></canvas>
                         </div>
                         <script>
                             let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'] ;
@@ -77,9 +77,9 @@
                                 },
                                 layout: {
                                     padding: {
-                                        left: 50,
-                                        right: 400,
-                                        bottom: 400,
+                                        left: 0,
+                                        right: 0,
+                                        bottom: 0,
                                         top: 0
                                     },
                                 }
