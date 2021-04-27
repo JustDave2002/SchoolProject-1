@@ -13,6 +13,25 @@
                     <form method="POST" action="{{route('answer.store')}}" class="was-validated">
                         @csrf
                         <input type="hidden" id="ID" name="ID" value="{{$feedbackForm->id}}">
+
+                        @if(Auth::check() == 0)
+                            <div class="form-group">
+                                <label for="name">Name</label><br>
+                                <input type="text" id="name" class="form-control" placeholder="Enter your name" name="name"  required>
+                                <div class="valid-feedback"><br></div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                            </div>
+                            <div class="form-group">
+                                <label for="title">Function</label><br>
+
+                                <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id"  required />
+                                @foreach($roles as $role)
+                                    <option value="{{$role->id}}">{{$role->name}}</option>
+                                @endforeach
+                                <div style='margin-top: 10%'></div>
+                            </div>
+                        @endif
+
                         @foreach($feedbackForm->questions as $question)
                             <div></div>
                                 <div class="form-group">

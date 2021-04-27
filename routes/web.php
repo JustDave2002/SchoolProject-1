@@ -28,9 +28,9 @@ Route::get('/dashboard', function () {
 
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 
-Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
+Route::get('/answer/create/{id}',[AnswerController::class, 'create']);
 
-Route::resource('answer', AnswerController::class)->middleware(['auth']);
+Route::resource('answer', AnswerController::class);
 
 Route::resource('user', UserController::class)->middleware(['auth']);
 

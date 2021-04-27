@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\FeedbackForm;
 use App\Models\answerForm;
 use App\Models\Answer;
+use App\Models\Role;
+use App\Models\Guest;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
@@ -29,8 +31,8 @@ class AnswerController extends Controller
      */
     public function create(FeedbackForm $id)
     {
-        //dd($id);
-        return view('answer.create',['feedbackForm' => $id]);
+        $roles = Role::all();
+        return view('answer.create',['feedbackForm' => $id, 'roles' =>$roles]);
 
     }
 
@@ -42,12 +44,20 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = Auth::user()->id;
-        $request->request->add(['user_id' => $user_id]);
-
+        if(Auth::check()){
+            $user_id = Auth::user()->id;
+            $request->request->add(['user_id' => $user_id]);
+            $guest_id = NULL;
+        }else{
+            $guest = Guest::create([
+                'name' => request('name'),
+                'role_id' => request('role_id')
+            ]);
+            $guest_id = $guest->id;
+        }
         $form = answerForm::create([
             'user_id' => request('user_id'),
-            //'guest_id' => 'NULL',
+            'guest_id' => $guest_id,
             'feedback_form_id' => request('ID'),
         ]);
 //        $this->validatePoints($request);
@@ -58,9 +68,8 @@ class AnswerController extends Controller
 
         $questions = DB::table('Questions')->where('feedback_form_id', '=', $request->ID)->get('id');
         $answers = request('answer');
-//        dd($questions);
-
-
+        //dd($questions, $request, $form, $guest_id);
+        //dd($form->id);
         for($i=0; $i<count($questions); $i++) {
 
             $answer = Answer::create([
@@ -71,8 +80,12 @@ class AnswerController extends Controller
             //echo $questions[$i]->id.'-'.$answers[$i].'<br>';
         }
 
+        if(Auth::check()){
+            return redirect('feedbackForm');
+        }else{
+            return redirect('/');
+        }
 
-        return redirect('feedbackForm');
     }
 
     /**
