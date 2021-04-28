@@ -3,12 +3,12 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
               crossorigin="anonymous">
-{{--        <meta charset="UTF-8">--}}
-{{--        <meta name="viewport" content="width=device-width, initial-scale=1.0">--}}
-{{--        <meta http-equiv="X-UA-Compatible" content="ie=edge">--}}
+
+        <!-- Js PDF -->
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
+        <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-{{--        <link rel="stylesheet"--}}
-{{--              href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">--}}
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Feedback form') }}
         </h2>
@@ -22,32 +22,6 @@
 
                         <h1>{{$feedbackForm->title}}</h1>
                         <br>
-
-
-
-
-                        <!DOCTYPE html>
-                        <html lang="en">
-                        <head>
-                            <!-- Js PDF -->
-                            <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
-                            <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
-                            <!-- Chart.js -->
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-                            <meta charset="UTF-8">
-                            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                            <meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-                            <link rel="stylesheet"
-                                  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-                            <title>Feedback</title>
-                        </head>
-                        <body>
-
-
-
-
                         <!-- PDF button -->
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>
                         <!-- PDF section (everything in here will be in the PDF) -->
