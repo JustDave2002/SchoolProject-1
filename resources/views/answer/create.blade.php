@@ -24,14 +24,13 @@
                             <div class="form-group">
                                 <label for="title">Function</label><br>
 
-                                <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id"  required />
+                                <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 40px" name="role_id"  required />
                                 @foreach($roles as $role)
                                     <option value="{{$role->id}}">{{$role->name}}</option>
                                 @endforeach
-                                <div style='margin-top: 10%'></div>
+                                </select>
                             </div>
                         @endif
-
                         @foreach($feedbackForm->questions as $question)
                             <div></div>
                                 <div class="form-group">

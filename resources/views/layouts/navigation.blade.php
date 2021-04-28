@@ -35,18 +35,24 @@
 
                     <x-slot name="content">
 
-                        <x-dropdown-link href="/user">
-                            {{ __('Account') }}
-                        </x-dropdown-link>
-                        <!-- Authentication -->
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
-                                                this.closest('form').submit();">
-                                {{ __('Log out') }}
+                        @if(Auth::check())
+                            <x-dropdown-link href="/user">
+                                {{ __('Account') }}
                             </x-dropdown-link>
-                        </form>
+                            <!-- Authentication -->
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')"
+                                        onclick="event.preventDefault();
+                                                this.closest('form').submit();">
+                                    {{ __('Log out') }}
+                                </x-dropdown-link>
+                            </form>
+                        @else
+                            <x-dropdown-link href="/login">
+                                {{ __('login') }}
+                            </x-dropdown-link>
+                        @endif
                     </x-slot>
                 </x-dropdown>
             </div>

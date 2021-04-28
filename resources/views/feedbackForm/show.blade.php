@@ -119,6 +119,7 @@
                             </tbody>
                         </table>
 
+                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feetback</a></button>
                     @else
                         You don't have permission to view this Form.
                     @endif
