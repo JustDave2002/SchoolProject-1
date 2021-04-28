@@ -35,5 +35,4 @@ Route::resource('answer', AnswerController::class);
 
 Route::resource('user', UserController::class)->middleware(['auth']);
 
-
 require __DIR__.'/auth.php';
