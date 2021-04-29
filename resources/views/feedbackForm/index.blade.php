@@ -13,17 +13,18 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
-                        Create Form
-                    </x-button>
-                    @if(session()->has('message'))
-                        <div class="alert alert-success">
-                            {{ session()->get('message') }}
-                        </div>
-                    @endif
+
                     @if(Auth::user()->role_id != NULL)
+                        <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
+                            Create Form
+                        </x-button>
+                        @if(session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
                         <div class="row">
-                            @foreach(Auth::user()->feedbackForms as $form)
+                            @foreach($feedbackForms as $form)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
                                      style="padding: 20px; border-radius: 25px; margin: 40px">
                                     <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
@@ -37,10 +38,12 @@
                                 </div>
                             @endforeach
                         </div>
+                        {{ $feedbackForms->links() }}
                     @else
-                        You should select your function
-                        <button ><a href="/user">edit account</a></button>
-
+                        Before you can start making feedback forms you need to edit your account <br>
+                        <x-button class="ml-3" onclick="document.location.href='{{route('user.index')}}'">
+                            Edit account
+                        </x-button>
                     @endif
                 </div>
             </div>
@@ -82,7 +85,7 @@
     Chart.defaults.global.defaultFontSize = 10;
     Chart.defaults.global.defaultFontColor = 'black';
 
-    @foreach(Auth::user()->feedbackForms as $feedbackForm)
+    @foreach($feedbackForms as $feedbackForm)
     let counter{{$feedbackForm->id}} = 0;
     let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 

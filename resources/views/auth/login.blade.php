@@ -57,6 +57,5 @@
 
             </div>
         </form>
-        <a href='/guestAnswer/create/5'>guest</a>
     </x-auth-card>
 </x-guest-layout>

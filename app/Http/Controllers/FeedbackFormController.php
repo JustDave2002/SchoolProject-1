@@ -17,9 +17,13 @@ class FeedbackFormController extends Controller
     public function index()
     {
         // Get all the posts ordered by published date
-        $feedbackForms = FeedbackForm::latest()->get();
-
-        return view('feedbackForm.index', compact('feedbackForms'));
+        $id = Auth::user()->id;
+        $feedbackForms = FeedbackForm::where('user_id',$id )
+            ->orderBy('created_at', 'desc')
+            ->orderBy('id', 'asc')
+            ->paginate(10);
+        //dd($feedbackForms);
+        return view('feedbackForm.index', ['feedbackForms' => $feedbackForms]);
     }
 
     /**
