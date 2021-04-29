@@ -80,7 +80,7 @@
     const data{{$feedbackForm->id}} = {
         labels: [
             @foreach($feedbackForm->questions as $question)
-            '{{$question->question}}',
+            '',
             @endforeach
         ],
         datasets: [

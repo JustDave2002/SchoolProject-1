@@ -27,7 +27,7 @@
                         <!-- PDF section (everything in here will be in the PDF) -->
                         <div class="canvas_div_pdf">
                             <div class="container">
-                                <canvas id="myChart" width="800" height="800"></canvas>
+                                <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
                         </div>
                         <!-- Script for making the Chart.js -->
