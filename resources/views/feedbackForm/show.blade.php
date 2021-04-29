@@ -23,7 +23,10 @@
                         <h1>{{$feedbackForm->title}}</h1>
                         <br>
                         <!-- PDF button -->
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>
+{{--                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>--}}
+                        <x-button class="ml-3" onclick="getPDF()">
+                            download PDF
+                        </x-button>
                         <!-- PDF section (everything in here will be in the PDF) -->
                         <div class="canvas_div_pdf">
                             <div class="container">

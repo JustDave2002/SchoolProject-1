@@ -18,7 +18,7 @@
                 <div>{{$user->role->name}}</div>
                 @endif
 
-                <button onclick="location.href='/user/{{$user->id}}/edit'" type="button" style="float: left">Edit</button>
+                <x-button onclick="location.href='/user/{{$user->id}}/edit'" type="button" style="float: left">Edit</x-button>
             </div>
         </div>
     </div>

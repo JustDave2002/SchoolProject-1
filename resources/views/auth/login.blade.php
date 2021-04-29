@@ -47,9 +47,13 @@
                     </a>
                 @endif
 
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
+{{--                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">--}}
+{{--                    {{ __('Log in') }}--}}
+{{--                </button>--}}
+
+                    <x-button class="ml-3">
+                        {{ __('Log in') }}
+                    </x-button>
 
             </div>
         </form>

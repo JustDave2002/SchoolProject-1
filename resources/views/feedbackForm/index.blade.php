@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+              integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+              crossorigin="anonymous">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('Dashboard') }}
@@ -11,7 +13,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                @if(session()->has('message'))
+                    <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
+                        Create Form
+                    </x-button>
+                    @if(session()->has('message'))
                         <div class="alert alert-success">
                             {{ session()->get('message') }}
                         </div>
@@ -20,22 +25,21 @@
                         <div class="row">
                             @foreach(Auth::user()->feedbackForms as $form)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
-                                     style="padding: 20px; border-radius: 25px; margin: 40px" >
+                                     style="padding: 20px; border-radius: 25px; margin: 40px">
                                     <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
                                         <h3 class="feature-title">{{$form->title}}</h3>
 
                                         <div class="container">
-                                            <canvas id="myChart{{$form->id}}" width="200px" height="120px" style="margin-bottom: 50px"></canvas>
+                                            <canvas id="myChart{{$form->id}}" width="200px" height="120px"
+                                                    style="margin-bottom: 50px"></canvas>
                                         </div>
                                     </a>
                                 </div>
                             @endforeach
                         </div>
-                        <button ><a href="{{route('feedbackForm.create')}}">create</a></button>
-
                     @else
                         yo go to this page and fix that bs
-                        <button ><a href="/user">edit account</a></button>
+                        <button><a href="/user">edit account</a></button>
 
                     @endif
                 </div>
@@ -45,7 +49,7 @@
 </x-app-layout>
 
 <script>
-    let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'] ;
+    let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'];
 
     const options = {
         scale: {
@@ -85,7 +89,7 @@
     const data{{$feedbackForm->id}} = {
         labels: [
             @foreach($feedbackForm->questions as $question)
-            '',
+                '',
             @endforeach
         ],
         datasets: [
