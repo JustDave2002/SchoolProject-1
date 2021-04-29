@@ -143,7 +143,7 @@
                                     @if($answerForm->guest == NULL)
                                         <th scope="col">{{$answerForm->user->name}}, {{$answerForm->user->role->name}} </th>
                                     @else
-                                        <th scope="col">{{$answerForm->guest->name}}, {{$answerForm->guest->role->name}} </th>
+                                        <th scope="col">{{$answerForm->guest->Name}}, {{$answerForm->guest->role->name}} </th>
                                     @endif
                                 @endforeach
                             </tr>
