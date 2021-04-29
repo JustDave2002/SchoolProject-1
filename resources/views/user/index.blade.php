@@ -20,8 +20,7 @@
                 <br>
                 <br>
                 <br>
-                <br>
-                <button onclick="location.href='/user/{{$user->id}}/edit'" type="button" style="float: left"><b><i>Edit</i></b></button>
+                <x-button onclick="location.href='/user/{{$user->id}}/edit'" type="button" style="float: left"><b><i>Edit</i></b></x-button>
             </div>
         </div>
     </div>
