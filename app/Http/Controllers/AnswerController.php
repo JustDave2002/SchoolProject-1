@@ -80,11 +80,12 @@ class AnswerController extends Controller
         }
 
         if(Auth::check()){
-            return redirect('feedbackForm');
+            return redirect('feedbackForm')->with('message', 'Your feedback has been submitted!');
         }else{
             return redirect('/');
         }
 
+        
     }
 
     /**
