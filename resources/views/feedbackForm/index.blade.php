@@ -15,14 +15,14 @@
                 <div class="p-6 bg-white border-b border-gray-200">
 
                     @if(Auth::user()->role_id != NULL)
-                        <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
-                            Create Form
-                        </x-button>
                         @if(session()->has('message'))
                             <div class="alert alert-success">
                                 {{ session()->get('message') }}
                             </div>
                         @endif
+                        <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
+                            Create Form
+                        </x-button>
                         <div class="row">
                             @foreach($feedbackForms as $form)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"

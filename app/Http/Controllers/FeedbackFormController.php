@@ -60,7 +60,7 @@ class FeedbackFormController extends Controller
         ]);
     }
 
-        return redirect('feedbackForm');
+        return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
     }
 
     /**
