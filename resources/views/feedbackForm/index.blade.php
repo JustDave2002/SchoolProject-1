@@ -34,7 +34,7 @@
                         <button ><a href="{{route('feedbackForm.create')}}">create</a></button>
 
                     @else
-                        yo go to this page and fix that bs
+                        You should select your function
                         <button ><a href="/user">edit account</a></button>
 
                     @endif
