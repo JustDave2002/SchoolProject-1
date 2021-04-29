@@ -161,7 +161,7 @@
                             </tbody>
                         </table>
 
-                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feetback</a></button>
+                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feedback</a></button>
                     @else
                         You don't have permission to view this Form.
                     @endif

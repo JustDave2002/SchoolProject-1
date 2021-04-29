@@ -38,8 +38,8 @@
                             @endforeach
                         </div>
                     @else
-                        yo go to this page and fix that bs
-                        <button><a href="/user">edit account</a></button>
+                        You should select your function
+                        <button ><a href="/user">edit account</a></button>
 
                     @endif
                 </div>
