@@ -39,20 +39,31 @@
                     <span class="ml-2 text-sm text-gray-600">{{ __('Remember me') }}</span>
                 </label>
             </div>
-
-            <div class="flex items-center justify-end mt-4">
-                @if (Route::has('password.request'))
-                    <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
-                        {{ __('Forgot your password?') }}
-                    </a>
-                @endif
-
-                <x-button class="ml-3">
-                    {{ __('Log in') }}
-                </x-button>
-
+<br>
+            <div class="container ">
+                <div class="row">
+                    <div class="col-sm" style="padding-left: 0px">
+                        <div class="grid text-left">
+                            @if (Route::has('register'))
+                                <a href="{{ route('register') }}" class="underline text-sm text-gray-600 hover:text-gray-900">Don't have an account yet?</a>
+                            @endif
+                            @if (Route::has('password.request'))
+                                <a class="underline text-sm text-gray-600 hover:text-gray-900" href="{{ route('password.request') }}">
+                                    {{ __('Forgot your password?') }}
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+{{--                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">--}}
+{{--                    {{ __('Log in') }}--}}
+{{--                </button>--}}
+                    <div class="col-sm flex items-center justify-end">
+                        <x-button class="ml-3">
+                            {{ __('Log in') }}
+                        </x-button>
+                    </div>
+                </div>
             </div>
         </form>
-        <a href='/guestAnswer/create/5'>guest</a>
     </x-auth-card>
 </x-guest-layout>

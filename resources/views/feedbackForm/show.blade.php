@@ -23,7 +23,10 @@
                         <h1>{{$feedbackForm->title}}</h1>
                         <br>
                         <!-- PDF button -->
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>
+{{--                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" onclick="getPDF()">download PDF</button>--}}
+                        <x-button class="ml-3" onclick="getPDF()">
+                            download PDF
+                        </x-button>
                         <!-- PDF section (everything in here will be in the PDF) -->
                         <div class="canvas_div_pdf">
                             <div class="container">
@@ -140,7 +143,7 @@
                                     @if($answerForm->guest == NULL)
                                         <th scope="col">{{$answerForm->user->name}}, {{$answerForm->user->role->name}} </th>
                                     @else
-                                        <th scope="col">{{$answerForm->guest->name}}, {{$answerForm->guest->role->name}} </th>
+                                        <th scope="col">{{$answerForm->guest->Name}}, {{$answerForm->guest->role->name}} </th>
                                     @endif
                                 @endforeach
                             </tr>
@@ -158,7 +161,7 @@
                             </tbody>
                         </table>
 
-                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feetback</a></button>
+                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feedback</a></button>
                     @else
                         You don't have permission to view this Form.
                     @endif
