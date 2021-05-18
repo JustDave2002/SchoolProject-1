@@ -45,27 +45,27 @@ class FeedbackFormController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id = Auth::user()->id;
-        $request->request->add(['user_id' => $user_id]);
-        $this->validateFeedbackForm($request);
-
-        $formBinder = formBinder::create([
-            'form_binder_id' => request(user_id),
-            'title' => request('binderTitle'),
-        ]);
-        foreach (request('title')as $formTitle){
-        $form = FeedbackForm::create([
-            'form_binder_id' => $formBinder->id,
-            'title' => $formTitle,
-        ]);
-
-    foreach(request('question') as $q){
-        $question = Question::create([
-          'feedback_form_id' => $form->id,
-          'question' => $q
-        ]);
-    }
-    }
+//        $user_id = Auth::user()->id;
+//        $request->request->add(['user_id' => $user_id]);
+//        $this->validateFeedbackForm($request);
+//
+//        $formBinder = formBinder::create([
+//            'form_binder_id' => request(user_id),
+//            'title' => request('binderTitle'),
+//        ]);
+//        foreach (request('title')as $formTitle){
+//        $form = FeedbackForm::create([
+//            'form_binder_id' => $formBinder->id,
+//            'title' => $formTitle,
+//        ]);
+//
+//    foreach(request('question') as $q){
+//        $question = Question::create([
+//          'feedback_form_id' => $form->id,
+//          'question' => $q
+//        ]);
+ //   }
+   // }
         return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
     }
 
