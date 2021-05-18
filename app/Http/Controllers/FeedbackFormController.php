@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\formBinder;
 use App\Models\Question;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
@@ -48,9 +49,14 @@ class FeedbackFormController extends Controller
         $request->request->add(['user_id' => $user_id]);
         $this->validateFeedbackForm($request);
 
+        $formBinder = formBinder::create([
+            'form_binder_id' => request(user_id),
+            'title' => request('binderTitle'),
+        ]);
+        foreach (request('title')as $formTitle){
         $form = FeedbackForm::create([
-            'user_id' => request('user_id'),
-            'title' => request('title'),
+            'form_binder_id' => $formBinder->id,
+            'title' => $formTitle,
         ]);
 
     foreach(request('question') as $q){
@@ -59,7 +65,7 @@ class FeedbackFormController extends Controller
           'question' => $q
         ]);
     }
-
+    }
         return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
     }
 
