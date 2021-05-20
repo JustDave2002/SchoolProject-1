@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackFormController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\EmailtoolController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -34,5 +35,7 @@ Route::get('/guestAnswer/create/{id}',[AnswerController::class, 'create']);
 Route::resource('answer', AnswerController::class);
 
 Route::resource('user', UserController::class)->middleware(['auth']);
+
+Route::get('/sendmail/test', [EmailtoolController::class, 'store'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

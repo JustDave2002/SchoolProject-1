@@ -27,6 +27,30 @@
                         <x-button class="ml-3" onclick="getPDF()">
                             download PDF
                         </x-button>
+                        <!-- email implementation -->
+                        <x-button class="ml-3" onclick="showElement()">
+                            ask feedback
+                        </x-button>
+                        <form class="formEmail" name="yes" style="visibility: hidden; padding-top: 20px; padding-left: 16px" action="/sendmail/test">
+                            <div class="form-row align-items-center">
+                                <div class="col-auto">
+                                    <label class="sr-only" for="inlineFormInput">E-mail</label>
+                                    <input type="text" class="form-control mb-2" name="email"
+                                           placeholder="Enter a email">
+                                </div>
+                                <div class="col-auto">
+                                    <div class="form-check mb-2">
+                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck">
+                                        <label class="form-check-label" for="autoSizingCheck">
+                                            Guest
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-auto">
+                                    <button type="submit" class="btn btn-primary mb-2">Send</button>
+                                </div>
+                            </div>
+                        </form>
                         <!-- PDF section (everything in here will be in the PDF) -->
                         <div class="canvas_div_pdf">
                             <div class="container">
@@ -133,6 +157,14 @@
                                     pdf.save("{{$feedbackForm->title}}.pdf");
                                 });
                             };
+                        </script>
+
+                        <!-- Script to make email section visible -->
+                        <script type="text/javascript">
+                            function showElement() {
+                                element = document.querySelector('.formEmail');
+                                element.style.visibility = 'visible';
+                            }
                         </script>
 
                         <table class="table">
