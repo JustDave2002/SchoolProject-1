@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateFeedbackFormsTable extends Migration
+class CreateFormBindersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,11 +13,10 @@ class CreateFeedbackFormsTable extends Migration
      */
     public function up()
     {
-        Schema::create('feedback_forms', function (Blueprint $table) {
+        Schema::create('form_binders', function (Blueprint $table) {
             $table->id();
-
-            $table->foreignId('form_binder_id')
-                ->constrained('form_binders')
+            $table->foreignId('user_id')
+                ->constrained('users')
                 ->onDelete('cascade');
             $table->string('title');
             $table->timestamps();
@@ -31,6 +30,6 @@ class CreateFeedbackFormsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('feedback_forms');
+        Schema::dropIfExists('form_binders');
     }
 }

@@ -10,8 +10,67 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('feedbackForm.store')}}" class="was-validated">
+                    <div method="POST" action="{{route('feedbackForm.store')}}" class="was-validated">
                         @csrf
+
+                        <script type="text/javascript">
+                            function showElement() {
+                                element = document.querySelector('.categoryForm');
+                                checkbox = document.getElementById("checkBox");
+
+                                if (checkbox.checked === true) {
+                                    element.style.visibility = 'visible';
+                                    element.style.display = 'block';
+
+                                }
+
+                                if (checkbox.checked === false) {
+                                    element.style.visibility = 'hidden';
+                                    element.style.display = 'none';
+                                }
+                            }
+
+                            let dropdownValue = 1;
+
+                            function onClickDropdown() {
+                                let dropdown = document.getElementById("dropdown");
+                                dropdownValue = dropdown.value;
+                                console.log(dropdownValue);
+                                {{dropdownValue = $dropdownValue}}
+                            }
+                        </script>
+
+                        <div>
+                            <label for="category"> Do you want categories? </label>
+                            <input type="checkbox" id="checkBox" onclick="showElement()">
+                        </div>
+
+                        <div class='categoryForm' style="display: none">
+                            <div>
+                                <label for="title">Form Title</label><br>
+                                <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="het grote feedback from" required>
+                                <div class="valid-feedback"><br></div>
+                                <div class="invalid-feedback">Please fill out this field.</div>
+                                <label for="title">Function</label>
+
+                                <div>
+                                <select id="dropdown" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id" onclick="onClickDropdown()"  required />
+
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                                <option value="6">6</option>
+                                </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
                         <div class="form-group">
                             <label for="title">Title</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="Feedback for Tom" required>
@@ -63,6 +122,13 @@
                         <br>
                         <br>
                         <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
+
+                    @for ($i = 1; $i >= $dropdownValue; $i--)
+                        {
+                    hoi
+                        }
+                        @endfor
+
                     </form>
 
                 </div>

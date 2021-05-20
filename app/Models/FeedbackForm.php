@@ -10,8 +10,8 @@ class FeedbackForm extends Model
     protected $guarded =[];
     use HasFactory;
 
-    public function users(){
-        return $this->belongsTo(User::class);
+    public function formBinderS(){
+        return $this->belongsTo(formBinder::class);
     }
 
     public function questions(){
