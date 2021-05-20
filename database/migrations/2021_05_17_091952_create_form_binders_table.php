@@ -19,6 +19,7 @@ class CreateFormBindersTable extends Migration
                 ->constrained('users')
                 ->onDelete('cascade');
             $table->string('title');
+            $table->integer('form_count');
             $table->timestamps();
         });
     }

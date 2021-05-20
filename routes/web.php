@@ -26,7 +26,11 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth'])->name('dashboard');
 
+Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth']);
+Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm'])->middleware(['auth'])->name('feedbackForm.storeForm');
+
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
+
 
 Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
 Route::get('/guestAnswer/create/{id}',[AnswerController::class, 'create']);

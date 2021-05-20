@@ -37,14 +37,58 @@ class FeedbackFormController extends Controller
         return view('feedbackForm.create');
     }
 
+    public function store(Request $request)
+    {
+        //is standaard 1
+        $user_id = Auth::user()->id;
+        $request->request->add(['user_id' => $user_id]);
+
+        $this->validateFormBinder($request);
+        $formBinder = formBinder::create([
+            'user_id' => request('user_id'),
+            'title' => request('title'),
+            'form_count' => request('form_count'),
+        ]);
+
+        return redirect('feedbackForm/createForm');
+    }
+
+    public function createForm()
+    {
+        return view('feedbackForm/createForm');
+
+    }
+    public function storeForm(Request $request)
+    {
+
+        $this->validateFeedbackForm($request);
+
+        $form = FeedbackForm::create([
+            'user_id' => request('user_id'),
+            'title' => request('title'),
+        ]);
+
+        foreach(request('question') as $q){
+            $question = Question::create([
+                'feedback_form_id' => $form->id,
+                'question' => $q
+            ]);
+        }
+//        if(){
+//
+//        }else{
+//            return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
+//        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+//    public function store(Request $request)
+//    {
 //        $user_id = Auth::user()->id;
 //        $request->request->add(['user_id' => $user_id]);
 //        $this->validateFeedbackForm($request);
@@ -66,8 +110,11 @@ class FeedbackFormController extends Controller
 //        ]);
  //   }
    // }
-        return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
-    }
+//        return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
+//    }
+
+
+
 
     /**
      * Display the specified resource.
