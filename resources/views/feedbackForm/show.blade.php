@@ -36,107 +36,7 @@
                                 <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
                         </div>
-                        <!-- Script for making the Chart.js -->
-                        <script>
-                            let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'] ;
-                            let counter = 0;
-                            let myChart = document.getElementById('myChart').getContext('2d');
 
-                            const data = {
-                                labels: [@foreach($feedbackForm->questions as $question)
-                                    '{{$question->question}}',
-                                    @endforeach],
-                                datasets: [
-                                            @foreach($feedbackForm->answerForms as $answerForm){
-                                                @if($answerForm->guest == NULL)
-                                                label: '{{$answerForm->user->role->name}}',
-                                                @else
-                                                label: '{{$answerForm->guest->role->name}}',
-                                                @endif
-                                                data: [
-                                                    @foreach($answerForm->answers as $answer)
-                                                        '{{$answer->answer}}',
-                                                    @endforeach
-                                                ],
-                                                borderColor: '#777',
-                                                backgroundColor: `${color[counter ++]}`,
-                                                borderWidth: 1
-                                            },
-                                            @endforeach
-                                ]
-                            };
-
-                            // Global Options
-                            Chart.defaults.global.defaultFontFamily = 'Arial';
-                            Chart.defaults.global.defaultFontSize = 10;
-                            Chart.defaults.global.defaultFontColor = 'black';
-
-                            const options = {
-                                scale: {
-                                    ticks: {
-                                        min: 0,
-                                        max: 5,
-                                        stepSize: 1
-                                    }
-                                },
-                                legend: {
-                                    display: true,
-                                    position: 'bottom',
-                                    labels: {
-                                        fontColor: '#000',
-                                        fontSize: 12
-                                    }
-                                },
-                                layout: {
-                                    padding: {
-                                        left: 0,
-                                        right: 0,
-                                        bottom: 0,
-                                        top: 0
-                                    },
-                                }
-                            };
-
-
-                            let massPopChart = new Chart(myChart, {
-                                type: 'radar',
-                                options: options,
-                                data: data,
-                            });
-                        </script>
-
-                        <!-- Script for making the PDF download -->
-                        <script>
-                            function getPDF() {
-                                var HTML_Width = $(".canvas_div_pdf").width();
-                                var HTML_Height = $(".canvas_div_pdf").height();
-                                var top_left_margin = 15;
-                                var PDF_Width = HTML_Width + (top_left_margin * 2);
-                                var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-                                var canvas_image_width = HTML_Width;
-                                var canvas_image_height = HTML_Height;
-
-                                var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
-
-                                html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
-                                    canvas.getContext('2d');
-
-                                    // console.log(canvas.height+"  "+canvas.width);
-
-                                    var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                                    var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-
-                                    for (var i = 1; i <= totalPDFPages; i++) {
-                                        pdf.addPage(PDF_Width, PDF_Height);
-                                        pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
-                                    }
-
-                                    pdf.save("{{$feedbackForm->title}}.pdf");
-                                });
-                            };
-                        </script>
 
                         <table class="table">
                             <thead>
@@ -167,7 +67,6 @@
                         <button ><a href="/answer/create/{{$binder->id}}">submit feedback</a></button>
                         @endforeach
                     @else
-                        {{$binder}}
                         You don't have permission to view this Form.
                     @endif
                 </div>
@@ -176,3 +75,104 @@
     </div>
 </x-app-layout>
 
+<!-- Script for making the Chart.js -->
+<script>
+    let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'] ;
+    let counter = 0;
+    let myChart = document.getElementById('myChart').getContext('2d');
+
+    const data = {
+        labels: [@foreach($feedbackForm->questions as $question)
+            '{{$question->question}}',
+            @endforeach],
+        datasets: [
+                @foreach($feedbackForm->answerForms as $answerForm){
+                @if($answerForm->guest == NULL)
+                label: '{{$answerForm->user->role->name}}',
+                @else
+                label: '{{$answerForm->guest->role->name}}',
+                @endif
+                data: [
+                    @foreach($answerForm->answers as $answer)
+                        '{{$answer->answer}}',
+                    @endforeach
+                ],
+                borderColor: '#777',
+                backgroundColor: `${color[counter ++]}`,
+                borderWidth: 1
+            },
+            @endforeach
+        ]
+    };
+
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Arial';
+    Chart.defaults.global.defaultFontSize = 10;
+    Chart.defaults.global.defaultFontColor = 'black';
+
+    const options = {
+        scale: {
+            ticks: {
+                min: 0,
+                max: 5,
+                stepSize: 1
+            }
+        },
+        legend: {
+            display: true,
+            position: 'bottom',
+            labels: {
+                fontColor: '#000',
+                fontSize: 12
+            }
+        },
+        layout: {
+            padding: {
+                left: 0,
+                right: 0,
+                bottom: 0,
+                top: 0
+            },
+        }
+    };
+
+
+    let massPopChart = new Chart(myChart, {
+        type: 'radar',
+        options: options,
+        data: data,
+    });
+</script>
+
+<!-- Script for making the PDF download -->
+<script>
+    function getPDF() {
+        var HTML_Width = $(".canvas_div_pdf").width();
+        var HTML_Height = $(".canvas_div_pdf").height();
+        var top_left_margin = 15;
+        var PDF_Width = HTML_Width + (top_left_margin * 2);
+        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+        var canvas_image_width = HTML_Width;
+        var canvas_image_height = HTML_Height;
+
+        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
+
+
+        html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
+            canvas.getContext('2d');
+
+            // console.log(canvas.height+"  "+canvas.width);
+
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+
+            for (var i = 1; i <= totalPDFPages; i++) {
+                pdf.addPage(PDF_Width, PDF_Height);
+                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+            }
+
+            pdf.save("{{$feedbackForm->title}}.pdf");
+        });
+    };
+</script>

@@ -10,7 +10,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('feedbackForm.storeForm')}}" class="was-validated">
+                    <form method="POST" action="{{route('feedbackForm.storeForm')}}" class="was-validated" name="feedbackForm">
                         @csrf
                         <div class="form-group">
                             <label for="title">Title</label><br>
@@ -56,15 +56,37 @@
                         </div>
                         <br>
                         <br>
-                        {{$formCount}}
-                        @if($formCount == 1)
-                            <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
+                        <input type="hidden" id="goBack" name="goBack" value="0">
+
+{{--                        {{$index}}{{$counter}}--}}
+
+                        <div class="row">
+                            <div class="col-md-6 text-left">
+                                @if($index > 0)
+                                    <a class="btn btn-danger pull-right" onclick="goBack()">Previous</a>
+                                @endif
+                            </div>
+                        @if($counter == 1)
+                            <div class="col-md-6 text-right">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                        </div>
                         @else
-                            <input class="btn btn-primary" style="width: 95%" type="submit" value="Next">
+                                <div class="col-md-6 text-right">
+                                <button type="submit" class="btn btn-primary">Next</button>
+                                </div>
                         @endif
+                        </div>
                     </form>
                 </div>
             </div>
         </div>
+        <script>
+
+            function goBack(){
+                    document.getElementById('goBack').value = 1
+                document.feedbackForm.submit()
+            }
+        </script>
     </div>
 </x-app-layout>
+

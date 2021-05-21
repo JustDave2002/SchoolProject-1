@@ -55,13 +55,7 @@
     </div>
 </x-app-layout>
 
-@foreach($formBinders as $binder)
-    @foreach($binder->feedbackForms as $form)
-      @if($loop->first)
-        {{$form->id}}
-      @endif
-    @endforeach
-@endforeach
+
 <script>
     let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'];
 
