@@ -30,8 +30,7 @@
                         <x-button class="ml-3" onclick="showElement()">
                             ask feedback
                         </x-button>
-
-                        <form class="formEmail" style="visibility: hidden; padding-top: 20px; padding-left: 16px" >
+                        <form class="formEmail" name="yes" style="visibility: hidden; padding-top: 20px; padding-left: 16px" action="/sendmail/test">
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
                                     <label class="sr-only" for="inlineFormInput">E-mail</label>
