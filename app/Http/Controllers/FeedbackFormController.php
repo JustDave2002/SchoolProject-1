@@ -59,11 +59,13 @@ class FeedbackFormController extends Controller
 
     public function createForm(Request $request)
     {
-        $formCount = $request->session()->decrement('formCount');
+        $formCount = $request->session()->get('formCount');
         $formBinder = $request->session()->get('formBinder');
         return view('feedbackForm/createForm', compact('formBinder', 'formCount'));
 
     }
+
+
     public function storeForm(Request $request)
     {
         $formBinder = $request->session()->get('formBinder');
@@ -82,11 +84,12 @@ class FeedbackFormController extends Controller
             ]);
         }
         $count = $request->session()->get('formCount');
-        if($count == 0){
+        if($count == 1){
             return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
 
         }
         else{
+            $request->session()->decrement('formCount');
             return redirect('feedbackForm/createForm');
         }
     }

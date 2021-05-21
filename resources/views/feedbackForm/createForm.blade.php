@@ -57,7 +57,7 @@
                         <br>
                         <br>
                         {{$formCount}}
-                        @if($formCount == 0)
+                        @if($formCount == 1)
                             <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
                         @else
                             <input class="btn btn-primary" style="width: 95%" type="submit" value="Next">
