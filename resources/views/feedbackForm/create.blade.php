@@ -14,9 +14,9 @@
                         @csrf
 
                         <div>
-                            <label class="container" for="checkBox"> Do you want a collection of multiple feedback forms?
+                            <label class="container" style="padding: 0px; margin: 0px" for="checkBox"> <h5 style="margin-bottom: 5px">Do you want a collection of multiple feedback forms?</h5>
                             <br>
-                            <input type="checkbox" id="checkBox" checked onclick="showElement()">
+                            <input type="checkbox" id="checkBox" onclick="showElement()">
                             <span class="checkmark"></span>
                             </label>
                         </div>
@@ -24,7 +24,7 @@
                         <div class='categoryForm' style="display: none">
                             <br>
                             <div>
-                                <label for="title">Form Title</label><br>
+                                <label style="margin: 0px" for="title">Form Title</label><br>
                                 <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="het grote feedback from" required>
                                 <div class="valid-feedback"><br></div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
@@ -33,6 +33,7 @@
                                 <div>
                                 <select id="dropdown" class="block mt-1 w-full" style="margin-bottom: 30px" name="form_count" onclick="onClickDropdown()"  required />
 
+                                <option value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
@@ -44,7 +45,7 @@
                         </div>
                         <br>
                         <br>
-                        <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
+                        <input class="btn btn-primary" style="width: 95%" type="submit" value="Next">
                     </form>
                     </form>
                 </div>
@@ -90,7 +91,7 @@
         display: inline-block;
         top: 0;
         left: 0;
-        margin-top: 15px;
+        /*margin-top: 15px;*/
         height: 35px;
         width: 35px;
         border-radius: 5px;

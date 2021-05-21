@@ -10,16 +10,19 @@
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Feedback form') }}
+            {{ __($binder->title) }}
         </h2>
     </x-slot>
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(Auth::user()->id == $binder->user_id)
+                {{ $feedbackForms->links() }}
+            <br>
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    @if(Auth::user()->id == $feedbackForm->user_id)
 
+                    @foreach($feedbackForms as $feedbackForm)
                         <h1>{{$feedbackForm->title}}</h1>
                         <br>
                         <!-- PDF button -->
@@ -161,8 +164,10 @@
                             </tbody>
                         </table>
 
-                        <button ><a href="/answer/create/{{$feedbackForm->id}}">submit feedback</a></button>
+                        <button ><a href="/answer/create/{{$binder->id}}">submit feedback</a></button>
+                        @endforeach
                     @else
+                        {{$binder}}
                         You don't have permission to view this Form.
                     @endif
                 </div>

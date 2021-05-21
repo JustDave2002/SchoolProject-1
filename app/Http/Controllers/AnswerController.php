@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\FeedbackForm;
 use App\Models\answerForm;
 use App\Models\Answer;
+use App\Models\formBinder;
 use App\Models\Role;
 use App\Models\Guest;
 use Illuminate\Http\Request;
@@ -28,10 +29,13 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(FeedbackForm $id)
+    public function create($id)
     {
+
+        $formBinder = formBinder::find($id);
         $roles = Role::all();
-        return view('answer.create',['feedbackForm' => $id, 'roles' =>$roles]);
+
+        return view('answer.create',['formBinder' => $formBinder, 'roles' =>$roles]);
 
     }
 

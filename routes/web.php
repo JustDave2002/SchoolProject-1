@@ -29,6 +29,7 @@ Route::get('/dashboard', function () {
 Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth']);
 Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm'])->middleware(['auth'])->name('feedbackForm.storeForm');
 
+
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 
 

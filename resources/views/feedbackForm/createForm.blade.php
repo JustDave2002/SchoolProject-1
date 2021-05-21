@@ -10,7 +10,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <div method="POST" action="{{route('feedbackForm.storeForm')}}" class="was-validated">
+                    <form method="POST" action="{{route('feedbackForm.storeForm')}}" class="was-validated">
                         @csrf
                         <div class="form-group">
                             <label for="title">Title</label><br>
@@ -56,17 +56,13 @@
                         </div>
                         <br>
                         <br>
-{{--                        @if()--}}
-{{--                            --}}
-{{--                            --}}
-{{--                            --}}
-{{--                        @else--}}
-{{--                            <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">--}}
-
-{{--                        @endif--}}
-                         </form>
-
-                    </div>
+                        {{$formCount}}
+                        @if($formCount == 0)
+                            <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
+                        @else
+                            <input class="btn btn-primary" style="width: 95%" type="submit" value="Next">
+                        @endif
+                    </form>
                 </div>
             </div>
         </div>

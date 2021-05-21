@@ -19,12 +19,12 @@ class FeedbackFormController extends Controller
     {
         // Get all the posts ordered by published date
         $id = Auth::user()->id;
-        $feedbackForms = FeedbackForm::where('user_id',$id )
+        $formBinders = FormBinder::where('user_id',$id )
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')
             ->paginate(10);
         //dd($feedbackForms);
-        return view('feedbackForm.index', ['feedbackForms' => $feedbackForms]);
+        return view('feedbackForm.index', ['formBinders' => $formBinders]);
     }
 
     /**
@@ -39,9 +39,9 @@ class FeedbackFormController extends Controller
 
     public function store(Request $request)
     {
-        //is standaard 1
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
+
 
         $this->validateFormBinder($request);
         $formBinder = formBinder::create([
@@ -49,37 +49,57 @@ class FeedbackFormController extends Controller
             'title' => request('title'),
             'form_count' => request('form_count'),
         ]);
+        $request->session()->forget('formCount');
+        $request->session()->forget('formBinder');
+        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('formCount', request('form_count'));
 
         return redirect('feedbackForm/createForm');
     }
 
-    public function createForm()
+    public function createForm(Request $request)
     {
-        return view('feedbackForm/createForm');
+        $formCount = $request->session()->decrement('formCount');
+        $formBinder = $request->session()->get('formBinder');
+        return view('feedbackForm/createForm', compact('formBinder', 'formCount'));
 
     }
     public function storeForm(Request $request)
     {
+        $formBinder = $request->session()->get('formBinder');
+        $request->request->add(['form_binder_id' => $formBinder->id]);
 
         $this->validateFeedbackForm($request);
 
         $form = FeedbackForm::create([
-            'user_id' => request('user_id'),
+            'form_binder_id' => request('form_binder_id'),
             'title' => request('title'),
         ]);
-
         foreach(request('question') as $q){
             $question = Question::create([
                 'feedback_form_id' => $form->id,
                 'question' => $q
             ]);
         }
-//        if(){
-//
-//        }else{
-//            return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
-//        }
+        $count = $request->session()->get('formCount');
+        if($count == 0){
+            return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
+
+        }
+        else{
+            return redirect('feedbackForm/createForm');
+        }
     }
+
+
+
+
+
+//    $request->session()->increment('count');
+//$value = $request->session()->pull('key', 'default');
+//$request->session()->push('user.teams', 'developers');
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -87,44 +107,22 @@ class FeedbackFormController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-//    public function store(Request $request)
-//    {
-//        $user_id = Auth::user()->id;
-//        $request->request->add(['user_id' => $user_id]);
-//        $this->validateFeedbackForm($request);
-//
-//        $formBinder = formBinder::create([
-//            'form_binder_id' => request(user_id),
-//            'title' => request('binderTitle'),
-//        ]);
-//        foreach (request('title')as $formTitle){
-//        $form = FeedbackForm::create([
-//            'form_binder_id' => $formBinder->id,
-//            'title' => $formTitle,
-//        ]);
-//
-//    foreach(request('question') as $q){
-//        $question = Question::create([
-//          'feedback_form_id' => $form->id,
-//          'question' => $q
-//        ]);
- //   }
-   // }
-//        return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
-//    }
-
 
 
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\FeedbackForm  $feedbackForm
+     * @param  \App\Models\formBinder  $formBinder
      * @return \Illuminate\Http\Response
      */
-    public function show(FeedbackForm $feedbackForm)
+    public function show($id)
     {
-        return view('feedbackForm.show', ['feedbackForm' => $feedbackForm]);
+        $formBinder = formBinder::find($id);
+        $feedbackForms = FeedbackForm::where('form_binder_id',$id)
+            ->orderBy('created_at', 'asc')
+            ->paginate(1);
+        return view('feedbackForm.show', ['binder' => $formBinder, 'feedbackForms' =>$feedbackForms]);
     }
 
     /**
@@ -166,10 +164,19 @@ class FeedbackFormController extends Controller
     private function validateFeedbackForm(Request $request)
     {
         return $request->validate([
-            'title' => 'required',
-            'user_id' => 'required',
+            'title' => 'required|string',
+            'form_binder_id' => 'required|numeric',
             'question' => 'required|array|min:6',
             'question.*' => 'required|string',
+        ]);
+    }
+
+    private function validateFormBinder(Request $request)
+    {
+        return $request->validate([
+            'user_id' => 'required|numeric',
+            'title' => 'required|string',
+            'form_count' => 'required|numeric'
         ]);
     }
 
