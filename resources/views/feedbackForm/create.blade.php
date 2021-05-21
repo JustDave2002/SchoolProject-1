@@ -36,7 +36,6 @@
                                 let dropdown = document.getElementById("dropdown");
                                 dropdownValue = dropdown.value;
                                 console.log(dropdownValue);
-                                {{dropdownValue = $dropdownValue}}
                             }
                         </script>
 
@@ -123,11 +122,11 @@
                         <br>
                         <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
 
-                    @for ($i = 1; $i >= $dropdownValue; $i--)
-                        {
-                    hoi
-                        }
-                        @endfor
+{{--                    @for ($i = 1; $i >= $dropdownValue; $i--)--}}
+{{--                        {--}}
+{{--                    hoi--}}
+{{--                        }--}}
+{{--                        @endfor--}}
 
                     </form>
 
