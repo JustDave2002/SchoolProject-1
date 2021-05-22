@@ -18,6 +18,11 @@ use App\Http\Controllers\UserController;
  *
  */
 
+Route::get('answer/guestCreate/{id}',[AnswerController::class, 'guestCreate'])->name('answer.guestCreate');
+route::put('guestAnswer/updateCreate/{id}',[AnswerController::class, 'guestStore'])->name('guestAnswer.updateCreate');
+
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -33,14 +38,15 @@ Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])
 Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth'])->name('feedbackForm.updateForm');
 
 
-Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 
 
 Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
-Route::get('/guestAnswer/create/{id}',[AnswerController::class, 'create']);
 
-Route::resource('answer', AnswerController::class);
 
-Route::resource('user', UserController::class)->middleware(['auth']);
 
 require __DIR__.'/auth.php';
+
+Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
+Route::resource('answer', AnswerController::class);
+Route::resource('user', UserController::class)->middleware(['auth']);
+

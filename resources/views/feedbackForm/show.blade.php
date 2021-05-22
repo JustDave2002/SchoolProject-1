@@ -64,6 +64,7 @@
                             </tbody>
                         </table>
 
+                        <button ><a href="{{answer.guestCreate}}">submit feedback</a></button>
                         <button ><a href="/answer/create/{{$binder->id}}">submit feedback</a></button>
                         @endforeach
                     @else

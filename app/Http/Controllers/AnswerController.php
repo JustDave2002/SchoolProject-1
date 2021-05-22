@@ -24,6 +24,33 @@ class AnswerController extends Controller
     {
 
     }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function guestCreate($id)
+    {
+        dd('12');
+        $formBinder = formBinder::find($id);
+        $roles = Role::all();
+
+        return view('answer.create',['formBinder' => $formBinder, 'roles' =>$roles]);
+    }
+
+
+    public function guestStore(Request $request)
+    {
+        $guest = Guest::create([
+            'name' => request('name'),
+            'role_id' => request('role_id')
+        ]);
+        $request->session()->put('guest_id', $guest->id);
+    }
+
+
     /**
      * Show the form for creating a new resource.
      *
@@ -35,11 +62,11 @@ class AnswerController extends Controller
 //TODO split guest info form from feedback answer form
         //TODO add the logic from feedbackFormController to this controller to allow multiple pages and previous page button
         $formBinder = formBinder::find($id);
-        $roles = Role::all();
 
-        return view('answer.create',['formBinder' => $formBinder, 'roles' =>$roles]);
+        return view('answer.create',['formBinder' => $formBinder]);
 
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -54,11 +81,7 @@ class AnswerController extends Controller
             $request->request->add(['user_id' => $user_id]);
             $guest_id = NULL;
         }else{
-            $guest = Guest::create([
-                'name' => request('name'),
-                'role_id' => request('role_id')
-            ]);
-            $guest_id = $guest->id;
+
         }
         $form = answerForm::create([
             'user_id' => request('user_id'),
