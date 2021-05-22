@@ -31,7 +31,9 @@ class AnswerController extends Controller
      */
     public function create($id)
     {
-
+//TODO add a function that sends you to the guestAnswerPage, giving you, before you fill in a form, the guest info page
+//TODO split guest info form from feedback answer form
+        //TODO add the logic from feedbackFormController to this controller to allow multiple pages and previous page button
         $formBinder = formBinder::find($id);
         $roles = Role::all();
 
