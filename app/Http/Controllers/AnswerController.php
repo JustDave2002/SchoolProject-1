@@ -59,7 +59,7 @@ class AnswerController extends Controller
         ]);
         $request->session()->put('guest_id', $guest->id);
 
-        return redirect('guestAnswer/create/');
+        return redirect('guestAnswer/create');
     }
 
 
