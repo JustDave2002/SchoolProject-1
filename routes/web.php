@@ -17,10 +17,12 @@ use App\Http\Controllers\UserController;
 /*
  *
  */
+//TODO change the first route url to something that makes fcking sense
+Route::get('guestAnswer/info/{id}',[AnswerController::class, 'formStart']);
+route::post('guestAnswer/update',[AnswerController::class, 'guestStore'])->name('guestAnswer.updateCreate');
+Route::get('/guestAnswer/create',[AnswerController::class, 'create']);
 
-Route::get('answer/guestCreate/{id}',[AnswerController::class, 'guestCreate'])->name('answer.guestCreate');
-route::put('guestAnswer/updateCreate/{id}',[AnswerController::class, 'guestStore'])->name('guestAnswer.updateCreate');
-
+Route::get('/answer/create',[AnswerController::class, 'create'])->middleware(['auth']);
 
 
 Route::get('/', function () {
@@ -36,12 +38,6 @@ Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm
 
 Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])->middleware(['auth']);
 Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth'])->name('feedbackForm.updateForm');
-
-
-
-
-Route::get('/answer/create/{id}',[AnswerController::class, 'create'])->middleware(['auth']);
-
 
 
 require __DIR__.'/auth.php';

@@ -12,8 +12,6 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{route('guestAnswer.updateCreate')}}" class="was-validated">
                         @csrf
-                        <input type="hidden" id="ID" name="ID" value="{{$feedbackForm->id}}">
-
                         @if(Auth::check() == 0)
                             <div class="form-group">
                                 <label for="name">Name</label><br>

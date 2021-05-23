@@ -80,13 +80,14 @@
                 </div>
             </div>
         </div>
-        <script>
-
-            function goBack(){
-                    document.getElementById('goBack').value = 1
-                document.feedbackForm.submit()
-            }
-        </script>
     </div>
+
 </x-app-layout>
 
+<script>
+
+    function goBack(){
+        document.getElementById('goBack').value = 1
+        document.feedbackForm.submit()
+    }
+</script>
