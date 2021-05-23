@@ -63,7 +63,7 @@
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if($index > 0)
-                                    <a class="btn btn-danger pull-right" onclick="goBack()">Previous</a>
+                                    <a class="btn pull-right" style="border-color: #3b82f6" onclick="goBack()">Previous</a>
                                 @endif
                             </div>
                         @if($counter == 1)

@@ -30,6 +30,7 @@
                                     <option value="5" label="++">
                                 </datalist>
                             </div>
+                            <br>
                         @endforeach
                         <br>
                         <br>
@@ -40,7 +41,7 @@
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if($index > 0)
-                                    <a class="btn btn-danger pull-right disabled " onclick="goBack()">Previous</a>
+                                    <a class="btn pull-right disabled " style="border-color: #3b82f6" onclick="goBack()">Previous</a>
                                 @endif
                             </div>
                             @if($counter == 1)
