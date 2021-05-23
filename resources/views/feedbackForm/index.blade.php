@@ -57,7 +57,7 @@
 
 
 <script>
-    let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'];
+    let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
 
     const options = {
         scale: {
@@ -114,7 +114,7 @@
                         '{{$answer->answer}}',
                     @endforeach
                 ],
-                borderColor: '#777',
+                borderColor: '#000',
                 backgroundColor: `${color[counter{{$feedbackForm->id}} ++]}`,
                 borderWidth: 1
             },

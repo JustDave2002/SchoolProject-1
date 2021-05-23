@@ -1,6 +1,8 @@
 <x-app-layout>
     <x-slot name="header">
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+              integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
+              crossorigin="anonymous">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __($formBinder->title) }}
         </h2>
@@ -18,10 +20,15 @@
                             <div></div>
                             <div class="form-group">
                                 <label for="q1">{{$question->question}}</label><br>
-                                <input type="range" id="answer" class="form-control" placeholder="Question 1" name="answer[]" value="4" min="1" max="5" required>
-                                <div class="valid-feedback"><br></div>
-                                <div class="invalid-feedback">Please fill out this field.</div>
-
+                                <input type="range" id="answer" class="answer" list="num" placeholder="Question 1"
+                                       name="answer[]" value="4" min="1" max="5">
+                                <datalist id="num">
+                                    <option value="1" label="--">
+                                    <option value="2" label="-">
+                                    <option value="3" label="o">
+                                    <option value="4" label="+">
+                                    <option value="5" label="++">
+                                </datalist>
                             </div>
                         @endforeach
                         <br>
@@ -46,7 +53,6 @@
                                 </div>
                         @endif
                     </form>
-
                 </div>
             </div>
         </div>
@@ -60,3 +66,30 @@
         document.feedbackForm.submit()
     }
 </script>
+<style>
+    datalist {
+        width: 123.5%;
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    datalist option {
+        -webkit-box-flex: 1;
+        -webkit-flex-grow: 1;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -webkit-flex-basis: 0;
+        -ms-flex-preferred-size: 0;
+        flex-basis: 0;
+        font-weight: bold;
+    }
+
+    .answer {
+        width: 100%;
+    }
+</style>
+
+
+
