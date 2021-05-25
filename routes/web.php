@@ -19,6 +19,7 @@ use App\Http\Controllers\EmailtoolController;
  *
  */
 //TODO change the first route url to something that makes fcking sense
+Route::get('answer/info/{id}',[AnswerController::class, 'formStart'])->middleware(['auth']);
 Route::get('guestAnswer/info/{id}',[AnswerController::class, 'formStart']);
 route::post('guestAnswer/update',[AnswerController::class, 'guestStore'])->name('guestAnswer.updateCreate');
 Route::get('/guestAnswer/create',[AnswerController::class, 'create']);
@@ -47,6 +48,6 @@ Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['aut
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
 
-Route::get('/sendmail/test', [EmailtoolController::class, 'store'])->middleware(['auth']);
+Route::get('/sendmail/test/', [EmailtoolController::class, 'store'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

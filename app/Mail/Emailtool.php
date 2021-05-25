@@ -6,6 +6,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Http\Request;
 
 class Emailtool extends Mailable
 {
@@ -26,8 +27,11 @@ class Emailtool extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(Request $request)
     {
-        return $this->view('emails.mail');
+        $guest=request('guest');
+//        dd($guest);
+        $id=request('id');
+        return $this->view('emails.mail', compact('id','guest'));
     }
 }

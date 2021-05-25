@@ -4,11 +4,9 @@
 <h1>Hello!</h1>
 <img src="https://i.imgur.com/mXPaedC.png" width="70" , height="70">
 <H2>Do you want to give me feedback?</H2>
-<button style="
-    padding: 0.5em 1.5em;
-    border: none;
-    border-radius: 0.15em;
-    color: white;
-    background-color: #3b82f6;
-    " onclick="">Give Feedback
-</button>
+@if( $guest==NULL)
+    <a href="http://127.0.0.5/answer/info/{{$id}}">Give feedback account</a>
+@else
+    <a href="http://127.0.0.5/guestAnswer/info/{{$id}}">Give feedback</a>
+@endif
+
