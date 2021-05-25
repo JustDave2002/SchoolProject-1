@@ -29,8 +29,9 @@ class Emailtool extends Mailable
      */
     public function build(Request $request)
     {
-
+        $guest=request('guest');
+//        dd($guest);
         $id=request('id');
-        return $this->view('emails.mail', compact('id'));
+        return $this->view('emails.mail', compact('id','guest'));
     }
 }
