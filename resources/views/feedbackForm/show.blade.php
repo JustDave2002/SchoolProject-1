@@ -72,7 +72,7 @@
                                         <th scope="col">{{$answerForm->user->name}}
                                             , {{$answerForm->user->role->name}} </th>
                                     @else
-                                        <th scope="col">{{$answerForm->guest->Name}}
+                                        <th scope="col">{{$answerForm->guest->name}}
                                             , {{$answerForm->guest->role->name}} </th>
                                     @endif
                                 @endforeach
