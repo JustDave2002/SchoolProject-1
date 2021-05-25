@@ -91,7 +91,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                            <button ><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
+                            <button ><a href="/guestAnswer/info/{{$binder->public_id}}">submit feedback</a></button>
                         @else
                             You don't have permission to view this Form.
                         @endif
