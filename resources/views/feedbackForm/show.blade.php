@@ -47,7 +47,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <input style="display:none;" value="{{$binder->id}}" name="id">
+                                <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary mb-2">Send</button>
                                 </div>
