@@ -7,10 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class formBinder extends Model
 {
+    protected $guarded =[];
+
     public function user(){
         return $this->belongsTo(User::class);
     }
-    public function feedbackForm(){
+    public function feedbackForms(){
         return $this->hasMany(FeedbackForm::class);
     }
 

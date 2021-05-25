@@ -24,21 +24,25 @@
                             Create Form
                         </x-button>
                         <div class="row">
-                            @foreach($feedbackForms as $form)
+                            @foreach($formBinders as $binder)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
                                      style="padding: 20px; border-radius: 25px; margin: 40px">
-                                    <a href="/feedbackForm/{{$form->id}}" style="color: inherit;">
-                                        <h3 class="feature-title">{{$form->title}}</h3>
+                                    <a href="/feedbackForm/{{$binder->id}}" style="color: inherit;">
+                                        <h3 class="feature-title">{{$binder->title}}</h3>
 
                                         <div class="container">
-                                            <canvas id="myChart{{$form->id}}" width="200px" height="120px"
+                                            @foreach($binder->feedbackForms as $form)
+                                                @if($loop->first)
+                                                    <canvas id="myChart{{$form->id}}" width="200px" height="120px"
                                                     style="margin-bottom: 50px"></canvas>
+                                                @endif
+                                            @endforeach
                                         </div>
                                     </a>
                                 </div>
                             @endforeach
                         </div>
-                        {{ $feedbackForms->links() }}
+                        {{ $formBinders->links() }}
                     @else
                         Before you can start making feedback forms you need to edit your account <br>
                         <x-button class="ml-3" onclick="document.location.href='{{route('user.index')}}'">
@@ -51,8 +55,9 @@
     </div>
 </x-app-layout>
 
+
 <script>
-    let color = ['rgba(255, 99, 132, 0.6)', 'rgba(75, 192, 192, 0.6)', 'rgba(54, 162, 235, 0.6)'];
+    let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
 
     const options = {
         scale: {
@@ -85,7 +90,9 @@
     Chart.defaults.global.defaultFontSize = 10;
     Chart.defaults.global.defaultFontColor = 'black';
 
-    @foreach($feedbackForms as $feedbackForm)
+    @foreach($formBinders as $binder)
+        @foreach($binder->feedbackForms as $feedbackForm)
+            @if($loop->first)
     let counter{{$feedbackForm->id}} = 0;
     let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
@@ -107,7 +114,7 @@
                         '{{$answer->answer}}',
                     @endforeach
                 ],
-                borderColor: '#777',
+                borderColor: '#000',
                 backgroundColor: `${color[counter{{$feedbackForm->id}} ++]}`,
                 borderWidth: 1
             },
@@ -120,5 +127,7 @@
         options: options,
         data: data{{$feedbackForm->id}},
     });
+            @endif
+        @endforeach
     @endforeach
 </script>
