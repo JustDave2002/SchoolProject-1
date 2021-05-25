@@ -9,9 +9,7 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __($binder->title) }}
-        </h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
     </x-slot>
 
     <div class="py-12">
@@ -34,7 +32,7 @@
                             ask feedback
                         </x-button>
                         <form class="formEmail" name="yes"
-                              style="visibility: hidden; padding-top: 20px; padding-left: 16px" action="/sendmail/test">
+                              style="visibility: hidden; padding-top: 20px; padding-left: 16px" action="/sendmail/test/">
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
                                     <label class="sr-only" for="inlineFormInput">E-mail</label>
@@ -49,6 +47,7 @@
                                         </label>
                                     </div>
                                 </div>
+                                <input style="display:none;" value="{{$binder->id}}" name="id">
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary mb-2">Send</button>
                                 </div>
