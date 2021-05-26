@@ -40,7 +40,7 @@ Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm
 
 Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])->middleware(['auth']);
 Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth'])->name('feedbackForm.updateForm');
-
+Route::get('feedbackForm/pdf/{id}', [FeedbackFormController::class, 'makePDF'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';
 

@@ -10,62 +10,27 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
     </x-slot>
-
+    <x-button class="ml-3" onclick="getPDF()">
+        download PDF
+    </x-button>
+    <div class="canvas_div_pdf">
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            @if(Auth::user()->id == $binder->user_id)
-                {{ $feedbackForms->links() }}
-                <br>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        @foreach($feedbackForms as $feedbackForm)
+        @foreach($feedbackForms as $feedbackForm)
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                @if(Auth::user()->id == $formBinder->user_id)
+                    <br>
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white border-b border-gray-200">
                             <h1>{{$feedbackForm->title}}</h1>
-                        @endforeach
-                        <br>
-                        <!-- PDF button -->
-                        <x-button class="ml-3" onclick="location.href='/feedbackForm/pdf/{{$binder->public_id}}'">
-                            download PDF
-                        </x-button>
-                        <!-- email implementation -->
-                        <x-button class="ml-3" onclick="showElement()">
-                            ask feedback
-                        </x-button>
-                        <!-- Give yourself feedback button -->
-                        <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
-                            Give yourself feedback
-                        </x-button>
+                            <br>
 
-                        <!-- Form for E-mail -->
-                        <form class="formEmail" name="yes"
-                              style="visibility: hidden; padding-top: 20px; padding-left: 16px"
-                              action="/sendmail/test/">
-                            <div class="form-row align-items-center">
-                                <div class="col-auto">
-                                    <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                    <input type="text" class="form-control mb-2" name="email"
-                                           placeholder="Enter a email">
-                                </div>
-                                <div class="col-auto">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck"
-                                               name="guest">
-                                        <label class="form-check-label" for="autoSizingCheck">
-                                            Guest
-                                        </label>
-                                    </div>
-                                </div>
-                                <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary mb-2">Send</button>
-                                </div>
-                            </div>
-                        </form>
+                            <!-- PDF section (everything in here will be in the PDF) -->
 
-                        <!-- PDF section (everything in here will be in the PDF) -->
-                        <div class="canvas_div_pdf">
-                            <div class="container">
-                                <canvas id="myChart" width="1500" height="1000"></canvas>
-                            </div>
+                                <div class="container">
+                                    <canvas id="myChart{{$feedbackForm->id}}" width="2000px" height="1500px"
+                                            style="margin-bottom: 100px;" ></canvas>
+                                </div>
+
 
                             <!-- table with answer information -->
                             <table class="table">
@@ -100,47 +65,15 @@
                             @endif
                         </div>
                     </div>
-                </div>
-        </div>
+            </div>
+        @endforeach
     </div>
     </div>
 </x-app-layout>
 
 
-<!-- Script for making the Chart.js -->
 <script>
     let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
-    let counter = 0;
-    let myChart = document.getElementById('myChart').getContext('2d');
-
-    const data = {
-        labels: [@foreach($feedbackForm->questions as $question)
-            '{{$question->question}}',
-            @endforeach],
-        datasets: [
-                @foreach($feedbackForm->answerForms as $answerForm){
-                @if($answerForm->guest == NULL)
-                label: '{{$answerForm->user->role->name}}',
-                @else
-                label: '{{$answerForm->guest->role->name}}',
-                @endif
-                data: [
-                    @foreach($answerForm->answers as $answer)
-                        '{{$answer->answer}}',
-                    @endforeach
-                ],
-                borderColor: '#777',
-                backgroundColor: `${color[counter++]}`,
-                borderWidth: 1
-            },
-            @endforeach
-        ]
-    };
-
-    // Global Options
-    Chart.defaults.global.defaultFontFamily = 'Arial';
-    Chart.defaults.global.defaultFontSize = 10;
-    Chart.defaults.global.defaultFontColor = 'black';
 
     const options = {
         scale: {
@@ -168,12 +101,50 @@
         }
     };
 
+    // Global Options
+    Chart.defaults.global.defaultFontFamily = 'Arial';
+    Chart.defaults.global.defaultFontSize = 10;
+    Chart.defaults.global.defaultFontColor = 'black';
 
-    let massPopChart = new Chart(myChart, {
+    @foreach($feedbackForms as $feedbackForm)
+    console.log({{$feedbackForm->id}});
+    {{--    @if($loop->first)--}}
+    let counter{{$feedbackForm->id}} = 0;
+    let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
+
+    const data{{$feedbackForm->id}} = {
+        labels: [
+            @foreach($feedbackForm->questions as $question)
+                '{{$question->question}}',
+            @endforeach],
+
+        datasets: [
+                @foreach($feedbackForm->answerForms as $answerForm){
+                @if($answerForm->guest == NULL)
+                label: '{{$answerForm->user->role->name}}',
+                @else
+                label: '{{$answerForm->guest->role->name}}',
+                @endif
+                data: [
+                    @foreach($answerForm->answers as $answer)
+                        '{{$answer->answer}}',
+                    @endforeach
+                ],
+                borderColor: '#000',
+                backgroundColor: `${color[counter{{$feedbackForm->id}} ++]}`,
+                borderWidth: 1
+            },
+            @endforeach
+        ]
+    };
+
+    let massPopChart{{$feedbackForm->id}} = new Chart(myChart{{$feedbackForm->id}}, {
         type: 'radar',
         options: options,
-        data: data,
+        data: data{{$feedbackForm->id}},
     });
+    @endforeach
+
 </script>
 
 <!-- Script for making the PDF download -->
@@ -187,8 +158,8 @@
         var canvas_image_width = HTML_Width;
         var canvas_image_height = HTML_Height;
 
-        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;
-
+        var totalPDFPages = {{$formBinder->form_count}} - 1;
+            // Math.ceil(HTML_Height / PDF_Height) - 1;
 
         html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
             canvas.getContext('2d');
@@ -204,15 +175,10 @@
                 pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
             }
 
-            pdf.save("{{$feedbackForm->title}}.pdf");
+            pdf.save("{{$formBinder->title}}.pdf");
         });
     };
 </script>
 
-<!-- Script to make email section visible -->
-<script type="text/javascript">
-    function showElement() {
-        element = document.querySelector('.formEmail');
-        element.style.visibility = 'visible';
-    }
-</script>
+
+

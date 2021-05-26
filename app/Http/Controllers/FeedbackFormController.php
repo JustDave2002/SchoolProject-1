@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\formBinder;
 use App\Models\Question;
+use Database\Seeders\FormBinderSeeder;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
 use Auth;
@@ -223,6 +224,12 @@ class FeedbackFormController extends Controller
     public function destroy(FeedbackForm $feedbackForm)
     {
         //
+    }
+
+    public function makePDF($id){
+   $formBinder=formBinder::where('public_id', $id)->first();
+   $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
+        return view('feedbackForm/pdf', compact('formBinder', 'feedbackForms'));
     }
 
 
