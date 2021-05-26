@@ -3,7 +3,6 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
               crossorigin="anonymous">
-
         <!-- Js PDF -->
         <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
@@ -31,8 +30,10 @@
                         <x-button class="ml-3" onclick="showElement()">
                             ask feedback
                         </x-button>
+                        <!-- Form for E-mail -->
                         <form class="formEmail" name="yes"
-                              style="visibility: hidden; padding-top: 20px; padding-left: 16px" action="/sendmail/test/">
+                              style="visibility: hidden; padding-top: 20px; padding-left: 16px"
+                              action="/sendmail/test/">
                             <div class="form-row align-items-center">
                                 <div class="col-auto">
                                     <label class="sr-only" for="inlineFormInput">E-mail</label>
@@ -41,7 +42,8 @@
                                 </div>
                                 <div class="col-auto">
                                     <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck" name="guest">
+                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                                               name="guest">
                                         <label class="form-check-label" for="autoSizingCheck">
                                             Guest
                                         </label>
@@ -54,13 +56,11 @@
                             </div>
                         </form>
 
-
                         <!-- PDF section (everything in here will be in the PDF) -->
-                        <div class="canvas_div_pdf">
+                            <div class="canvas_div_pdf">
                             <div class="container">
                                 <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
-                        </div>
 
                         <!-- table with answer information -->
                         <table class="table">
@@ -90,7 +90,9 @@
                             @endforeach
                             </tbody>
                         </table>
-                            <button ><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
+                        </div>
+                            
+                        <button><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
                         @else
                             You don't have permission to view this Form.
                         @endif
