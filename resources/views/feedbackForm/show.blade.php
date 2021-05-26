@@ -49,7 +49,7 @@
                                         </label>
                                     </div>
                                 </div>
-                                <input style="display:none;" value="{{$binder->id}}" name="id">
+                                <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
                                 <div class="col-auto">
                                     <button type="submit" class="btn btn-primary mb-2">Send</button>
                                 </div>
@@ -90,9 +90,7 @@
                             @endforeach
                             </tbody>
                         </table>
-                        </div>
-
-                        <button><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
+                            <button ><a href="/guestAnswer/info/{{$binder->public_id}}">submit feedback</a></button>
                         @else
                             You don't have permission to view this Form.
                         @endif

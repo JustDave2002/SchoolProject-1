@@ -31,7 +31,7 @@ class Emailtool extends Mailable
     {
         $guest=request('guest');
 //        dd($guest);
-        $id=request('id');
-        return $this->view('emails.mail', compact('id','guest'));
+        $public_id=request('public_id');
+        return $this->view('emails.mail', compact('public_id','guest'));
     }
 }

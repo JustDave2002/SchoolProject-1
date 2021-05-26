@@ -5,8 +5,8 @@
 <img src="https://i.imgur.com/mXPaedC.png" width="70" , height="70">
 <H2>Do you want to give me feedback?</H2>
 @if( $guest==NULL)
-    <a href="http://127.0.0.5/answer/info/{{$id}}">Give feedback account</a>
+    <a href="http://127.0.0.5/answer/info/{{$public_id}}">Give feedback account</a>
 @else
-    <a href="http://127.0.0.5/guestAnswer/info/{{$id}}">Give feedback</a>
+    <a href="http://127.0.0.5/guestAnswer/info/{{$public_id}}">Give feedback</a>
 @endif
 
