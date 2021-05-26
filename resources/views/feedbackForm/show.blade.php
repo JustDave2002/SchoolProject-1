@@ -91,7 +91,7 @@
                             </tbody>
                         </table>
                         </div>
-                            
+
                         <button><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
                         @else
                             You don't have permission to view this Form.
