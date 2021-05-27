@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackFormController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\EmailtoolController;
+use App\Http\Controllers\FeedbackToolController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -48,6 +48,6 @@ Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['aut
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
 
-Route::get('/sendmail/test/', [EmailtoolController::class, 'store'])->middleware(['auth']);
+Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

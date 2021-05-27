@@ -7,8 +7,9 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Http\Request;
+use Auth;
 
-class Emailtool extends Mailable
+class FeedbackTool extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -30,8 +31,9 @@ class Emailtool extends Mailable
     public function build(Request $request)
     {
         $guest=request('guest');
-//        dd($guest);
+        $name=Auth::user()->name;
+//        dd($name);
         $public_id=request('public_id');
-        return $this->view('emails.mail', compact('public_id','guest'));
+        return $this->view('emails.mail', compact('public_id','guest', 'name'));
     }
 }

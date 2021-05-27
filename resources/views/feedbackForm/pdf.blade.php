@@ -10,64 +10,62 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
     </x-slot>
+    <br>
     <x-button class="ml-3" onclick="getPDF()">
         download PDF
     </x-button>
+    <!-- Everything inside this class will be in the PDF -->
     <div class="canvas_div_pdf">
-    <div class="py-12">
-        @foreach($feedbackForms as $feedbackForm)
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                @if(Auth::user()->id == $formBinder->user_id)
-                    <br>
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200">
-                            <h1>{{$feedbackForm->title}}</h1>
-                            <br>
-
-                            <!-- PDF section (everything in here will be in the PDF) -->
+        <div class="py-12">
+            @foreach($feedbackForms as $feedbackForm)
+                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                    @if(Auth::user()->id == $formBinder->user_id)
+                        <br>
+                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                            <div class="p-6 bg-white border-b border-gray-200">
+                                <h1>{{$feedbackForm->title}}</h1>
+                                <br>
 
                                 <div class="container">
-                                    <canvas id="myChart{{$feedbackForm->id}}" width="2000px" height="1500px"
-                                            style="margin-bottom: 100px;" ></canvas>
+                                    <canvas id="myChart{{$feedbackForm->id}}" width="1500px" height="1000px"></canvas>
                                 </div>
 
-
-                            <!-- table with answer information -->
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Questions</th>
-                                    @foreach($feedbackForm->answerForms as $answerForm)
-                                        @if($answerForm->guest == NULL)
-                                            <th scope="col">{{$answerForm->user->name}}
-                                                - {{$answerForm->user->role->name}} </th>
-                                        @else
-                                            <th scope="col">{{$answerForm->guest->name}}
-                                                - {{$answerForm->guest->role->name}} </th>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($feedbackForm->questions as $question)
-                                    <div></div>
+                                <!-- table with answer information -->
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{$question->question}}</th>
-                                        @foreach($question->answers as $answer)
-                                            <td>{{$answer->answer}}</td>
+                                        <th scope="col">Questions</th>
+                                        @foreach($feedbackForm->answerForms as $answerForm)
+                                            @if($answerForm->guest == NULL)
+                                                <th scope="col">{{$answerForm->user->name}}
+                                                    - {{$answerForm->user->role->name}} </th>
+                                            @else
+                                                <th scope="col">{{$answerForm->guest->name}}
+                                                    - {{$answerForm->guest->role->name}} </th>
+                                            @endif
                                         @endforeach
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                            @else
-                                You don't have permission to view this Form.
-                            @endif
+                                    </thead>
+                                    <tbody>
+                                    @foreach($feedbackForm->questions as $question)
+                                        <div></div>
+                                        <tr>
+                                            <th scope="row">{{$question->question}}</th>
+                                            @foreach($question->answers as $answer)
+                                                <td>{{$answer->answer}}</td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                @else
+                                    You don't have permission to view this Form.
+                                @endif
+                            </div>
                         </div>
-                    </div>
-            </div>
-        @endforeach
-    </div>
+                </div>
+            @endforeach
+        </div>
     </div>
 </x-app-layout>
 
@@ -158,8 +156,8 @@
         var canvas_image_width = HTML_Width;
         var canvas_image_height = HTML_Height;
 
-        var totalPDFPages = {{$formBinder->form_count}} - 1;
-            // Math.ceil(HTML_Height / PDF_Height) - 1;
+        var totalPDFPages = {{$formBinder->form_count}} -1;
+        // Math.ceil(HTML_Height / PDF_Height) - 1;
 
         html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
             canvas.getContext('2d');
