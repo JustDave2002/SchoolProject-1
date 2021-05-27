@@ -37,7 +37,7 @@
                     <table cellspacing="0" cellpadding="0">
                         <tr>
                             <td style="border-radius: 2px;" bgcolor="#3b82f6">
-                                <a href="http://127.0.0.5/answer/info/{{$public_id}}" target="_blank"
+                                <a href="https://hz360feedback.herokuapp.com/answer/info/{{$public_id}}" target="_blank"
                                    style="padding: 8px 12px; border: 1px solid #3b82f6;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
                                     Give feedback
                                 </a>
@@ -54,7 +54,7 @@
                     <table cellspacing="0" cellpadding="0">
                         <tr>
                             <td style="border-radius: 2px;" bgcolor="#3b82f6">
-                                <a href="http://127.0.0.5/guestAnswer/info/{{$public_id}}" target="_blank"
+                                <a href="https://hz360feedback.herokuapp.com/guestAnswer/info/{{$public_id}}" target="_blank"
                                    style="padding: 8px 12px; border: 1px solid #3b82f6;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px; color: #ffffff;text-decoration: none;font-weight:bold;display: inline-block;">
                                     Give feedback
                                 </a>

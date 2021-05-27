@@ -179,6 +179,7 @@ class FeedbackFormController extends Controller
     {
         $formBinder = formBinder::where('public_id', $public_id)->first();
         $id = $formBinder->id;
+        $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);

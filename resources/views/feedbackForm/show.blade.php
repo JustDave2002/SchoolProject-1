@@ -18,51 +18,7 @@
 
             @if(Auth::user()->id == $binder->user_id)
                 @if($formCheck != NULL)
-                    {{ $feedbackForms->links() }}
-                    <br>
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200">
-                            @foreach($feedbackForms as $feedbackForm)
-                                <h1>{{$feedbackForm->title}}</h1>
-                            @endforeach
-                            <br>
-                            <!-- PDF button -->
-                            <x-button class="ml-3" onclick="getPDF()">
-                                download PDF
-                            </x-button>
-                            <!-- email implementation -->
-                            <x-button class="ml-3" onclick="showElement()">
-                                ask feedback
-                            </x-button>
-                            <form class="formEmail" name="yes"
-                                  style="visibility: hidden; padding-top: 20px; padding-left: 16px"
-                                  action="/sendmail/test">
-                                <div class="form-row align-items-center">
-                                    <div class="col-auto">
-                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                        <input type="text" class="form-control mb-2" name="email"
-                                               placeholder="Enter a email">
-                                    </div>
-                                    <div class="col-auto">
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox" id="autoSizingCheck">
-                                            <label class="form-check-label" for="autoSizingCheck">
-                                                Guest
-                                            </label>
-                                        </div>
-                                    </div>
-                                    <div class="col-auto">
-                                        <button type="submit" class="btn btn-primary mb-2">Send</button>
-                                    </div>
-                                </div>
-                            </form>
 
-
-                            <!-- PDF section (everything in here will be in the PDF) -->
-                            <div class="canvas_div_pdf">
-                                <div class="container">
-                                    <canvas id="myChart" width="1500" height="1000"></canvas>
-                                </div>
                 {{ $feedbackForms->links() }}
                 <br>
                 <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -144,7 +100,6 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                            <button><a href="/guestAnswer/info/{{$binder->id}}">submit feedback</a></button>
                             @else
                                 <div class="danger">
                                     <h3>Uh oh! <br><br></h3>
@@ -278,48 +233,7 @@
             element.style.visibility = 'visible';
         }
     </script>
-@endif
-            @endforeach
-        ]
-    };
 
-    // Chart formatting
-    Chart.defaults.global.defaultFontFamily = 'Arial';
-    Chart.defaults.global.defaultFontSize = 10;
-    Chart.defaults.global.defaultFontColor = 'black';
-
-    const options = {
-        scale: {
-            ticks: {
-                min: 0,
-                max: 5,
-                stepSize: 1
-            }
-        },
-        legend: {
-            display: true,
-            position: 'bottom',
-            labels: {
-                fontColor: '#000',
-                fontSize: 12
-            }
-        },
-        layout: {
-            padding: {
-                left: 0,
-                right: 0,
-                bottom: 0,
-                top: 0
-            },
-        }
-    };
-
-    let massPopChart = new Chart(myChart, {
-        type: 'radar',
-        options: options,
-        data: data,
-    });
-</script>
 
 <!-- Script for making the PDF download (In development on pdf.blade.php) -->
 {{--<script>--}}
@@ -360,3 +274,5 @@
         element.style.visibility = 'visible';
     }
 </script>
+
+@endif
