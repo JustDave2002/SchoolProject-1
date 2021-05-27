@@ -78,14 +78,12 @@ class FeedbackFormController extends Controller
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
 
         //if the formPage does not exist yet create one
-        if($feedbackForms->get($index) == NULL){
+        if ($feedbackForms->get($index) == NULL) {
             //gets variables from session and returns them in the view
-            $counter = $request->session()->get('counter');
             $formBinder = $request->session()->get('formBinder');
             return view('feedbackForm/createForm', compact('formBinder', 'counter', 'index'));
-        }
-        //go to the edit form page
-        else{
+        } //go to the edit form page
+        else {
             return view('feedbackForm/editForm', compact('feedbackForm', 'counter', 'index'));
         }
     }
@@ -127,11 +125,11 @@ class FeedbackFormController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function editForm(Request $request)
-{
-    list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
+    {
+        list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
 
-    return view('feedbackForm/editForm',compact('feedbackForm','index', 'counter'));
-}
+        return view('feedbackForm/editForm', compact('feedbackForm', 'index', 'counter'));
+    }
 
 
     /**
@@ -142,17 +140,17 @@ class FeedbackFormController extends Controller
     public function updateForm(Request $request)
     {
         //validates feedbackform
-        $request->request->add(['form_binder_id'=> 1]);
+        $request->request->add(['form_binder_id' => 1]);
         $this->validateFeedbackForm($request);
 
         //grabs the current feedbackform from DB and updates title
-        $feedbackForm =FeedbackForm::findOrFail(request('id'));
+        $feedbackForm = FeedbackForm::findOrFail(request('id'));
         $title = request('title');
         $feedbackForm->update(['title' => $title]);
 
         //updates questions
-        $questionArray= request('question');
-        foreach ($feedbackForm->questions as $question){
+        $questionArray = request('question');
+        foreach ($feedbackForm->questions as $question) {
             $currentQuestion = array_shift($questionArray);
             $question->update(['question' => $currentQuestion]);
         }
@@ -178,10 +176,11 @@ class FeedbackFormController extends Controller
     public function show($id)
     {
         $formBinder = formBinder::find($id);
+        $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
-        return view('feedbackForm.show', ['binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
+        return view('feedbackForm.show', ['formCheck'=> $formCheck, 'binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
     }
 
 
