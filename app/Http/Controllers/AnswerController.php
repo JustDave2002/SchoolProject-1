@@ -12,6 +12,7 @@ use App\Models\Guest;
 use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
+use Ramsey\Uuid\Uuid;
 
 
 class AnswerController extends Controller
@@ -32,11 +33,13 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function formStart (Request $request, $id)
+    public function formStart (Request $request, $public_id)
     {
         $request->session()->forget('answerForms');
         //TODO refactor this into a first page, where the counter is set, and if statement decides if user goes to guest page or not
-        $formBinder = formBinder::find($id);
+        $formBinder = formBinder::where('public_id', $public_id)->first();
+        //dd($public_id);
+        $id = $formBinder->id;
         $request->session()->put('counter', $formBinder->form_count);
         $request->session()->put('formBinder', $formBinder);
 

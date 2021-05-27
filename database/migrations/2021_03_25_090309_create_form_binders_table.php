@@ -15,6 +15,7 @@ class CreateFormBindersTable extends Migration
     {
         Schema::create('form_binders', function (Blueprint $table) {
             $table->id();
+            $table->string('public_id');
             $table->foreignId('user_id')
                 ->constrained('users')
                 ->onDelete('cascade');

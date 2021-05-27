@@ -27,7 +27,7 @@
                             @foreach($formBinders as $binder)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
                                      style="padding: 20px; border-radius: 25px; margin: 40px">
-                                    <a href="/feedbackForm/{{$binder->id}}" style="color: inherit;">
+                                    <a href="/feedbackForm/{{$binder->public_id}}" style="color: inherit;">
                                         <h3 class="feature-title">{{$binder->title}}</h3>
 
                                         <div class="container">

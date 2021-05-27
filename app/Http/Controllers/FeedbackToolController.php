@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Mail\Emailtool;
+use App\Mail\FeedbackTool;
 use Illuminate\Support\Facades\Mail;
 
-class EmailtoolController extends Controller
+class FeedbackToolController extends Controller
 {
     public function store(Request $request)
     {
-        Mail::to($request)->send(new Emailtool);
+//        dd($request);
+        Mail::to($request)->send(new FeedbackTool);
 
         return redirect('/feedbackForm');
     }

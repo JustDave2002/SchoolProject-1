@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\FeedbackFormController;
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\UserController;
-use App\Http\Controllers\EmailtoolController;
+use App\Http\Controllers\FeedbackToolController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -42,7 +42,7 @@ Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm
 
 Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])->middleware(['auth']);
 Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth'])->name('feedbackForm.updateForm');
-
+Route::get('feedbackForm/pdf/{id}', [FeedbackFormController::class, 'makePDF'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';
 
@@ -50,6 +50,6 @@ Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['aut
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
 
-Route::get('/sendmail/test', [EmailtoolController::class, 'store'])->middleware(['auth']);
+Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth']);
 
 require __DIR__.'/auth.php';

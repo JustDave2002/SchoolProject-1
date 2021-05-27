@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\formBinder;
 use App\Models\Question;
+use Database\Seeders\FormBinderSeeder;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
 use Auth;
 use function Sodium\add;
+use Ramsey\Uuid\Uuid;
 
 class FeedbackFormController extends Controller
 {
@@ -24,7 +26,6 @@ class FeedbackFormController extends Controller
             ->orderBy('created_at', 'desc')
             ->orderBy('id', 'asc')
             ->paginate(10);
-        //dd($feedbackForms);
         return view('feedbackForm.index', ['formBinders' => $formBinders]);
     }
 
@@ -55,6 +56,7 @@ class FeedbackFormController extends Controller
 
         //make formBinder
         $formBinder = formBinder::create([
+            'public_id' => Uuid::uuid4(),
             'user_id' => request('user_id'),
             'title' => request('title'),
             'form_count' => request('form_count'),
@@ -173,10 +175,10 @@ class FeedbackFormController extends Controller
      * @param \App\Models\formBinder $formBinder
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($public_id)
     {
-        $formBinder = formBinder::find($id);
-        $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
+        $formBinder = formBinder::where('public_id', $public_id)->first();
+        $id = $formBinder->id;
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
@@ -220,6 +222,12 @@ class FeedbackFormController extends Controller
     public function destroy(FeedbackForm $feedbackForm)
     {
         //
+    }
+
+    public function makePDF($id){
+   $formBinder=formBinder::where('public_id', $id)->first();
+   $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
+        return view('feedbackForm/pdf', compact('formBinder', 'feedbackForms'));
     }
 
 
