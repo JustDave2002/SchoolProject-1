@@ -38,18 +38,22 @@ class RegisteredUserController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|confirmed|min:8',
-            //TODO role_id toevoegen
+            'role_id' => 'required|numeric'
         ]);
 
-        //TODO if statement maken, if function == 1 (aka student) role_verified = true
-        // otherwise role_verified = false
+        if ($request->role_id==1){
+            $role_verified=TRUE;
+        } else {
+            $role_verified=FALSE;
+        }
 
         Auth::login($user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            //TODO role_id toevoegen
-            //TODO role verified toevoegen (ook in de migrations aanpassen)
+            'role_id' => $request->role_id,
+            'role_verified' => $role_verified,
+            'admin' => FALSE
         ]));
 
         event(new Registered($user));

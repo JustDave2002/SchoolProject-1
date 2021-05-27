@@ -47,6 +47,7 @@ require __DIR__.'/auth.php';
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
+Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth'])->name('admin');
 
 Route::get('/sendmail/test/', [EmailtoolController::class, 'store'])->middleware(['auth']);
 
