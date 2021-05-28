@@ -26,24 +26,28 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @foreach ($notVerifiedUsers as $user)
-                            <tr>
-                                <th scope="row"> {{$user->name}} </th>
-                                <td> {{$user->email}} </td>
-                                <td> {{$user->role->name}}</td>
-                                <td>
-                                    <form method="get" action="{{route('adminPage.verified', ['id' => $user->id])}}">
-                                        <button class="btn btn-primary" href="" style="margin-right: 24px">Accept
-                                        </button>
-                                    </form>
-                                </td>
-                                <td>
-                                    <form method="get" action="{{route('adminPage.declined', ['id' => $user->id])}}">
-                                        <button class="btn pull-right" style="border-color: #3b82f6;">Decline</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
+                            @foreach($notVerifiedUsers as $user)
+
+                                <tr>
+                                    <th scope="row"> {{$user->name}} </th>
+                                    <td> {{$user->email}} </td>
+                                    <td> {{$user->role->name}}</td>
+                                    <td>
+                                        <form method="get"
+                                              action="{{route('adminPage.verified', ['id' => $user->id])}}">
+                                            <button class="btn btn-primary" href="" style="margin-right: 24px">Accept
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td>
+                                        <form method="get"
+                                              action="{{route('adminPage.declined', ['id' => $user->id])}}">
+                                            <button class="btn pull-right" style="border-color: #3b82f6;">Decline
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
