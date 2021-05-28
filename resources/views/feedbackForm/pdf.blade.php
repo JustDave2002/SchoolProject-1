@@ -11,62 +11,65 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
     </x-slot>
     <br>
-    <x-button class="ml-3" onclick="getPDF()">
-        download PDF
-    </x-button>
-    <!-- Everything inside this class will be in the PDF -->
-    <div class="canvas_div_pdf">
-        <div class="py-12">
-            @foreach($feedbackForms as $feedbackForm)
-                <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                    @if(Auth::user()->id == $formBinder->user_id)
-                        <br>
-                        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                            <div class="p-6 bg-white border-b border-gray-200">
-                                <h1>{{$feedbackForm->title}}</h1>
-                                <br>
-
-                                <div class="container">
-                                    <canvas id="myChart{{$feedbackForm->id}}" width="1500px" height="1000px"></canvas>
-                                </div>
-
-                                <!-- table with answer information -->
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Questions</th>
-                                        @foreach($feedbackForm->answerForms as $answerForm)
-                                            @if($answerForm->guest == NULL)
-                                                <th scope="col">{{$answerForm->user->name}}
-                                                    - {{$answerForm->user->role->name}} </th>
-                                            @else
-                                                <th scope="col">{{$answerForm->guest->name}}
-                                                    - {{$answerForm->guest->role->name}} </th>
-                                            @endif
-                                        @endforeach
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($feedbackForm->questions as $question)
-                                        <div></div>
-                                        <tr>
-                                            <th scope="row">{{$question->question}}</th>
-                                            @foreach($question->answers as $answer)
-                                                <td>{{$answer->answer}}</td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
-                                @else
-                                    You don't have permission to view this Form.
-                                @endif
-                            </div>
-                        </div>
-                </div>
-            @endforeach
-        </div>
+    <div>
+        <x-button class="ml-3" onclick="getPDF()">
+            download PDF
+        </x-button>
     </div>
+
+{{--    <div class="py-12">--}}
+    @foreach($feedbackForms as $feedbackForm)
+        <!-- Everything inside this class will be in the PDF -->
+            <div style="width: 1200px; height: 1500px; display: inline-block;"
+                 class="canvas_div_pdf{{$feedbackForm->id}}">
+                @if(Auth::user()->id == $formBinder->user_id)
+                    <br>
+
+                    <h1>{{$feedbackForm->title}}</h1>
+                    <br>
+
+                    <div class="container">
+                        <canvas id="myChart{{$feedbackForm->id}}"
+                                style="margin-bottom: 200px; width:1110px; height:740px"></canvas>
+                    </div>
+
+                    <!-- table with answer information -->
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Questions</th>
+                            @foreach($feedbackForm->answerForms as $answerForm)
+                                @if($answerForm->guest == NULL)
+                                    <th scope="col">{{$answerForm->user->name}}
+                                        - {{$answerForm->user->role->name}} </th>
+                                @else
+                                    <th scope="col">{{$answerForm->guest->name}}
+                                        - {{$answerForm->guest->role->name}} </th>
+                                @endif
+                            @endforeach
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($feedbackForm->questions as $question)
+                            <div></div>
+                            <tr>
+                                <th scope="row">{{$question->question}}</th>
+                                @foreach($question->answers as $answer)
+                                    <td>{{$answer->answer}}</td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                @else
+                    You don't have permission to view this Form.
+                @endif
+            </div>
+
+
+        @endforeach
+
+{{--    </div>--}}
 </x-app-layout>
 
 
@@ -74,6 +77,11 @@
     let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
 
     const options = {
+
+
+                animation: {
+            duration: 0
+        },
         scale: {
             ticks: {
                 min: 0,
@@ -146,37 +154,89 @@
 </script>
 
 <!-- Script for making the PDF download -->
-<script>
-    function getPDF() {
-        var HTML_Width = $(".canvas_div_pdf").width();
-        var HTML_Height = $(".canvas_div_pdf").height();
+<script >
+     window.addEventListener("load",function getPDF() {
+
+        console.log('loaded')
+        var HTML_Width = 1200;
+        var HTML_Height = 1500;
+
         var top_left_margin = 15;
         var PDF_Width = HTML_Width + (top_left_margin * 2);
         var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+        var PDF_Width = HTML_Width;
+        var PDF_Height = HTML_Height;
         var canvas_image_width = HTML_Width;
         var canvas_image_height = HTML_Height;
 
         var totalPDFPages = {{$formBinder->form_count}} -1;
         // Math.ceil(HTML_Height / PDF_Height) - 1;
 
-        html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {
+        let pdf = ''
+        @foreach($feedbackForms as $feedbackForm)
+        html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true,}).then(function (canvas) {
             canvas.getContext('2d');
-
+            var imgData = canvas.toDataURL("image/jpeg", 1.0);
+            @if ($loop->first)
+                pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+            @else
+            pdf.addPage(PDF_Width, PDF_Height);
+            @endif
             // console.log(canvas.height+"  "+canvas.width);
 
-            var imgData = canvas.toDataURL("image/jpeg", 1.0);
-            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+
             pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
 
-            for (var i = 1; i <= totalPDFPages; i++) {
-                pdf.addPage(PDF_Width, PDF_Height);
-                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
-            }
+            // for (var i = 1; i <= totalPDFPages; i++) {
+            //     pdf.addPage(PDF_Width, PDF_Height);
+            //     pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
+            // }
 
+            @if($loop->last)
             pdf.save("{{$formBinder->title}}.pdf");
+            @endif
+
         });
-    };
+        @endforeach
+        //window.history.back();
+    });
 </script>
 
 
+{{--<script>--}}
+{{--    function getPDF() {--}}
+{{--                @foreach($feedbackForms as $feedbackForm)--}}
+{{--                var HTML_Width{{$feedbackForm->id->first()}} = $(".canvas_div_pdf{{$feedbackForm->id->first()}}").width();--}}
+{{--                var HTML_Height{{$feedbackForm->id->first()}} = $(".canvas_div_pdf{{$feedbackForm->id->first()}}").height();--}}
+{{--                @endforeach--}}
+{{--        var top_left_margin = 15;--}}
+{{--        var PDF_Width = HTML_Width + (top_left_margin * 2);--}}
+{{--        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);--}}
+{{--        var canvas_image_width = HTML_Width;--}}
+{{--        var canvas_image_height = HTML_Height;--}}
 
+{{--        var totalPDFPages = {{$formBinder->form_count}} -1;--}}
+{{--        // Math.ceil(HTML_Height / PDF_Height) - 1;--}}
+
+{{--        var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
+{{--        @foreach($feedbackForms as $feedbackForm)--}}
+{{--        html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true}).then(function (canvas) {--}}
+{{--            canvas.getContext('2d');--}}
+
+{{--            // console.log(canvas.height+"  "+canvas.width);--}}
+
+{{--            var imgData = canvas.toDataURL("image/jpeg", 1.0);--}}
+{{--            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
+{{--            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);--}}
+
+{{--            for (var i = 1; i <= totalPDFPages; i++) {--}}
+{{--                pdf.addPage(PDF_Width, PDF_Height);--}}
+{{--                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);--}}
+{{--            }--}}
+
+
+{{--        });--}}
+{{--        @endforeach--}}
+{{--        pdf.save("{{$formBinder->title}}.pdf");--}}
+{{--    };--}}
+{{--</script>--}}
