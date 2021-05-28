@@ -99,6 +99,11 @@
                                     @endforeach
                                     </tbody>
                                 </table>
+                                <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
+                                    @method('DELETE')
+                                    @csrf
+                                    <button class="btn pull-right" type="submit" onclick="return confirm('Are you sure you want to delete this form?')" style="border-color: #3b82f6">Delete this form</button>
+                                </form>
                                 @else
                                     <div class="danger">
                                         <h3>Uh oh! <br><br></h3>
