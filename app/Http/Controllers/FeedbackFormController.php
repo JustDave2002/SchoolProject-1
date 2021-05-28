@@ -8,6 +8,7 @@ use Database\Seeders\FormBinderSeeder;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
 use Auth;
+use function PHPUnit\Framework\isEmpty;
 use function Sodium\add;
 use Ramsey\Uuid\Uuid;
 
@@ -217,12 +218,22 @@ class FeedbackFormController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\FeedbackForm $feedbackForm
+     * @param \App\Models\formBinder $formBinder
      * @return \Illuminate\Http\Response
      */
-    public function destroy(FeedbackForm $feedbackForm)
+    public function destroy($publicId)
     {
-        //
+        $formBinder=formBinder::where('public_id', $publicId)->first();
+        if (isEmpty(FeedbackForm::where('form_binder_id', $formBinder->id)->first())){
+        } else{
+            $feedbackForms = FeedbackForm::select('form_binder_id', $formBinder->id)->get();
+            foreach ($feedbackForms as $feedbackForm) {
+                $feedbackForm->delete();
+            }
+        }
+        $formBinder->delete();
+        return redirect(route('feedbackForm.index'));
+
     }
 
     public function makePDF($id){

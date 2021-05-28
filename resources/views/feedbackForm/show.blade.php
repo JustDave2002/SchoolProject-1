@@ -12,112 +12,115 @@
     </x-slot>
 
 
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if(Auth::user()->id == $binder->user_id)
                 @if($formCheck != NULL)
 
-                {{ $feedbackForms->links() }}
-                <br>
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                    <div class="p-6 bg-white border-b border-gray-200">
-                        @foreach($feedbackForms as $feedbackForm)
-                            <h1>{{$feedbackForm->title}}</h1>
-                        @endforeach
-                        <br>
-                        <!-- PDF button -->
-                        <x-button class="ml-3" onclick="location.href='/feedbackForm/pdf/{{$binder->public_id}}'">
-                            download PDF
-                        </x-button>
-                        <!-- email implementation -->
-                        <x-button class="ml-3" onclick="showElement()">
-                            ask feedback
-                        </x-button>
-                        <!-- Give yourself feedback button -->
-                        <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
-                            Give yourself feedback
-                        </x-button>
+                    {{ $feedbackForms->links() }}
+                    <br>
+                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                        <div class="p-6 bg-white border-b border-gray-200">
+                            @foreach($feedbackForms as $feedbackForm)
+                                <h1>{{$feedbackForm->title}}</h1>
+                            @endforeach
+                            <br>
+                            <!-- PDF button -->
+                            <x-button class="ml-3" onclick="location.href='/feedbackForm/pdf/{{$binder->public_id}}'">
+                                download PDF
+                            </x-button>
+                            <!-- email implementation -->
+                            <x-button class="ml-3" onclick="showElement()">
+                                ask feedback
+                            </x-button>
+                            <!-- Give yourself feedback button -->
+                            <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
+                                Give yourself feedback
+                            </x-button>
 
-                        <!-- Form for E-mail -->
-                        <form class="formEmail" name="yes"
-                              style="visibility: hidden; padding-top: 20px; padding-left: 16px"
-                              action="/sendmail/test/">
-                            <div class="form-row align-items-center">
-                                <div class="col-auto">
-                                    <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                    <input type="text" class="form-control mb-2" name="email"
-                                           placeholder="Enter a email">
-                                </div>
-                                <div class="col-auto">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="checkbox" id="autoSizingCheck"
-                                               name="guest">
-                                        <label class="form-check-label" for="autoSizingCheck">
-                                            Guest
-                                        </label>
+                            <!-- Form for E-mail -->
+                            <form class="formEmail" name="yes"
+                                  style="visibility: hidden; padding-top: 20px; padding-left: 16px"
+                                  action="/sendmail/test/">
+                                <div class="form-row align-items-center">
+                                    <div class="col-auto">
+                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
+                                        <input type="text" class="form-control mb-2" name="email"
+                                               placeholder="Enter a email">
+                                    </div>
+                                    <div class="col-auto">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                                                   name="guest">
+                                            <label class="form-check-label" for="autoSizingCheck">
+                                                Guest
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary mb-2">Send</button>
                                     </div>
                                 </div>
-                                <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
-                                <div class="col-auto">
-                                    <button type="submit" class="btn btn-primary mb-2">Send</button>
+                            </form>
+
+                            <!-- PDF section (everything in here will be in the PDF) -->
+                            <div class="canvas_div_pdf">
+                                <div class="container">
+                                    <canvas id="myChart" width="1500" height="1000"></canvas>
                                 </div>
-                            </div>
-                        </form>
 
-                        <!-- PDF section (everything in here will be in the PDF) -->
-                        <div class="canvas_div_pdf">
-                            <div class="container">
-                                <canvas id="myChart" width="1500" height="1000"></canvas>
-                            </div>
-
-                            <!-- table with answer information -->
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col">Questions</th>
-                                    @foreach($feedbackForm->answerForms as $answerForm)
-                                        @if($answerForm->guest == NULL)
-                                            <th scope="col">{{$answerForm->user->name}}
-                                                - {{$answerForm->user->role->name}} </th>
-                                        @else
-                                            <th scope="col">{{$answerForm->guest->name}}
-                                                - {{$answerForm->guest->role->name}} </th>
-                                        @endif
-                                    @endforeach
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @foreach($feedbackForm->questions as $question)
-                                    <div></div>
+                                <!-- table with answer information -->
+                                <table class="table">
+                                    <thead>
                                     <tr>
-                                        <th scope="row">{{$question->question}}</th>
-                                        @foreach($question->answers as $answer)
-                                            <td>{{$answer->answer}}</td>
+                                        <th scope="col">Questions</th>
+                                        @foreach($feedbackForm->answerForms as $answerForm)
+                                            @if($answerForm->guest == NULL)
+                                                <th scope="col">{{$answerForm->user->name}}
+                                                    - {{$answerForm->user->role->name}} </th>
+                                            @else
+                                                <th scope="col">{{$answerForm->guest->name}}
+                                                    - {{$answerForm->guest->role->name}} </th>
+                                            @endif
                                         @endforeach
                                     </tr>
-                                @endforeach
-                                </tbody>
-                            </table>
-                            @else
-                                <div class="danger">
-                                    <h3>Uh oh! <br><br></h3>
-                                    <h4>
-                                        It looks like something went wrong in the making of this form!
-                                        It is best to delete this form and try again. If the problem persists, we fucked up.<br>
-                                    </h4>
-                                    <a class="btn pull-right"  style="border-color: #3b82f6" >Delete this form</a>
-
-                                </div>
-                            @endif
-                            @else
-                                You don't have permission to view this Form.
-                            @endif
+                                    </thead>
+                                    <tbody>
+                                    @foreach($feedbackForm->questions as $question)
+                                        <div></div>
+                                        <tr>
+                                            <th scope="row">{{$question->question}}</th>
+                                            @foreach($question->answers as $answer)
+                                                <td>{{$answer->answer}}</td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+                                @else
+                                    <div class="danger">
+                                        <h3>Uh oh! <br><br></h3>
+                                        <h4>
+                                            It looks like something went wrong in the making of this form!
+                                            It is best to delete this form and try again. If the problem persists, we
+                                            fucked up.<br>
+                                        </h4>
+                                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
+                                            @method('DELETE')
+                                            @csrf
+                                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button>
+                                        </form>
+                                    </div>
+                                @endif
+                                @else
+                                    You don't have permission to view this Form.
+                                @endif
+                            </div>
                         </div>
                     </div>
         </div>
-    </div>
     </div>
 </x-app-layout>
 
@@ -235,44 +238,44 @@
     </script>
 
 
-<!-- Script for making the PDF download (In development on pdf.blade.php) -->
-{{--<script>--}}
-{{--    function getPDF() {--}}
-{{--        var HTML_Width = $(".canvas_div_pdf").width();--}}
-{{--        var HTML_Height = $(".canvas_div_pdf").height();--}}
-{{--        var top_left_margin = 15;--}}
-{{--        var PDF_Width = HTML_Width + (top_left_margin * 2);--}}
-{{--        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);--}}
-{{--        var canvas_image_width = HTML_Width;--}}
-{{--        var canvas_image_height = HTML_Height;--}}
+    <!-- Script for making the PDF download (In development on pdf.blade.php) -->
+    {{--<script>--}}
+    {{--    function getPDF() {--}}
+    {{--        var HTML_Width = $(".canvas_div_pdf").width();--}}
+    {{--        var HTML_Height = $(".canvas_div_pdf").height();--}}
+    {{--        var top_left_margin = 15;--}}
+    {{--        var PDF_Width = HTML_Width + (top_left_margin * 2);--}}
+    {{--        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);--}}
+    {{--        var canvas_image_width = HTML_Width;--}}
+    {{--        var canvas_image_height = HTML_Height;--}}
 
-{{--        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;--}}
+    {{--        var totalPDFPages = Math.ceil(HTML_Height / PDF_Height) - 1;--}}
 
 
-{{--        html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {--}}
-{{--            canvas.getContext('2d');--}}
+    {{--        html2canvas($(".canvas_div_pdf")[0], {allowTaint: true}).then(function (canvas) {--}}
+    {{--            canvas.getContext('2d');--}}
 
-{{--            // console.log(canvas.height+"  "+canvas.width);--}}
-{{--            var imgData = canvas.toDataURL("image/jpeg", 1.0);--}}
-{{--            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
-{{--            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);--}}
+    {{--            // console.log(canvas.height+"  "+canvas.width);--}}
+    {{--            var imgData = canvas.toDataURL("image/jpeg", 1.0);--}}
+    {{--            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
+    {{--            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);--}}
 
-{{--            for (var i = 1; i <= totalPDFPages; i++) {--}}
-{{--                pdf.addPage(PDF_Width, PDF_Height);--}}
-{{--                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);--}}
-{{--            }--}}
+    {{--            for (var i = 1; i <= totalPDFPages; i++) {--}}
+    {{--                pdf.addPage(PDF_Width, PDF_Height);--}}
+    {{--                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);--}}
+    {{--            }--}}
 
-{{--            pdf.save("{{$feedbackForm->title}}.pdf");--}}
-{{--        });--}}
-{{--    };--}}
-{{--</script>--}}
+    {{--            pdf.save("{{$feedbackForm->title}}.pdf");--}}
+    {{--        });--}}
+    {{--    };--}}
+    {{--</script>--}}
 
-<!-- Script to make email section visible -->
-<script type="text/javascript">
-    function showElement() {
-        element = document.querySelector('.formEmail');
-        element.style.visibility = 'visible';
-    }
-</script>
+    <!-- Script to make email section visible -->
+    <script type="text/javascript">
+        function showElement() {
+            element = document.querySelector('.formEmail');
+            element.style.visibility = 'visible';
+        }
+    </script>
 
 @endif
