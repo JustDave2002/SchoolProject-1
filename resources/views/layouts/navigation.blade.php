@@ -12,10 +12,18 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('feedbackForm.index')" :active="request()->routeIs('feedbackForm')">
+                    <x-nav-link :href="route('feedbackForm.index')" :active="request()->routeIs('feedbackForm.index')">
                         {{ __('My feedback forms') }}
                     </x-nav-link>
                 </div>
+
+                @if(Auth::user()->admin==TRUE)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
+                        {{ __('Admin page') }}
+                    </x-nav-link>
+                </div>
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

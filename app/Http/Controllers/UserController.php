@@ -95,5 +95,28 @@ class UserController extends Controller
             'role_id' => 'required|numeric'
         ]);
     }
+
+    public function showAdmin(Request $request){
+        $notVerifiedUsers=user::where('role_verified', 0)->get();
+        $users=user::all();
+        $roles = Role::all();
+        return view('user.adminPage', compact('notVerifiedUsers', 'roles', 'users'));
+    }
+
+    public function verifyAdmin($id)
+    {
+        $user=User::where('id',$id)->first();
+        $user->update(['role_verified'=>TRUE]);
+        //dd($user);
+        return redirect(url()->previous());
+    }
+
+    public function declineAdmin($id)
+    {
+        $user=User::where('id',$id)->first();
+        $user->update(['role_id'=>1, 'role_verified'=>TRUE]);
+        return redirect(url()->previous());
+
+    }
 }
 

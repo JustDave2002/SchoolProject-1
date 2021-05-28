@@ -49,7 +49,12 @@ require __DIR__.'/auth.php';
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
+Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth'])->name('admin');
 
 Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth']);
 
+Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
+Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
+
 require __DIR__.'/auth.php';
+
