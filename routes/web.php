@@ -51,4 +51,8 @@ Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth'])
 
 Route::get('/sendmail/test/', [EmailtoolController::class, 'store'])->middleware(['auth']);
 
+Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
+Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
+
 require __DIR__.'/auth.php';
+
