@@ -8,7 +8,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight"></h2>
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __($binder->title) }}
+        </h2>
     </x-slot>
 
 
@@ -23,7 +25,7 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
                             @foreach($feedbackForms as $feedbackForm)
-                                <h1>{{$feedbackForm->title}}</h1>
+                                <h3>{{$feedbackForm->title}}</h3>
                             @endforeach
                             <br>
                             <!-- PDF button -->

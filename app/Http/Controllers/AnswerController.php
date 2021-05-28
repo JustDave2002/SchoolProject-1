@@ -87,7 +87,6 @@ class AnswerController extends Controller
             $answerForm = $answerForms[$index];
             return view('answer/edit',compact('feedbackForm','formBinder', 'answerForm','index', 'counter'));
         }
-
     }
 
 
@@ -147,6 +146,7 @@ class AnswerController extends Controller
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
 
         $answers = request('answer');
+        //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
         foreach ($questions as $question){

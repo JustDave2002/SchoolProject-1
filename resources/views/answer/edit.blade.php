@@ -12,39 +12,35 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('answer.updateForm')}}" name="answerForm" onsubmit="setFormSubmitting()" class="was-validated">
+                    <form method="POST"
+                          action="{{route('answer.updateForm')}}"
+                          name="answerForm"
+                          onsubmit="setFormSubmitting()"
+                          class="was-validated"
+                    >
                         @csrf
                         <b><h4>{{$feedbackForm->title}}</h4></b>
                         <br>
                         @foreach($feedbackForm->questions as $question)
                             <div class="form-group">
-
-                                    <label for="q1">{{$question->question}}</label><br>
-                                    <input type="range" id="answer" class="answer" list="num" placeholder="Question 1"
-                                           name="answer[]" value="{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}" min="1" max="5">
-
-                                    <datalist id="num">
-                                        <option value="1" label="--">
-                                        <option value="2" label="-">
-                                        <option value="3" label="o">
-                                        <option value="4" label="+">
-                                        <option value="5" label="++">
-                                    </datalist>
+                                <label for="q1">{{$question->question}}</label><br>
+                                <input type="range" id="answer" class="answer" list="num" placeholder="Question 1"
+                                       name="answer[]"
+                                       value="{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}"
+                                       min="1" max="5">
+                                <datalist id="num">
+                                    <option value="1" label="--">
+                                    <option value="2" label="-">
+                                    <option value="3" label="o">
+                                    <option value="4" label="+">
+                                    <option value="5" label="++">
+                                </datalist>
                             </div>
                             <br>
-{{--                                {{$question->question}} <br>--}}
-{{--                                {{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}--}}
-
-{{--                            {{$collection->question}}--}}
-{{--                            {{$collection->answer}}--}}
-
                         @endforeach
                         <br>
                         <br>
                         <input type="hidden" id="goBack" name="goBack" value="0">
-
-                        {{--                        {{$index}}{{$counter}}--}}
-
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if($index > 0)
@@ -62,8 +58,7 @@
                                 </div>
                         @endif
                     </form>
-                    {{$index}}
-                    {{$counter}}
+                    {{--                    {{$index}}{{$counter}}--}}
                 </div>
             </div>
         </div>
@@ -74,10 +69,12 @@
 
 <script>
     let formSubmitting = false;
-    let setFormSubmitting = function() { formSubmitting = true; };
+    let setFormSubmitting = function () {
+        formSubmitting = true;
+    };
 
 
-    function goBack(){
+    function goBack() {
         document.getElementById('goBack').value = 1
         formSubmitting = true;
         console.log(formSubmitting)
@@ -85,8 +82,7 @@
     }
 
 
-
-    window.onload = function() {
+    window.onload = function () {
         window.addEventListener("beforeunload", function (e) {
             console.log(formSubmitting)
             if (formSubmitting == true) {

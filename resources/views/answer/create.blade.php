@@ -12,7 +12,8 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('answer.store')}}" class="was-validated" onsubmit="setFormSubmitting()" name="answerForm">
+                    <form method="POST" action="{{route('answer.store')}}" class="was-validated"
+                          onsubmit="setFormSubmitting()" name="answerForm">
                         @csrf
                         <b><h4>{{$feedbackForm->title}}</h4></b>
                         <br>
@@ -35,13 +36,12 @@
                         <br>
                         <br>
                         <input type="hidden" id="goBack" name="goBack" value="0">
-
                         {{--                        {{$index}}{{$counter}}--}}
-
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if($index > 0)
-                                    <a class="btn pull-right"  style="border-color: #3b82f6" onclick="goBack()" >Previous</a>
+                                    <a class="btn pull-right" style="border-color: #3b82f6"
+                                       onclick="goBack()">Previous</a>
                                 @endif
                             </div>
                             @if($counter == 1)
@@ -62,10 +62,12 @@
 
 <script>
     let formSubmitting = false;
-    let setFormSubmitting = function() { formSubmitting = true; };
+    let setFormSubmitting = function () {
+        formSubmitting = true;
+    };
 
 
-    function goBack(){
+    function goBack() {
         document.getElementById('goBack').value = 1
         formSubmitting = true;
         console.log(formSubmitting)
@@ -73,8 +75,7 @@
     }
 
 
-
-    window.onload = function() {
+    window.onload = function () {
         window.addEventListener("beforeunload", function (e) {
             console.log(formSubmitting)
             if (formSubmitting == true) {

@@ -20,6 +20,12 @@
                                 {{ session()->get('message') }}
                             </div>
                         @endif
+                        @if(session()->has('error'))
+                            <div class="alert alert-danger">
+                                {{ session()->get('error') }}
+                            </div>
+                        @endif
+
                         <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
                             Create Form
                         </x-button>
@@ -34,7 +40,7 @@
                                             @foreach($binder->feedbackForms as $form)
                                                 @if($loop->first)
                                                     <canvas id="myChart{{$form->id}}" width="200px" height="120px"
-                                                    style="margin-bottom: 50px"></canvas>
+                                                            style="margin-bottom: 50px"></canvas>
                                                 @endif
                                             @endforeach
                                         </div>
@@ -91,8 +97,8 @@
     Chart.defaults.global.defaultFontColor = 'black';
 
     @foreach($formBinders as $binder)
-        @foreach($binder->feedbackForms as $feedbackForm)
-            @if($loop->first)
+    @foreach($binder->feedbackForms as $feedbackForm)
+    @if($loop->first)
     let counter{{$feedbackForm->id}} = 0;
     let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
@@ -127,7 +133,7 @@
         options: options,
         data: data{{$feedbackForm->id}},
     });
-            @endif
-        @endforeach
+    @endif
+    @endforeach
     @endforeach
 </script>

@@ -111,6 +111,12 @@ class FeedbackFormController extends Controller
             'title' => request('title'),
         ]);
 
+        //if there is no collection of feedback forms, hide the form binder title by
+        //making it the same as the feedback form title
+        if ($formBinder->form_count == 1) {
+            $formBinder->update(['title' => request('title')]);
+        }
+
         //creates questions
         foreach (request('question') as $q) {
             $question = Question::create([
@@ -232,7 +238,7 @@ class FeedbackFormController extends Controller
             }
         }
         $formBinder->delete();
-        return redirect(route('feedbackForm.index'));
+        return redirect(route('feedbackForm.index'))->with('error', 'Your feedback form has been deleted!');
 
     }
 

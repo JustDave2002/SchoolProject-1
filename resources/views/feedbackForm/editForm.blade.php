@@ -12,8 +12,12 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('feedbackForm.updateForm')}}" class="was-validated"
-                          name="feedbackForm">
+                    <form method="POST"
+                          action="{{route('feedbackForm.updateForm')}}"
+                          onsubmit="setFormSubmitting()"
+                          class="was-validated"
+                          name="feedbackForm"
+                    >
                         @csrf
                         @method('PUT')
                         <div class="form-group">
@@ -36,14 +40,12 @@
                         <br>
                         <input type="hidden" id="goBack" name="goBack" value="0">
                         <input type="hidden" id="id" name="id" value="{{$feedbackForm->id}}">
-
-
-{{--                        {{$index}}{{$counter}}--}}
-
+                        {{--                        {{$index}}{{$counter}}--}}
                         <div class="row">
                             <div class="col-md-6 text-left">
                                 @if($index > 0)
-                                    <a class="btn pull-right" style="border-color: #3b82f6" onclick="goBack()">Previous</a>
+                                    <a class="btn pull-right" style="border-color: #3b82f6"
+                                       onclick="goBack()">Previous</a>
                                 @endif
                             </div>
                             @if($counter == 1)
@@ -60,13 +62,36 @@
                 </div>
             </div>
         </div>
-        <script>
-
-            function goBack() {
-                document.getElementById('goBack').value = 1
-                document.feedbackForm.submit()
-            }
-        </script>
     </div>
 </x-app-layout>
 
+<script>
+    let formSubmitting = false;
+    let setFormSubmitting = function () {
+        formSubmitting = true;
+    };
+
+
+    function goBack() {
+        document.getElementById('goBack').value = 1
+        formSubmitting = true;
+        console.log(formSubmitting)
+        document.feedbackForm.submit()
+    }
+
+
+    window.onload = function () {
+        window.addEventListener("beforeunload", function (e) {
+            console.log(formSubmitting)
+            if (formSubmitting == true) {
+                return undefined;
+            }
+
+            const confirmationMessage = 'It looks like you have been editing something. '
+                + 'If you leave before saving, your changes will be lost.';
+
+            (e || window.event).returnValue = confirmationMessage; //Gecko + IE
+            return confirmationMessage; //Gecko + Webkit, Safari, Chrome etc.
+        });
+    };
+</script>

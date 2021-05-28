@@ -33,7 +33,7 @@
                                 <div>
                                 <select id="dropdown" class="block mt-1 w-full" style="margin-bottom: 30px" name="form_count" onclick="onClickDropdown()"  required />
 
-                                <option value="1">1</option>
+                                <option style="display: none" value="1">1</option>
                                 <option value="2">2</option>
                                 <option value="3">3</option>
                                 <option value="4">4</option>
@@ -57,17 +57,20 @@
 <script type="text/javascript">
     function showElement() {
         element = document.querySelector('.categoryForm');
+        dropdown = document.getElementById('dropdown');
         checkbox = document.getElementById("checkBox");
 
         if (checkbox.checked === true) {
             element.style.visibility = 'visible';
             element.style.display = 'block';
+            dropdown.value = 2;
 
         }
 
         if (checkbox.checked === false) {
             element.style.visibility = 'hidden';
             element.style.display = 'none';
+            dropdown.value = 1;
         }
     }
 
