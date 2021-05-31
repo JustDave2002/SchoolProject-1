@@ -21,7 +21,7 @@
     @foreach($feedbackForms as $feedbackForm)
         <!-- Everything inside this class will be in the PDF -->
             <div style="width: 1200px; height: 1500px; display: inline-block;"
-                 class="canvas_div_pdf{{$feedbackForm->id}}">
+                 class="canvas_div_pdf{{$feedbackForm->id}}" id="clipped">
                 @if(Auth::user()->id == $formBinder->user_id)
                     <br>
 
@@ -174,7 +174,7 @@
 
         let pdf = ''
         @foreach($feedbackForms as $feedbackForm)
-        html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true,}).then(function (canvas) {
+        html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true, scale: 2}).then(function (canvas) {
             canvas.getContext('2d');
             var imgData = canvas.toDataURL("image/jpeg", 1.0);
             @if ($loop->first)
@@ -240,3 +240,10 @@
 {{--        pdf.save("{{$formBinder->title}}.pdf");--}}
 {{--    };--}}
 {{--</script>--}}
+
+<style>
+    #clipped {
+        clip-path: inset(0 100% 0 0);
+    }
+
+</style>
