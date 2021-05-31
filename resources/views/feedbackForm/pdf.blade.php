@@ -17,7 +17,7 @@
         </x-button>
     </div>
 
-{{--    <div class="py-12">--}}
+
     @foreach($feedbackForms as $feedbackForm)
         <!-- Everything inside this class will be in the PDF -->
             <div style="width: 1200px; height: 1500px; display: inline-block;"
@@ -65,11 +65,7 @@
                     You don't have permission to view this Form.
                 @endif
             </div>
-
-
         @endforeach
-
-{{--    </div>--}}
 </x-app-layout>
 
 
@@ -155,7 +151,7 @@
 
 <!-- Script for making the PDF download -->
 <script >
-     window.addEventListener("load",function getPDF() {
+     function getPDF() {
 
         console.log('loaded')
         var HTML_Width = 1200;
@@ -198,48 +194,9 @@
 
         });
         @endforeach
-        //window.history.back();
-    });
+    };
 </script>
 
-
-{{--<script>--}}
-{{--    function getPDF() {--}}
-{{--                @foreach($feedbackForms as $feedbackForm)--}}
-{{--                var HTML_Width{{$feedbackForm->id->first()}} = $(".canvas_div_pdf{{$feedbackForm->id->first()}}").width();--}}
-{{--                var HTML_Height{{$feedbackForm->id->first()}} = $(".canvas_div_pdf{{$feedbackForm->id->first()}}").height();--}}
-{{--                @endforeach--}}
-{{--        var top_left_margin = 15;--}}
-{{--        var PDF_Width = HTML_Width + (top_left_margin * 2);--}}
-{{--        var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);--}}
-{{--        var canvas_image_width = HTML_Width;--}}
-{{--        var canvas_image_height = HTML_Height;--}}
-
-{{--        var totalPDFPages = {{$formBinder->form_count}} -1;--}}
-{{--        // Math.ceil(HTML_Height / PDF_Height) - 1;--}}
-
-{{--        var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
-{{--        @foreach($feedbackForms as $feedbackForm)--}}
-{{--        html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true}).then(function (canvas) {--}}
-{{--            canvas.getContext('2d');--}}
-
-{{--            // console.log(canvas.height+"  "+canvas.width);--}}
-
-{{--            var imgData = canvas.toDataURL("image/jpeg", 1.0);--}}
-{{--            var pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);--}}
-{{--            pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);--}}
-
-{{--            for (var i = 1; i <= totalPDFPages; i++) {--}}
-{{--                pdf.addPage(PDF_Width, PDF_Height);--}}
-{{--                pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);--}}
-{{--            }--}}
-
-
-{{--        });--}}
-{{--        @endforeach--}}
-{{--        pdf.save("{{$formBinder->title}}.pdf");--}}
-{{--    };--}}
-{{--</script>--}}
 
 <style>
     #clipped {

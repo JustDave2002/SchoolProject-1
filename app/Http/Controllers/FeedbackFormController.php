@@ -184,13 +184,16 @@ class FeedbackFormController extends Controller
      */
     public function show($public_id)
     {
-        $formBinder = formBinder::where('public_id', $public_id)->first();
-        $id = $formBinder->id;
+        $binder = formBinder::where('public_id', $public_id)->first();
+        $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
-        return view('feedbackForm.show', ['formCheck'=> $formCheck, 'binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
+
+//dd($feedbackForms);
+        $feedbackFormsPDF = FeedbackForm::where('form_binder_id', $binder->id)->get();
+        return view('feedbackForm.show', compact('binder', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
     }
 
 

@@ -34,7 +34,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('welcome');
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth']);
