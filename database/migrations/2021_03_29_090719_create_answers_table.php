@@ -20,7 +20,7 @@ class CreateAnswersTable extends Migration
                 ->onDelete('cascade');
 
             $table->foreignId('answer_form_id')
-                ->constrained('answers')
+                ->constrained('answer_forms')
                 ->onDelete('cascade');
 
             $table->string('answer');
