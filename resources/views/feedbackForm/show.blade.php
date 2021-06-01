@@ -23,12 +23,17 @@
                     <h4>
                         It looks like something went wrong in the making of this form!
                         If you want to continue making this form, you can edit it here. <br>
-                        <a class="btn pull-right" style="border-color: #3b82f6" href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+                        <a class="btn pull-right" style="border-color: #3b82f6"
+                           href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
 
 
                         <br><br>Alternatively you can delete the form by pressing here.<br>
-                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
-                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button></form>
+                        <form method="POST"
+                              action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
+                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this
+                                form
+                            </button>
+                        </form>
                     </h4>
                 @elseif($formCount != 0)
 
@@ -84,7 +89,6 @@
                                 <div class="container">
                                     <canvas id="myChart" width="1500" height="1000"></canvas>
                                 </div>
-
                                 <!-- table with answer information -->
                                 <table class="table">
                                     <thead>
@@ -93,7 +97,13 @@
                                         @foreach($feedbackForm->answerForms as $answerForm)
                                             @if($answerForm->guest == NULL)
                                                 <th scope="col">{{$answerForm->user->name}}
-                                                    - {{$answerForm->user->role->name}} </th>
+                                                    - <br>{{$answerForm->user->role->name}}
+                                                    @if($answerForm->user->role_verified)
+                                                        <div class="verified"></div>
+                                                    @else
+                                                        <div class="not_verified"> x</div>
+                                                    @endif
+                                                </th>
                                             @else
                                                 <th scope="col">{{$answerForm->guest->name}}
                                                     - {{$answerForm->guest->role->name}} </th>
@@ -113,12 +123,16 @@
                                     @endforeach
                                     </tbody>
                                 </table>
-                                <a class="btn pull-right" style="border-color: #3b82f6" href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+                                <a class="btn pull-right" style="border-color: #3b82f6"
+                                   href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
 
                                 <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
                                     @method('DELETE')
                                     @csrf
-                                    <button class="btn pull-right" type="submit" onclick="return confirm('Are you sure you want to delete this form?')" style="border-color: #3b82f6">Delete this form</button>
+                                    <button class="btn pull-right" type="submit"
+                                            onclick="return confirm('Are you sure you want to delete this form?')"
+                                            style="border-color: #3b82f6">Delete this form
+                                    </button>
                                 </form>
 
                                 @else
@@ -130,8 +144,12 @@
                                             fucked up.<br>
                                         </h4>
 
-                                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
-                                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button></form>
+                                        <form method="POST"
+                                              action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
+                                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">
+                                                Delete this form
+                                            </button>
+                                        </form>
                                     </div>
                                 @endif
                                 @else
@@ -164,10 +182,16 @@
                     <thead>
                     <tr>
                         <th scope="col">Questions</th>
-                        @foreach($form->answerForms as $answerForm)
+                        @foreach($feedbackForm->answerForms as $answerForm)
                             @if($answerForm->guest == NULL)
                                 <th scope="col">{{$answerForm->user->name}}
-                                    - {{$answerForm->user->role->name}} </th>
+                                    - <br>{{$answerForm->user->role->name}}
+                                    @if($answerForm->user->role_verified)
+                                        <div class="verified"></div>
+                                    @else
+                                        <div class="not_verified"> x</div>
+                                    @endif
+                                </th>
                             @else
                                 <th scope="col">{{$answerForm->guest->name}}
                                     - {{$answerForm->guest->role->name}} </th>
@@ -366,7 +390,7 @@
     </script>
 
     <!-- Script for making the PDF download -->
-    <script >
+    <script>
         function getPDF() {
 
             console.log('loaded')
@@ -386,7 +410,10 @@
 
             let pdf = ''
             @foreach($feedbackFormsPDF as $feedbackForm)
-            html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {allowTaint: true, scale: 2}).then(function (canvas) {
+            html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {
+                allowTaint: true,
+                scale: 2
+            }).then(function (canvas) {
                 canvas.getContext('2d');
                 var imgData = canvas.toDataURL("image/jpeg", 1.0);
                 @if ($loop->first)
