@@ -36,8 +36,9 @@ class FeedbackFormController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $request)
     {
+        $this->clearSession($request);
         return view('feedbackForm.create');
     }
 
@@ -79,7 +80,8 @@ class FeedbackFormController extends Controller
     {
         //gathers some needed data
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
-
+//TODO finish this
+        dd($feedbackForms->get($index));
         //if the formPage does not exist yet create one
         if ($feedbackForms->get($index) == NULL) {
             //gets variables from session and returns them in the view
@@ -187,13 +189,15 @@ class FeedbackFormController extends Controller
         $binder = formBinder::where('public_id', $public_id)->first();
         $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
+        $formCount = count(FeedbackForm::where('form_binder_id', $id)->get());
+//        dd($formCount);
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
 
 //dd($feedbackForms);
         $feedbackFormsPDF = FeedbackForm::where('form_binder_id', $binder->id)->get();
-        return view('feedbackForm.show', compact('binder', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
+        return view('feedbackForm.show', compact('binder', 'formCount', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
     }
 
 
@@ -203,9 +207,13 @@ class FeedbackFormController extends Controller
      * @param \App\Models\FeedbackForm $feedbackForm
      * @return \Illuminate\Http\Response
      */
-    public function edit(FeedbackForm $feedbackForm)
+    public function edit(Request $request, $publicId)
     {
-        return view('feedbackForm.edit', compact('feedbackForm'));
+//        dd($request->session());
+        $formBinder=formBinder::where('public_id', $publicId)->first();
+        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('counter', $formBinder->form_count);
+        return redirect('feedbackForm/createForm');
     }
 
 
@@ -285,8 +293,7 @@ class FeedbackFormController extends Controller
         } else {
             $count = $request->session()->get('counter');
             if ($count == 1) {
-                $request->session()->forget('counter');
-                $request->session()->forget('formBinder');
+                //TODO session forget
                 return redirect('feedbackForm')->with('message', 'Your feedback form has been made!');
 
             } else {
@@ -312,6 +319,18 @@ class FeedbackFormController extends Controller
         $request->session()->put('index', $index);
         $request->session()->put('feedbackForm', $feedbackForm);
         return array($index, $feedbackForms, $feedbackForm, $counter);
+    }
+
+    /**
+     * @param Request $request
+     */
+    private function clearSession(Request $request): void
+    {
+        $request->session()->forget('counter');
+        $request->session()->forget('formBinder');
+        $request->session()->forget('index');
+        $request->session()->forget('feedbackForm');
+        $request->session()->forget('answerForms');
     }
 }
 

@@ -18,7 +18,19 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
             @if(Auth::user()->id == $binder->user_id)
-                @if($formCheck != NULL)
+                @if($binder->form_count != $formCount && $formCount != 0)
+                    <h3>Uh oh! <br><br></h3>
+                    <h4>
+                        It looks like something went wrong in the making of this form!
+                        If you want to continue making this form, you can edit it here. <br>
+                        <a class="btn pull-right" style="border-color: #3b82f6" href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+
+
+                        <br><br>Alternatively you can delete the form by pressing here.<br>
+                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
+                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button></form>
+                    </h4>
+                @elseif($formCount != 0)
 
                     {{ $feedbackForms->links() }}
                     <br>
@@ -101,11 +113,14 @@
                                     @endforeach
                                     </tbody>
                                 </table>
+                                <a class="btn pull-right" style="border-color: #3b82f6" href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+
                                 <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
                                     @method('DELETE')
                                     @csrf
                                     <button class="btn pull-right" type="submit" onclick="return confirm('Are you sure you want to delete this form?')" style="border-color: #3b82f6">Delete this form</button>
                                 </form>
+
                                 @else
                                     <div class="danger">
                                         <h3>Uh oh! <br><br></h3>
@@ -114,11 +129,9 @@
                                             It is best to delete this form and try again. If the problem persists, we
                                             fucked up.<br>
                                         </h4>
-                                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
-                                            @method('DELETE')
-                                            @csrf
-                                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button>
-                                        </form>
+
+                                        <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
+                                            <button class="btn pull-right" type="submit" style="border-color: #3b82f6">Delete this form</button></form>
                                     </div>
                                 @endif
                                 @else
@@ -181,7 +194,7 @@
     @endforeach
 </x-app-layout>
 
-@if($formCheck != NULL)
+@if($binder->form_count == $formCount)
     <!-- Script for making the Chart.js -->
     <script>
         let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
