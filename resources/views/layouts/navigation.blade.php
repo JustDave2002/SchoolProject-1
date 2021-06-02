@@ -17,6 +17,12 @@
                     </x-nav-link>
                 </div>
 
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('answer.index')" :active="request()->routeIs('answer.index')">
+                        {{ __('My given feedback') }}
+                    </x-nav-link>
+                </div>
+
                 @if(Auth::user() != NULL)
                 @if(Auth::user()->admin==TRUE)
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -25,7 +31,7 @@
                     </x-nav-link>
                 </div>
                 @endif
-                    @endif
+                @endif
             </div>
 
             <!-- Settings Dropdown -->

@@ -13,6 +13,8 @@ use Illuminate\Http\Request;
 use Auth;
 use Illuminate\Support\Facades\DB;
 use Ramsey\Uuid\Uuid;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Input;
 
 
 class AnswerController extends Controller
@@ -24,7 +26,50 @@ class AnswerController extends Controller
      */
     public function index()
     {
+        // Get all the posts ordered by published date and paginated
+        $id = Auth::user()->id;
 
+        $answerForms = answerform::where('user_id', $id)->get();
+
+        $formBinders = collect([]);
+
+        $num = 0;
+
+        foreach ($answerForms as $answerForm) {
+            $feedbackForm = FeedbackForm::where('id', $answerForm->feedback_form_id)->first();
+
+            $formBinderId = $feedbackForm->form_binder_id;
+
+            $currentBinder = FormBinder::where('id', $formBinderId)->first();
+
+            if ($formBinders->contains($currentBinder) === false) {
+                $formBinders->push($currentBinder);
+            }
+
+            // for ($i=$num; $i < $formBinders.length; $i++) {
+            //     $thisFeedbackform = $feedbackForm[$i];
+            //     if($currentBinder->id === $thisFeedbackform->id); 
+            //     $num += 1;
+            //     Log::debug('please werk');
+            // }
+            // if($formBinder->id != $currentBinder->id){
+            //     $formBinders->push($currentBinder);
+            //     Log::debug('adding new instance', (array)$formBinder->id);
+            //     }     
+            //}
+        }
+        // $page = Input::get('page', 1); // Get the ?page=1 from the url
+        // $perPage = 10; // Number of items per page
+        // $offset = ($page * $perPage) - $perPage;
+        
+        // return new LengthAwarePaginator(
+        //     array_slice($formBinders->toArray(), $offset, $perPage, true), // Only grab the items we need
+        //     count($formBinders), // Total items
+        //     $perPage, // Items per page
+        //     $page, // Current page
+        //     ['path' => $request->url(), 'query' => $request->query()] // We need this so we can keep all old query parameters from the url
+        // );
+        return view('answer.index', ['formBinders' => $formBinders]);
     }
 
 
@@ -242,9 +287,15 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($public_id)
     {
-        //
+        $formBinder = formBinder::where('public_id', $public_id)->first();
+        $id = $formBinder->id;
+        $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
+        $feedbackForms = FeedbackForm::where('form_binder_id', $id)
+            ->orderBy('created_at', 'asc')
+            ->paginate(1);
+        return view('answer.show', ['formCheck'=> $formCheck, 'binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
     }
 
     /**
