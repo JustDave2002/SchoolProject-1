@@ -34,7 +34,6 @@
                             </thead>
                             <tbody class="tbody list">
                             @foreach($notVerifiedUsers as $user)
-
                                 <tr>
                                     <th scope="row" class="name"> {{$user->name}} </th>
                                     <td class="email"> {{$user->email}} </td>
@@ -67,11 +66,10 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <!-- table with answer information -->
                     <h4>All Users</h4>
                     <br>
-
-                    <div id="users">
+                    <!-- table with answer information -->
+                    <div id="user">
                         <input class="search" placeholder="Search"/>
                         <a>
                             Sort by name
@@ -126,11 +124,12 @@
 </x-app-layout>
 
 <script>
-    var options = {
+    const options = {
         valueNames: ['name', 'email', 'role', 'admin', 'email_verified']
     };
 
-    var userList = new List('users', options);
+    let userLists = new List('users', options);
+    let userList = new List('user', options);
 </script>
 <style>
     .table td:nth-child(n+2) {
