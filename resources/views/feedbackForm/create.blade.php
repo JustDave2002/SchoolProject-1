@@ -24,7 +24,7 @@
                         <div class='categoryForm' style="display: none">
                             <br>
                             <div>
-                                <label style="margin: 0px" for="title">Form Title</label><br>
+                                <label style="margin: 0px" for="title">Category Title</label><br>
                                 <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="het grote feedback from" required>
                                 <div class="valid-feedback"><br></div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
