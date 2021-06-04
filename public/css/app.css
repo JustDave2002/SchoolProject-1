@@ -1,3 +1,27 @@
+.verified {
+    margin-top: 6px;
+    left: 13px;
+    top: 2.5px;
+    width: 5px;
+    height: 10px;
+    border: solid #0080FF;
+    border-width: 0 2px 2px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+    display: inline-block;
+    vertical-align:top;
+}
+.not_verified {
+    display: inline-block;
+    font-size: 15px;
+    vertical-align:top;
+    color: red;
+    font-weight: bold;
+}
+
+
+
 /*! tailwindcss v2.0.4 | MIT License | https://tailwindcss.com */
 
 /*! modern-normalize v1.0.0 | MIT License | https://github.com/sindresorhus/modern-normalize */

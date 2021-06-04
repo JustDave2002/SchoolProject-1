@@ -72,9 +72,17 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        //dd($user);
+//        dd($user);
 //        dd($request->all());
         $this->validateUser($request);
+        if ($request->role_id==1){
+            $role_verified=TRUE;
+        } else {
+            $role_verified=FALSE;
+        }
+
+//        dd($role_verified);
+        $request->request->add(['role_verified' => $role_verified]);
         $user->update($request->all());
         return redirect('/user');
     }
@@ -92,13 +100,19 @@ class UserController extends Controller
 
     public function validateUser(Request $request){
         return $request->validate([
-            'role_id' => 'required|numeric'
+            'role_id' => 'required|numeric',
+            'admin' => 'prohibited',
+            'name' => 'prohibited',
+            'email' => 'prohibited',
+            'password' => 'prohibited',
         ]);
     }
 
     public function showAdmin(Request $request){
-        $notVerifiedUsers=user::where('role_verified', 0)->get();
-        $users=user::all();
+        $notVerifiedUsers=user::where('role_verified', 0)
+            ->orderBy('name', 'asc')
+            ->get();
+        $users=user::orderBy('name', 'asc')->get();
         $roles = Role::all();
         return view('user.adminPage', compact('notVerifiedUsers', 'roles', 'users'));
     }
