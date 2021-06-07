@@ -13,6 +13,6 @@ class FeedbackToolController extends Controller
 //        dd($request);
         Mail::to($request)->send(new FeedbackTool);
 
-        return redirect('/feedbackForm');
+        return redirect(url()->previous());
     }
 }

@@ -5,7 +5,7 @@
               crossorigin="anonymous">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('My feedback forms') }}
+            {{ __('My given feedback') }}
         </h2>
     </x-slot>
 
@@ -26,14 +26,11 @@
                             </div>
                         @endif
 
-                        <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
-                            Create Form
-                        </x-button>
                         <div class="row">
                             @foreach($formBinders as $binder)
                                 <div class="col-lg-5 col-md-12 col-sm-12 bg-light"
                                      style="padding: 20px; border-radius: 25px; margin: 40px">
-                                    <a href="/feedbackForm/{{$binder->public_id}}" style="color: inherit;">
+                                    <a href="/answer/{{$binder->public_id}}" style="color: inherit;">
                                         <h3 class="feature-title">{{$binder->title}}</h3>
 
                                         <div class="container">
@@ -48,7 +45,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        {{ $formBinders->links() }}
+                        
                     @else
                         Before you can start making feedback forms you need to edit your account <br>
                         <x-button class="ml-3" onclick="document.location.href='{{route('user.index')}}'">
@@ -109,12 +106,8 @@
             @endforeach
         ],
         datasets: [
-                @foreach($feedbackForm->answerForms as $answerForm){
-                @if($answerForm->guest == NULL)
+                @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
                 label: '{{$answerForm->user->role->name}}',
-                @else
-                label: '{{$answerForm->guest->role->name}}',
-                @endif
                 data: [
                     @foreach($answerForm->answers as $answer)
                         '{{$answer->answer}}',

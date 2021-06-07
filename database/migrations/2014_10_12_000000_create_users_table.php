@@ -20,9 +20,11 @@ class CreateUsersTable extends Migration
                 ->nullable()
                 ->constrained('roles')
                 ->onDelete('cascade');
+            $table->boolean('role_verified');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->boolean('admin');
             $table->rememberToken();
             $table->timestamps();
         });

@@ -12,10 +12,26 @@
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    <x-nav-link :href="route('feedbackForm.index')" :active="request()->routeIs('feedbackForm')">
+                    <x-nav-link :href="route('feedbackForm.index')" :active="request()->routeIs('feedbackForm.index')">
                         {{ __('My feedback forms') }}
                     </x-nav-link>
                 </div>
+
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('answer.index')" :active="request()->routeIs('answer.index')">
+                        {{ __('My given feedback') }}
+                    </x-nav-link>
+                </div>
+
+                @if(Auth::user() != NULL)
+                @if(Auth::user()->admin==TRUE)
+                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <x-nav-link :href="route('admin')" :active="request()->routeIs('admin')">
+                        {{ __('Admin page') }}
+                    </x-nav-link>
+                </div>
+                @endif
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
@@ -72,8 +88,8 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
-                {{ __('Dashboard') }}
+            <x-responsive-nav-link :href="route('feedbackForm.index')" :active="request()->routeIs('feedbackForm.index')">
+                {{ __('My feedback forms') }}
             </x-responsive-nav-link>
         </div>
 

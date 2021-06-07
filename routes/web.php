@@ -25,6 +25,8 @@ route::post('guestAnswer/update',[AnswerController::class, 'guestStore'])->name(
 Route::get('/guestAnswer/create',[AnswerController::class, 'create']);
 
 Route::get('/answer/create',[AnswerController::class, 'create'])->middleware(['auth']);
+Route::get('/answer/edit',[AnswerController::class, 'editForm'])->middleware(['auth']);
+Route::post('/answer/updateForm',[AnswerController::class, 'updateForm'])->middleware(['auth'])->name('answer.updateForm');
 
 
 Route::get('/', function () {
@@ -32,7 +34,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
+    return view('welcome');
 })->middleware(['auth'])->name('dashboard');
 
 Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth']);
@@ -47,7 +49,12 @@ require __DIR__.'/auth.php';
 Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
 Route::resource('answer', AnswerController::class);
 Route::resource('user', UserController::class)->middleware(['auth']);
+Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth'])->name('admin');
 
 Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth']);
 
+Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
+Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
+
 require __DIR__.'/auth.php';
+
