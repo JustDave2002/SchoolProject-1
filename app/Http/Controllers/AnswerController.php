@@ -171,6 +171,7 @@ class AnswerController extends Controller
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
 
         $answers = request('answer');
+        $comments = request('comment');
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
@@ -178,7 +179,8 @@ class AnswerController extends Controller
             $answer = Answer::create([
                 'question_id' => $question->id,
                 'answer_form_id' => $form->id,
-                'answer' => array_shift($answers)
+                'answer' => array_shift($answers),
+                'comment' => array_shift($comments)
             ]);
         }
 

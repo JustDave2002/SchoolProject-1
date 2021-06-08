@@ -24,6 +24,7 @@ class CreateAnswersTable extends Migration
                 ->onDelete('cascade');
 
             $table->string('answer');
+            $table->string('comment')->nullable();
             $table->timestamps();
         });
     }
