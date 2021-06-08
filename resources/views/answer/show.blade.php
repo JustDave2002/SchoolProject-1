@@ -19,27 +19,29 @@
 
             @if(Auth::user()->id == $binder->user_id)
 
-                    {{ $feedbackForms->links() }}
-                    <br>
-                    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                        <div class="p-6 bg-white border-b border-gray-200">
-                            @foreach($feedbackForms as $feedbackForm)
-                                <h3>{{$feedbackForm->title}}</h3>
-                            @endforeach
-                            <br>
-                            <!-- PDF section (everything in here will be in the PDF) -->
-                            <div class="canvas_div_pdf">
-                                <div class="container">
-                                    <canvas id="myChart" width="1500" height="1000"></canvas>
-                                </div>
+                {{ $feedbackForms->links() }}
+                <br>
+                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                    <div class="p-6 bg-white border-b border-gray-200">
+                        @foreach($feedbackForms as $feedbackForm)
+                            <h3>{{$feedbackForm->title}}</h3>
+                        @endforeach
+                        <br>
+                            <!-- Secondary button for editing a form -->
+                            <a class="btn pull-right" style="border-color: #3b82f6"
+                               href="/answer/{{$binder->public_id}}/edit">Edit Feedback</a>
+                        <br>
 
-                                <!-- table with answer information -->
-                                @else
-                                    You don't have permission to view this Form.
-                                @endif
-                            </div>
+                        <div class="container">
+                            <canvas id="myChart" width="1500" height="1000"></canvas>
                         </div>
+
+                        <!-- table with answer information -->
+                        @else
+                            You don't have permission to view this Form.
+                        @endif
                     </div>
+                </div>
         </div>
     </div>
 </x-app-layout>
@@ -57,7 +59,7 @@
                 '{{$question->question}}',
                 @endforeach],
             datasets: [
-                @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
+                    @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
                     label: '{{$answerForm->user->role->name}}',
                     data: [
                         @foreach($answerForm->answers as $answer)
