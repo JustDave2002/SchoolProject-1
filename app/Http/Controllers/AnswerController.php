@@ -33,6 +33,7 @@ class AnswerController extends Controller
 
         $formBinders = collect([]);
 
+
         $num = 0;
 
         foreach ($answerForms as $answerForm) {
@@ -69,6 +70,8 @@ class AnswerController extends Controller
         //     $page, // Current page
         //     ['path' => $request->url(), 'query' => $request->query()] // We need this so we can keep all old query parameters from the url
         // );
+//        dd($formBinders);
+        $formBinders = $formBinders->sortDesc();
         return view('answer.index', ['formBinders' => $formBinders]);
     }
 
