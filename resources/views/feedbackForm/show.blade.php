@@ -33,7 +33,7 @@
                         </form>
                     </h4>
                 @elseif($formCount != 0)
-                   <!-- Pagination -->
+                <!-- Pagination -->
                     {{ $feedbackForms->links() }}
                     <br>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -144,18 +144,24 @@
                                 @endforeach
                                 </tbody>
                             </table>
-                                <!-- Secondary buttons for edit and delete a form -->
-                            <a class="btn pull-right" style="border-color: #3b82f6"
-                               href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
 
-                            <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn pull-right" type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this form?')"
-                                        style="border-color: #3b82f6">Delete this form
-                                </button>
-                            </form>
+                            <!-- Secondary buttons for edit and delete a form -->
+                                <div>
+                                <a class="btn pull-right" style="border-color: #3b82f6"
+                                   href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+
+                                <div style="display:inline-block; vertical-align: top">
+                                    <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="btn pull-right" type="submit"
+                                                onclick="return confirm('Are you sure you want to delete this form?')"
+                                                style="border-color: #3b82f6">Delete this form
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
                             <!-- Form error when form does not exists -->
                             @else
                                 <div class="danger">
@@ -185,6 +191,9 @@
 @if($binder->form_count == $formCount )
 
     @foreach($feedbackFormsPDF as $form)
+
+        <!-- ALERT! this code part will only be in the pdf -->
+
         <!-- Everything inside this class will be in the PDF -->
             <div style="width: 1200px; height: 1500px;  position: absolute;
   left:     -10000px; display: inline-block;"
@@ -200,7 +209,7 @@
                                 style="margin-bottom: 200px; width:1110px; height:740px"></canvas>
                     </div>
 
-                    <!-- table with answer information -->
+                    <!-- table with answer information PDF -->
                     <table class="table">
                         <thead>
                         <tr>
