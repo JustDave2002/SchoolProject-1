@@ -13,10 +13,9 @@
         </h2>
     </x-slot>
 
-
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
+            <!-- Alert for incomplete form -->
             @if(Auth::user()->id == $binder->user_id)
                 @if($binder->form_count != $formCount && $formCount != 0)
                     <h3>Uh oh! <br><br></h3>
@@ -25,8 +24,6 @@
                         If you want to continue making this form, you can edit it here. <br>
                         <a class="btn pull-right" style="border-color: #3b82f6"
                            href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
-
-
                         <br><br>Alternatively you can delete the form by pressing here.<br>
                         <form method="POST"
                               action="{{route('feedbackForm.destroy', $binder->public_id) }}">@method('DELETE') @csrf
@@ -36,7 +33,7 @@
                         </form>
                     </h4>
                 @elseif($formCount != 0)
-
+                   <!-- Pagination -->
                     {{ $feedbackForms->links() }}
                     <br>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
@@ -44,8 +41,8 @@
                             @foreach($feedbackForms as $feedbackForm)
                                 <h3>{{$feedbackForm->title}}</h3>
                             @endforeach
-
                             <br>
+
                             <!-- PDF button -->
                             <x-button class="ml-3" onclick="getPDF()">
                                 download PDF
@@ -85,10 +82,10 @@
                                 </div>
                             </form>
 
-
                             <div class="container">
                                 <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
+
                             <!-- table with answer information -->
                             <table class="table">
                                 <thead>
@@ -133,28 +130,21 @@
                                     <div></div>
                                     <tr>
                                         <th scope="row">{{$question->question}}</th>
-{{--                                        @if($loop->first)--}}
-{{--                                            @foreach($feedbackFormsPDF->where('id', $feedbackForm->id) as $form)--}}
-{{--                                                @foreach($form->avg as $avg)--}}
-{{--                                                    <td>{{$avg}}</td>--}}
-{{--                                                @endforeach--}}
-{{--                                            @endforeach--}}
-{{--                                        @else--}}
-                                            @foreach($question->answers as $answer)
-                                                @if($loop->first)
-                                                    @foreach($feedbackFormsPDF->where('id', $feedbackForm->id) as $form)
+                                        @foreach($question->answers as $answer)
+                                            @if($loop->first)
+                                                @foreach($feedbackFormsPDF->where('id', $feedbackForm->id) as $form)
                                                     <td>{{$form->avg[$loop->parent->parent->index]}}</td>
-                                                    @endforeach
-                                                    <td>{{$answer->answer}}</td>
-                                                @else
+                                                @endforeach
                                                 <td>{{$answer->answer}}</td>
-                                                @endif
-                                            @endforeach
-{{--                                        @endif--}}
+                                            @else
+                                                <td>{{$answer->answer}}</td>
+                                            @endif
+                                        @endforeach
                                     </tr>
                                 @endforeach
                                 </tbody>
                             </table>
+                                <!-- Secondary buttons for edit and delete a form -->
                             <a class="btn pull-right" style="border-color: #3b82f6"
                                href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
 
@@ -166,7 +156,7 @@
                                         style="border-color: #3b82f6">Delete this form
                                 </button>
                             </form>
-
+                            <!-- Form error when form does not exists -->
                             @else
                                 <div class="danger">
                                     <h3>Uh oh! <br><br></h3>
@@ -253,6 +243,7 @@
 </x-app-layout>
 
 @if($binder->form_count == $formCount)
+
     <!-- Script for making the Chart.js -->
     <script>
         let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
@@ -282,7 +273,7 @@
                         @endforeach
 
                     ],
-                    borderColor: '#000000',
+                    borderColor: 'black',
                     backgroundColor: '#FF000000',
                     borderWidth: 1.5
                 },
@@ -307,38 +298,23 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label
-        :
-        '{{$answerForm->user->role->name}}',
+                    label:'{{$answerForm->user->role->name}}',
             @else
-                label
-        :
-        '{{$answerForm->guest->role->name}}',
+                label:'{{$answerForm->guest->role->name}}',
             @endif
 
-                data
-        :
-        [
+                data:[
             @foreach($answerForm->answers as $answer)
                 '{{$answer->answer}}',
             @endforeach
         ],
-            borderColor
-        :
-        '#777',
-            backgroundColor
-        :
-        `${color[counter++]}`,
-            borderWidth
-        :
-        1
+            borderColor:'#777',
+            backgroundColor:`${color[counter++]}`,
+            borderWidth:1
         },
         @endif
         @endforeach
-
-        ]
-        }
-        ;
+        ]};
 
         // Global Options
         Chart.defaults.global.defaultFontFamily = 'Arial';
@@ -372,7 +348,6 @@
             }
         };
 
-
         let massPopChart = new Chart(myChart, {
             type: 'radar',
             options: options,
@@ -380,7 +355,6 @@
         });
     </script>
 
-
     <!-- Script to make email section visible -->
     <script type="text/javascript">
         function showElement() {
@@ -397,10 +371,8 @@
         }
     </script>
 
-
+    <!-- Script to draw the charts on the pdf -->
     <script>
-        //let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
-
         const optionsPDF = {
 
 
@@ -439,7 +411,6 @@
 
         @foreach($feedbackFormsPDF as $feedbackForm)
         console.log({{$feedbackForm->id}});
-        {{--    @if($loop->first)--}}
         let counter{{$feedbackForm->id}} = 0;
         let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
@@ -475,7 +446,6 @@
             data: data{{$feedbackForm->id}},
         });
         @endforeach
-
     </script>
 
     <!-- Script for making the PDF download -->
@@ -493,9 +463,8 @@
             var PDF_Height = HTML_Height;
             var canvas_image_width = HTML_Width;
             var canvas_image_height = HTML_Height;
-
             var totalPDFPages = {{$binder->form_count}} -1;
-            // Math.ceil(HTML_Height / PDF_Height) - 1;
+
 
             let pdf = ''
             @foreach($feedbackFormsPDF as $feedbackForm)
@@ -510,15 +479,8 @@
                 @else
                 pdf.addPage(PDF_Width, PDF_Height);
                 @endif
-                // console.log(canvas.height+"  "+canvas.width);
-
 
                 pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
-
-                // for (var i = 1; i <= totalPDFPages; i++) {
-                //     pdf.addPage(PDF_Width, PDF_Height);
-                //     pdf.addImage(imgData, 'JPG', top_left_margin, -(PDF_Height * i) + (top_left_margin * 4), canvas_image_width, canvas_image_height);
-                // }
 
                 @if($loop->last)
                 pdf.save("{{$binder->title}}.pdf");
@@ -529,12 +491,11 @@
         };
     </script>
 
-
+    <!-- Make PDf invisible on page -->
     <style>
         #clipped {
             clip-path: inset(0 100% 0 0);
         }
-
     </style>
 @endif
 
