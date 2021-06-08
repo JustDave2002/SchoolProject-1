@@ -282,7 +282,7 @@
                         @endforeach
 
                     ],
-                    borderColor: '#000000',
+                    borderColor: 'black',
                     backgroundColor: '#FF000000',
                     borderWidth: 1.5
                 },
@@ -397,7 +397,7 @@
         }
     </script>
 
-
+    <!-- Script to draw the charts on the pdf -->
     <script>
         //let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
 
