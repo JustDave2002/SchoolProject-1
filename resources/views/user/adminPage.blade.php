@@ -133,11 +133,11 @@
 </script>
 <style>
     .table td:nth-child(n+2) {
-        border: 2px solid black;
+        /*border: 2px solid black;*/
     }
 
     .table td:nth-child(n+2) {
-        border: 2px solid black;
+        /*border: 2px solid black;*/
     }
 
     .table td:nth-last-child(n) {
@@ -146,9 +146,9 @@
 
 
     .table th:nth-child(n+2) {
-        border-bottom: 3px solid black;
-        border-left: 2px solid black;
-        border-right: 2px solid black;
+        /*border-bottom: 3px solid black;*/
+        /*border-left: 2px solid black;*/
+        /*border-right: 2px solid black;*/
     }
 
     .table th:nth-last-child(n) {
@@ -156,20 +156,22 @@
     }
 
     .thead th:nth-child(1) {
-        border-bottom: 3px solid black;
-        border-right: 2px solid black
+        /*border-bottom: 3px solid black;*/
+        /*border-right: 2px solid black*/
     }
 
     .thead {
         background-color: #c5cdd3;
+        /*background-color: #74ad5c;*/
     }
 
     .tbody th:nth-child(1) {
-        border-bottom: 2px solid black;
+        /*border-bottom: 2px solid black;*/
     }
 
     .tbody tr:nth-child(even) {
         background-color: #e2e6e9;
+        /*background-color: #db8061;*/
     }
 
     input {
