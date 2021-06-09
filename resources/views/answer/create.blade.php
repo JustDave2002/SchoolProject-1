@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group" id="field{{$loop->index}}" style="display: none">
                                 <label style="margin: 0px" for="title">Extra feedback</label><br>
-                                <input type="text" id="comment" class="form-control" placeholder="Type some extra feedback or clarification here" name="comment[]">
+                                <input type="text" id="comment" class="form-control" placeholder="Type some extra feedback or clarification here" name="comment[]"maxlength="200">
                                 <div class="valid-feedback"><br></div>
                             </div>
 

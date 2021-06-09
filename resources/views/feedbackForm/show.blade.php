@@ -39,7 +39,10 @@
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
                             @foreach($feedbackForms as $feedbackForm)
-                                <h3>{{$feedbackForm->title}}</h3>
+                                <div class="row">
+                                    <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
+                                   <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
+                                </div>
                             @endforeach
                             <br>
 
@@ -55,7 +58,7 @@
                             <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
                                 Give yourself feedback
                             </x-button>
-                           
+
 
                             <!-- Form for E-mail -->
                             <form class="formEmail was-validated" name="yes"
@@ -151,6 +154,42 @@
                                 @endforeach
                                 </tbody>
                             </table>
+<br><br>
+                                <!-- table with comments -->
+                                <table class="table" style="  table-layout:fixed; width:100%;">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Questions</th>
+                                        @foreach($feedbackForm->answerForms as $answerForm)
+                                                @if($answerForm->guest == NULL)
+                                                    <th scope="col">{{$answerForm->user->name}}
+                                                        - <br>{{$answerForm->user->role->name}}
+                                                        @if($answerForm->user->role_verified)
+                                                            <div class="verified"></div>
+                                                        @else
+                                                            <div class="not_verified"> x</div>
+                                                        @endif
+                                                    </th>
+                                                @else
+                                                    <th scope="col">{{$answerForm->guest->name}}
+                                                        - {{$answerForm->guest->role->name}} </th>
+                                                @endif
+                                        @endforeach
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    @foreach($feedbackForm->questions as $question)
+                                        <div></div>
+                                        <tr>
+                                            <th scope="row">{{$question->question}}</th>
+                                            @foreach($question->answers as $answer)
+                                                    <td>{{$answer->comment}}</td>
+                                            @endforeach
+                                        </tr>
+                                    @endforeach
+                                    </tbody>
+                                </table>
+
                                 <!-- Secondary buttons for edit and delete a form -->
                             <a class="btn pull-right" style="border-color: #3b82f6"
                                href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
@@ -193,13 +232,18 @@
 
     @foreach($feedbackFormsPDF as $form)
         <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px; height: 1500px;  position: absolute;
+            <div style="width: 1200px;   position: absolute;
   left:     -10000px; display: inline-block;"
-                 class="canvas_div_pdf{{$form->id}}" id="clipped">
+                 class="canvas_div_pdf{{$form->id}} " id="clipped">
                 @if(Auth::user()->id == $binder->user_id)
                     <br>
 
-                    <h1>{{$form->title}}</h1>
+                    <div class="row">
+                        <div class="col-md-6 text-left"><h3>{{$form->title}}</h3></div>
+                        @if($loop->first)
+                            <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
+                        @endif
+                    </div>
                     <br>
 
                     <div class="container">
@@ -212,7 +256,7 @@
                         <thead>
                         <tr>
                             <th scope="col">Questions</th>
-                            @foreach($feedbackForm->answerForms as $answerForm)
+                            @foreach($form->answerForms as $answerForm)
                                 @if($answerForm->guest == NULL)
                                     <th scope="col">{{$answerForm->user->name}}
                                         - <br>{{$answerForm->user->role->name}}
@@ -236,6 +280,41 @@
                                 <th scope="row">{{$question->question}}</th>
                                 @foreach($question->answers as $answer)
                                     <td>{{$answer->answer}}</td>
+                                @endforeach
+                            </tr>
+                        @endforeach
+                        </tbody>
+                    </table>
+                    <br><br>
+                    <!-- table with comments -->
+                    <table class="table" style="  table-layout:fixed; width:100%;">
+                        <thead>
+                        <tr>
+                            <th scope="col">Questions</th>
+                            @foreach($form->answerForms as $answerForm)
+                                @if($answerForm->guest == NULL)
+                                    <th scope="col">{{$answerForm->user->name}}
+                                        - <br>{{$answerForm->user->role->name}}
+                                        @if($answerForm->user->role_verified)
+                                            <div class="verified"></div>
+                                        @else
+                                            <div class="not_verified"> x</div>
+                                        @endif
+                                    </th>
+                                @else
+                                    <th scope="col">{{$answerForm->guest->name}}
+                                        - {{$answerForm->guest->role->name}} </th>
+                                @endif
+                            @endforeach
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach($form->questions as $question)
+                            <div></div>
+                            <tr>
+                                <th scope="row">{{$question->question}}</th>
+                                @foreach($question->answers as $answer)
+                                    <td>{{$answer->comment}}</td>
                                 @endforeach
                             </tr>
                         @endforeach
@@ -288,9 +367,9 @@
                 //in loop first, add first user after average has been set
                 {
                     @if($answerForm->guest == NULL)
-                    label: '{{$answerForm->user->role->name}}',
+                    label: '{{$answerForm->user->name}}',
                     @else
-                    label: '{{$answerForm->guest->role->name}}',
+                    label: '{{$answerForm->guest->name}}',
                     @endif
 
                     data: [
@@ -305,9 +384,9 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label:'{{$answerForm->user->role->name}}',
+                    label:'{{$answerForm->user->name}}',
             @else
-                label:'{{$answerForm->guest->role->name}}',
+                label:'{{$answerForm->guest->name}}',
             @endif
 
                 data:[
@@ -417,7 +496,6 @@
         Chart.defaults.global.defaultFontColor = 'black';
 
         @foreach($feedbackFormsPDF as $feedbackForm)
-        console.log({{$feedbackForm->id}});
         let counter{{$feedbackForm->id}} = 0;
         let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
@@ -458,23 +536,25 @@
     <!-- Script for making the PDF download -->
     <script>
         function getPDF() {
+            $('html,body').scrollTop(0);
+            console.log('generating pdf')
 
-            console.log('loaded')
-            var HTML_Width = 1200;
-            var HTML_Height = 1500;
 
-            var top_left_margin = 15;
-            var PDF_Width = HTML_Width + (top_left_margin * 2);
-            var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-            var PDF_Width = HTML_Width;
-            var PDF_Height = HTML_Height;
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
-            var totalPDFPages = {{$binder->form_count}} -1;
 
 
             let pdf = ''
             @foreach($feedbackFormsPDF as $feedbackForm)
+            var HTML_Width = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
+            var HTML_Height = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
+            console.log(HTML_Width, HTML_Height)
+
+            var top_left_margin = 15;
+            // var PDF_Width = HTML_Width + (top_left_margin * 2);
+            // var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
+            var PDF_Width = HTML_Width + 30;
+            var PDF_Height = HTML_Height + 30;
+            var canvas_image_width = HTML_Width;
+            var canvas_image_height = HTML_Height;
             html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {
                 allowTaint: true,
                 scale: 2
@@ -483,19 +563,22 @@
                 var imgData = canvas.toDataURL("image/jpeg", 1.0);
                 @if ($loop->first)
                     pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+                console.log('first page generated')
                 @else
                 pdf.addPage(PDF_Width, PDF_Height);
+                console.log('page generated')
                 @endif
 
                 pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
 
                 @if($loop->last)
+                console.log('saving pdf')
                 pdf.save("{{$binder->title}}.pdf");
                 @endif
 
             });
             @endforeach
-        };
+        }
     </script>
 
     <!-- Make PDf invisible on page -->
