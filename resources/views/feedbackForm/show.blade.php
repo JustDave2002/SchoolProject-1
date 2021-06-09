@@ -41,7 +41,7 @@
                             @foreach($feedbackForms as $feedbackForm)
                                 <div class="row">
                                     <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
-                                   <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
+                                    <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
                                 </div>
                             @endforeach
                             <br>
@@ -69,7 +69,7 @@
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
                                         <input type="email" class="form-control mb-2" name="email"
                                                placeholder="Enter a email" required>
-                                               <div class="invalid-feedback">Email did not meet requirements</div>
+                                        <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
@@ -154,54 +154,58 @@
                                 @endforeach
                                 </tbody>
                             </table>
-<br><br>
-                                <!-- table with comments -->
-                                <table class="table" style="  table-layout:fixed; width:100%;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Questions</th>
-                                        @foreach($feedbackForm->answerForms as $answerForm)
-                                                @if($answerForm->guest == NULL)
-                                                    <th scope="col">{{$answerForm->user->name}}
-                                                        - <br>{{$answerForm->user->role->name}}
-                                                        @if($answerForm->user->role_verified)
-                                                            <div class="verified"></div>
-                                                        @else
-                                                            <div class="not_verified"> x</div>
-                                                        @endif
-                                                    </th>
+                            <br><br>
+                            <!-- table with comments -->
+                            <table class="table" style="  table-layout:fixed; width:100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Questions</th>
+                                    @foreach($feedbackForm->answerForms as $answerForm)
+                                        @if($answerForm->guest == NULL)
+                                            <th scope="col">{{$answerForm->user->name}}
+                                                - <br>{{$answerForm->user->role->name}}
+                                                @if($answerForm->user->role_verified)
+                                                    <div class="verified"></div>
                                                 @else
-                                                    <th scope="col">{{$answerForm->guest->name}}
-                                                        - {{$answerForm->guest->role->name}} </th>
+                                                    <div class="not_verified"> x</div>
                                                 @endif
+                                            </th>
+                                        @else
+                                            <th scope="col">{{$answerForm->guest->name}}
+                                                - {{$answerForm->guest->role->name}} </th>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($feedbackForm->questions as $question)
+                                    <div></div>
+                                    <tr>
+                                        <th scope="row">{{$question->question}}</th>
+                                        @foreach($question->answers as $answer)
+                                            <td>{{$answer->comment}}</td>
                                         @endforeach
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($feedbackForm->questions as $question)
-                                        <div></div>
-                                        <tr>
-                                            <th scope="row">{{$question->question}}</th>
-                                            @foreach($question->answers as $answer)
-                                                    <td>{{$answer->comment}}</td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+                                @endforeach
+                                </tbody>
+                            </table>
 
-                                <!-- Secondary buttons for edit and delete a form -->
-                            <a class="btn pull-right" style="border-color: #3b82f6"
-                               href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
-
-                            <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn pull-right" type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this form?')"
-                                        style="border-color: #3b82f6">Delete this form
-                                </button>
-                            </form>
+                            <!-- Secondary buttons for edit and delete a form -->
+                            <div>
+                                <div></div>
+                                <a class="btn pull-right" style="border-color: #3b82f6"
+                                   href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+                                <div style="display:inline-block">
+                                    <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="btn pull-right" type="submit"
+                                                onclick="return confirm('Are you sure you want to delete this form?')"
+                                                style="border-color: #3b82f6">Delete this form
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                             <!-- Form error when form does not exists -->
                             @else
                                 <div class="danger">
@@ -234,7 +238,7 @@
 
         <!-- ALERT! this code part will only be in the pdf -->
 
-        <!-- Everything inside this class will be in the PDF -->
+            <!-- Everything inside this class will be in the PDF -->
             <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
                  class="canvas_div_pdf{{$form->id}}" id="clipped">
                 @if(Auth::user()->id == $binder->user_id)
@@ -299,7 +303,7 @@
                                 <th scope="row">{{$question->question}}</th>
                                 @foreach($question->answers as $answer)
                                     @if($loop->first)
-                                            <td>{{$form->avg[$loop->parent->parent->index]}}</td>
+                                        <td>{{$form->avg[$loop->parent->parent->index]}}</td>
                                         <td>{{$answer->answer}}</td>
                                     @else
                                         <td>{{$answer->answer}}</td>
@@ -408,23 +412,37 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label:'{{$answerForm->user->name}}',
+                    label
+        :
+        '{{$answerForm->user->name}}',
             @else
-                label:'{{$answerForm->guest->name}}',
+                label
+        :
+        '{{$answerForm->guest->name}}',
             @endif
 
-                data:[
+                data
+        :
+        [
             @foreach($answerForm->answers as $answer)
                 '{{$answer->answer}}',
             @endforeach
         ],
-            borderColor:'#777',
-            backgroundColor:`${color[counter++]}`,
-            borderWidth:1
+            borderColor
+        :
+        '#777',
+            backgroundColor
+        :
+        `${color[counter++]}`,
+            borderWidth
+        :
+        1
         },
         @endif
         @endforeach
-        ]};
+        ]
+        }
+        ;
 
         // Global Options
         Chart.defaults.global.defaultFontFamily = 'Arial';
@@ -569,23 +587,37 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label:'{{$answerForm->user->name}}',
+                    label
+        :
+        '{{$answerForm->user->name}}',
             @else
-                label:'{{$answerForm->guest->name}}',
+                label
+        :
+        '{{$answerForm->guest->name}}',
             @endif
 
-                data:[
+                data
+        :
+        [
             @foreach($answerForm->answers as $answer)
                 '{{$answer->answer}}',
             @endforeach
         ],
-            borderColor:'#777',
-            backgroundColor:`${color[counter{{$feedbackForm->id}} ++]}`,
-            borderWidth:1
+            borderColor
+        :
+        '#777',
+            backgroundColor
+        :
+        `${color[counter{{$feedbackForm->id}} ++]}`,
+            borderWidth
+        :
+        1
         },
         @endif
         @endforeach
-        ]};
+        ]
+        }
+        ;
 
 
         let massPopChart{{$feedbackForm->id}} = new Chart(myChart{{$feedbackForm->id}}, {
@@ -601,8 +633,6 @@
         function getPDF() {
             $('html,body').scrollTop(0);
             console.log('generating pdf')
-
-
 
 
             let pdf = ''
