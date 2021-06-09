@@ -10,9 +10,26 @@ class FeedbackToolController extends Controller
 {
     public function store(Request $request)
     {
-//        dd($request);
-        Mail::to($request)->send(new FeedbackTool);
+        Mail::to($this->validateEmail())->send(new FeedbackTool);
+        
+        if ($request->email2 !== null) {
+            Mail::to($this->validateEmail2())->send(new FeedbackTool);
+        }
 
         return redirect(url()->previous());
+    }
+
+    public function validateEmail():array
+    {
+        return request()->validate([
+            'email' => 'required'
+        ]);
+    }
+
+    public function validateEmail2():array
+    {
+        return request()->validate([
+            'email2' => 'nullable|email'
+        ]);
     }
 }

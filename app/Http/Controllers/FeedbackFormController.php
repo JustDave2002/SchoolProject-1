@@ -80,8 +80,8 @@ class FeedbackFormController extends Controller
     {
         //gathers some needed data
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
-//TODO finish this
-       // dd($feedbackForms->get($index));
+    //TODO finish this
+        
         //if the formPage does not exist yet create one
         if ($feedbackForms->get($index) == NULL) {
             //gets variables from session and returns them in the view
@@ -204,7 +204,8 @@ class FeedbackFormController extends Controller
                 foreach ($feedbackForm->questions as $question) {
                     $answerValue = [];
                     $qAnswers = Answer::where('question_id', $question->id)->get();
-                    foreach ($qAnswers as $value ){
+                    if(count($qAnswers) != NULL){
+                        foreach ($qAnswers as $value ){
                         array_push($answerValue, $value->answer);
                     }
                     $total = 0;
@@ -212,7 +213,8 @@ class FeedbackFormController extends Controller
                         $total += $answerValue[$i];
                     }
                     $qAvg = $total / count($answerValue);
-                    array_push($avg, $qAvg);
+                    array_push($avg, round($qAvg,1));
+                    }
                 }
                 //dd($avg);
                 $feedbackForm->avg = $avg;

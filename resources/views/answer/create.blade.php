@@ -19,9 +19,9 @@
                         <br>
                         @foreach($feedbackForm->questions as $question)
                             <div></div>
-                            <div class="form-group">
+                            <div class="form-group" style="width: 89%; display: inline-block">
                                 <label for="q1">{{$question->question}}</label><br>
-                                <input type="range" id="answer" class="answer" list="num" placeholder="Question 1"
+                                <input type="range" id="answer" class="answer" list="num" placeholder="Question"
                                        name="answer[]" value="4" min="1" max="5">
                                 <datalist id="num">
                                     <option value="1" label="--">
@@ -31,6 +31,16 @@
                                     <option value="5" label="++">
                                 </datalist>
                             </div>
+                            <div style="display: inline-block; vertical-align:top">
+                                <a class="btn btn-primary pull-right" onclick="showComment({{$loop->index}})" style="margin-top: 25px">Comment</a>
+                            </div>
+                            <div class="form-group" id="field{{$loop->index}}" style="display: none">
+                                <label style="margin: 0px" for="title">Extra feedback</label><br>
+                                <input type="text" id="comment" class="form-control" placeholder="Type some extra feedback or clarification here" name="comment[]"maxlength="200">
+                                <div class="valid-feedback"><br></div>
+                            </div>
+
+
                             <br>
                         @endforeach
                         <br>
@@ -61,6 +71,19 @@
 </x-app-layout>
 
 <script>
+    let shown = 0
+
+    function showComment(index) {
+        let commentField = document.getElementById(`field${index}`)
+        if (shown === 0){
+            commentField.style.display = 'block';
+            shown = 1
+        } else {
+            commentField.style.display = 'none';
+            shown = 0
+        }
+    }
+
     let formSubmitting = false;
     let setFormSubmitting = function () {
         formSubmitting = true;

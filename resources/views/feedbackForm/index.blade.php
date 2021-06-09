@@ -45,6 +45,7 @@
                                             @endforeach
                                         </div>
                                     </a>
+                                    {{ $binder->created_at->format('m/d/Y')}}
                                 </div>
                             @endforeach
                         </div>
