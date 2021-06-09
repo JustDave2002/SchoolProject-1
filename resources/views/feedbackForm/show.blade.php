@@ -232,9 +232,8 @@
 
     @foreach($feedbackFormsPDF as $form)
         <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px;   position: absolute;
-  left:     -10000px; display: inline-block;"
-                 class="canvas_div_pdf{{$form->id}} " id="clipped">
+            <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
+                 class="canvas_div_pdf{{$form->id}}" id="clipped">
                 @if(Auth::user()->id == $binder->user_id)
                     <br>
 
@@ -257,18 +256,35 @@
                         <tr>
                             <th scope="col">Questions</th>
                             @foreach($form->answerForms as $answerForm)
-                                @if($answerForm->guest == NULL)
-                                    <th scope="col">{{$answerForm->user->name}}
-                                        - <br>{{$answerForm->user->role->name}}
-                                        @if($answerForm->user->role_verified)
-                                            <div class="verified"></div>
-                                        @else
-                                            <div class="not_verified"> x</div>
-                                        @endif
-                                    </th>
+                                @if($loop->first)
+                                    <th scope="col">Average</th>
+                                    @if($answerForm->guest == NULL)
+                                        <th scope="col">{{$answerForm->user->name}}
+                                            - <br>{{$answerForm->user->role->name}}
+                                            @if($answerForm->user->role_verified)
+                                                <div class="verified"></div>
+                                            @else
+                                                <div class="not_verified"> x</div>
+                                            @endif
+                                        </th>
+                                    @else
+                                        <th scope="col">{{$answerForm->guest->name}}
+                                            - {{$answerForm->guest->role->name}} </th>
+                                    @endif
                                 @else
-                                    <th scope="col">{{$answerForm->guest->name}}
-                                        - {{$answerForm->guest->role->name}} </th>
+                                    @if($answerForm->guest == NULL)
+                                        <th scope="col">{{$answerForm->user->name}}
+                                            - <br>{{$answerForm->user->role->name}}
+                                            @if($answerForm->user->role_verified)
+                                                <div class="verified"></div>
+                                            @else
+                                                <div class="not_verified"> x</div>
+                                            @endif
+                                        </th>
+                                    @else
+                                        <th scope="col">{{$answerForm->guest->name}}
+                                            - {{$answerForm->guest->role->name}} </th>
+                                    @endif
                                 @endif
                             @endforeach
                         </tr>
@@ -279,7 +295,12 @@
                             <tr>
                                 <th scope="row">{{$question->question}}</th>
                                 @foreach($question->answers as $answer)
-                                    <td>{{$answer->answer}}</td>
+                                    @if($loop->first)
+                                            <td>{{$form->avg[$loop->parent->parent->index]}}</td>
+                                        <td>{{$answer->answer}}</td>
+                                    @else
+                                        <td>{{$answer->answer}}</td>
+                                    @endif
                                 @endforeach
                             </tr>
                         @endforeach
@@ -507,23 +528,62 @@
 
             datasets: [
                     @foreach($feedbackForm->answerForms as $answerForm){
+
+                    //set average in first loop, then iterate over first user
+                    @if($loop->first)
+                    label: 'average',
+
+                    data: [
+                        @foreach($feedbackFormsPDF->where('id', $feedbackForm->id) as $form)
+                            @foreach($form->avg as $avg)
+                            '{{$avg}}',
+                        @endforeach
+                        @endforeach
+
+                    ],
+                    borderColor: 'black',
+                    backgroundColor: '#FF000000',
+                    borderWidth: 1.5
+                },
+
+                //in loop first, add first user after average has been set
+                {
                     @if($answerForm->guest == NULL)
-                    label: '{{$answerForm->user->role->name}}',
+                    label: '{{$answerForm->user->name}}',
                     @else
-                    label: '{{$answerForm->guest->role->name}}',
+                    label: '{{$answerForm->guest->name}}',
                     @endif
+
                     data: [
                         @foreach($answerForm->answers as $answer)
                             '{{$answer->answer}}',
                         @endforeach
                     ],
-                    borderColor: '#000',
+                    borderColor: '#777',
                     backgroundColor: `${color[counter{{$feedbackForm->id}} ++]}`,
                     borderWidth: 1
                 },
-                @endforeach
-            ]
-        };
+                //after loop first add the rest of the data
+                @else
+                    @if($answerForm->guest == NULL)
+                    label:'{{$answerForm->user->name}}',
+            @else
+                label:'{{$answerForm->guest->name}}',
+            @endif
+
+                data:[
+            @foreach($answerForm->answers as $answer)
+                '{{$answer->answer}}',
+            @endforeach
+        ],
+            borderColor:'#777',
+            backgroundColor:`${color[counter{{$feedbackForm->id}} ++]}`,
+            borderWidth:1
+        },
+        @endif
+        @endforeach
+        ]};
+
 
         let massPopChart{{$feedbackForm->id}} = new Chart(myChart{{$feedbackForm->id}}, {
             type: 'radar',
