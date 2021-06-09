@@ -7,9 +7,9 @@ use App\Models\Question;
 use Database\Seeders\FormBinderSeeder;
 use Illuminate\Http\Request;
 use App\Models\FeedbackForm;
+use App\Models\Answer;
 use Auth;
 use function PHPUnit\Framework\isEmpty;
-use function Sodium\add;
 use Ramsey\Uuid\Uuid;
 
 class FeedbackFormController extends Controller
@@ -192,11 +192,36 @@ class FeedbackFormController extends Controller
         $formCount = count(FeedbackForm::where('form_binder_id', $id)->get());
 //        dd($formCount);
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
-            ->orderBy('created_at', 'asc')
             ->paginate(1);
 
 //dd($feedbackForms);
         $feedbackFormsPDF = FeedbackForm::where('form_binder_id', $binder->id)->get();
+
+
+        foreach ($feedbackFormsPDF as $feedbackForm) {
+            if (count($feedbackForm->answerForms) != 0) {
+                $avg = [];
+                foreach ($feedbackForm->questions as $question) {
+                    $answerValue = [];
+                    $qAnswers = Answer::where('question_id', $question->id)->get();
+                    if(count($qAnswers) != NULL){
+                        foreach ($qAnswers as $value ){
+                        array_push($answerValue, $value->answer);
+                    }
+                    $total = 0;
+                    for ($i = 0; $i < count($qAnswers); $i++) {
+                        $total += $answerValue[$i];
+                    }
+                    $qAvg = $total / count($answerValue);
+                    array_push($avg, round($qAvg,1));
+                    }
+                }
+                //dd($avg);
+                $feedbackForm->avg = $avg;
+            }
+        };
+       // dd($feedbackFormsPDF);
+
         return view('feedbackForm.show', compact('binder', 'formCount', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
     }
 
@@ -210,7 +235,7 @@ class FeedbackFormController extends Controller
     public function edit(Request $request, $publicId)
     {
 //        dd($request->session());
-        $formBinder=formBinder::where('public_id', $publicId)->first();
+        $formBinder = formBinder::where('public_id', $publicId)->first();
         $request->session()->put('formBinder', $formBinder);
         $request->session()->put('counter', $formBinder->form_count);
         return redirect('feedbackForm/createForm');
@@ -240,9 +265,9 @@ class FeedbackFormController extends Controller
      */
     public function destroy($publicId)
     {
-        $formBinder=formBinder::where('public_id', $publicId)->first();
-        if (isEmpty(FeedbackForm::where('form_binder_id', $formBinder->id)->first())){
-        } else{
+        $formBinder = formBinder::where('public_id', $publicId)->first();
+        if (isEmpty(FeedbackForm::where('form_binder_id', $formBinder->id)->first())) {
+        } else {
             $feedbackForms = FeedbackForm::select('form_binder_id', $formBinder->id)->get();
             foreach ($feedbackForms as $feedbackForm) {
                 $feedbackForm->delete();
@@ -253,9 +278,10 @@ class FeedbackFormController extends Controller
 
     }
 
-    public function makePDF($id){
-   $formBinder=formBinder::where('public_id', $id)->first();
-   $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
+    public function makePDF($id)
+    {
+        $formBinder = formBinder::where('public_id', $id)->first();
+        $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
         return view('feedbackForm/pdf', compact('formBinder', 'feedbackForms'));
     }
 

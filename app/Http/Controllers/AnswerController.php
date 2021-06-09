@@ -33,6 +33,7 @@ class AnswerController extends Controller
 
         $formBinders = collect([]);
 
+
         $num = 0;
 
         foreach ($answerForms as $answerForm) {
@@ -48,20 +49,20 @@ class AnswerController extends Controller
 
             // for ($i=$num; $i < $formBinders.length; $i++) {
             //     $thisFeedbackform = $feedbackForm[$i];
-            //     if($currentBinder->id === $thisFeedbackform->id); 
+            //     if($currentBinder->id === $thisFeedbackform->id);
             //     $num += 1;
             //     Log::debug('please werk');
             // }
             // if($formBinder->id != $currentBinder->id){
             //     $formBinders->push($currentBinder);
             //     Log::debug('adding new instance', (array)$formBinder->id);
-            //     }     
+            //     }
             //}
         }
         // $page = Input::get('page', 1); // Get the ?page=1 from the url
         // $perPage = 10; // Number of items per page
         // $offset = ($page * $perPage) - $perPage;
-        
+
         // return new LengthAwarePaginator(
         //     array_slice($formBinders->toArray(), $offset, $perPage, true), // Only grab the items we need
         //     count($formBinders), // Total items
@@ -69,6 +70,8 @@ class AnswerController extends Controller
         //     $page, // Current page
         //     ['path' => $request->url(), 'query' => $request->query()] // We need this so we can keep all old query parameters from the url
         // );
+//        dd($formBinders);
+        $formBinders = $formBinders->sortDesc();
         return view('answer.index', ['formBinders' => $formBinders]);
     }
 
@@ -124,6 +127,7 @@ class AnswerController extends Controller
         //TODO add the logic from feedbackFormController to this controller to allow multiple pages and previous page button
 
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms) = $this->prevPageLogic($request);
+        //checks if answerform exists
         $formTest = $answerForms[$index] ?? NULL;
         if ($formTest == NULL) {
             return view('answer.create',compact('formBinder', 'feedbackForm', 'counter','index'));
@@ -134,27 +138,6 @@ class AnswerController extends Controller
         }
     }
 
-
-    /**
-     * @param Request $request
-     * @return array
-     */
-    public function prevPageLogic(Request $request): array
-    {
-        $formBinder= $request->session()->get('formBinder');
-        $index = $request->session()->get('formBinder')->form_count - $request->session()->get('counter');
-        $counter = $request->session()->get('counter');
-        $id = $request->session()->get('formBinder')->id;
-        $feedbackForms = FeedbackForm::where('form_binder_id', $id)->get();
-        $feedbackForm = $feedbackForms->get($index);
-        $guestId = $request->session()->get('guest_id');
-        $answerForms =$request->session()->get('answerForms');
-//        dd($answerForms);
-
-        $request->session()->put('index', $index);
-        $request->session()->put('feedbackForm', $feedbackForm);
-        return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder,$guestId, $answerForms);
-    }
 
 
     /**
@@ -191,6 +174,7 @@ class AnswerController extends Controller
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
 
         $answers = request('answer');
+        $comments = request('comment');
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
@@ -198,7 +182,8 @@ class AnswerController extends Controller
             $answer = Answer::create([
                 'question_id' => $question->id,
                 'answer_form_id' => $form->id,
-                'answer' => array_shift($answers)
+                'answer' => array_shift($answers),
+                'comment' => array_shift($comments)
             ]);
         }
 
@@ -331,4 +316,28 @@ class AnswerController extends Controller
     {
         //
     }
+
+
+
+    /**
+     * @param Request $request
+     * @return array
+     */
+    public function prevPageLogic(Request $request): array
+    {
+        $formBinder= $request->session()->get('formBinder');
+        $index = $request->session()->get('formBinder')->form_count - $request->session()->get('counter');
+        $counter = $request->session()->get('counter');
+        $id = $request->session()->get('formBinder')->id;
+        $feedbackForms = FeedbackForm::where('form_binder_id', $id)->get();
+        $feedbackForm = $feedbackForms->get($index);
+        $guestId = $request->session()->get('guest_id');
+        $answerForms =$request->session()->get('answerForms');
+//        dd($answerForms);
+
+        $request->session()->put('index', $index);
+        $request->session()->put('feedbackForm', $feedbackForm);
+        return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder,$guestId, $answerForms);
+    }
+
 }
