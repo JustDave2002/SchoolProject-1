@@ -57,15 +57,22 @@
                             <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
                                 Give yourself feedback
                             </x-button>
+                           
 
                             <!-- Form for E-mail -->
-                            <form class="formEmail" name="yes"
+                            <form class="formEmail was-validated" name="yes"
                                   style="visibility: hidden; padding-top: 20px; padding-left: 16px"
                                   action="/sendmail/test/">
                                 <div class="form-row align-items-center">
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                        <input type="text" class="form-control mb-2" name="email"
+                                        <input type="email" class="form-control mb-2" name="email"
+                                               placeholder="Enter a email" required>
+                                               <div class="invalid-feedback">Email did not meet requirements</div>
+                                    </div>
+                                    <div class="col-auto">
+                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
+                                        <input type="email" class="form-control mb-2" name="email2"
                                                placeholder="Enter a email">
                                     </div>
                                     <div class="col-auto">
