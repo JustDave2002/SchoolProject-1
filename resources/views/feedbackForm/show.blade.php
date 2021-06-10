@@ -44,6 +44,11 @@
                                 {{ session()->get('message') }}
                             </div>
                         @endif
+                            @if(session()->has('error'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('error') }}
+                                </div>
+                            @endif
                             @foreach($feedbackForms as $feedbackForm)
                                 <div class="row">
                                     <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
