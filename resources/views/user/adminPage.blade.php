@@ -104,7 +104,7 @@
                                         @endif
                                     </td>
                                     <td class="email_verified">
-                                        @if($user->email_verified == NULL)
+                                        @if($user->email_verified_at == NULL)
                                             not verified
                                         @else
                                             verified
