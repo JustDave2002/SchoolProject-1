@@ -38,6 +38,11 @@
                     <br>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
+                        @if(session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
                             @foreach($feedbackForms as $feedbackForm)
                                 <div class="row">
                                     <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
@@ -60,7 +65,7 @@
                             </x-button>
 
 
-                            <!-- Form for E-mail -->
+                            <!-- Form for sending multiple emails E-mail -->
                             <form class="formEmail was-validated" name="yes"
                                   style="visibility: hidden; padding-top: 20px; padding-left: 16px"
                                   action="/sendmail/test/">
@@ -71,6 +76,7 @@
                                                placeholder="Enter a email" required>
                                                <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
+                                    <!-- Checkbox for guests, when you press it a seperate guest email is being sent instead of a regular one, this is for people without an account -->
                                     <div class="col-auto">
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="autoSizingCheck"
