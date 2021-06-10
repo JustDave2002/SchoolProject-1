@@ -240,8 +240,8 @@
         <!-- ALERT! this code part will only be in the pdf -->
 
             <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px;     display: inline-block;"
-                 class="canvas_div_pdf{{$form->id}}">
+            <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
+                 class="canvas_div_pdf{{$form->id}}" id="clipped">
                 @if(Auth::user()->id == $binder->user_id)
                     <br>
 
