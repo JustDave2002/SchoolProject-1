@@ -25,6 +25,7 @@ route::post('guestAnswer/update',[AnswerController::class, 'guestStore'])->name(
 Route::get('/guestAnswer/create',[AnswerController::class, 'create']);
 
 Route::get('/answer/create',[AnswerController::class, 'create'])->middleware(['auth', 'verified']);
+Route::post('/answer/store',[AnswerController::class, 'store'])->name('answer.save');
 Route::get('/answer/edit',[AnswerController::class, 'editForm'])->middleware(['auth', 'verified']);
 Route::post('/answer/updateForm',[AnswerController::class, 'updateForm'])->middleware(['auth', 'verified'])->name('answer.updateForm');
 

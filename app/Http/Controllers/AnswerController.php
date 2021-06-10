@@ -70,7 +70,7 @@ class AnswerController extends Controller
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
 
 
-        if (answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
+        if (Auth::check() && answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
             return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
@@ -206,7 +206,11 @@ class AnswerController extends Controller
 
             } else {
                 $request->session()->decrement('counter');
-                return redirect('/answer/create');
+                if(Auth::check()) {
+                    return redirect('/answer/create');
+                }else{
+                    return redirect('guestAnswer/create');
+                }
             }
         }
     }
