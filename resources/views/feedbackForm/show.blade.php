@@ -72,6 +72,15 @@
                                                <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
                                     <div class="col-auto">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                                                   name="guest1">
+                                            <label class="form-check-label" for="autoSizingCheck">
+                                                Guest
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
                                         <input type="email" class="form-control mb-2" name="email2"
                                                placeholder="Enter a email">
@@ -79,7 +88,7 @@
                                     <div class="col-auto">
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="autoSizingCheck"
-                                                   name="guest">
+                                                   name="guest2">
                                             <label class="form-check-label" for="autoSizingCheck">
                                                 Guest
                                             </label>

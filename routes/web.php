@@ -19,14 +19,14 @@ use App\Http\Controllers\FeedbackToolController;
  *
  */
 //TODO change the first route url to something that makes fcking sense
-Route::get('answer/info/{id}',[AnswerController::class, 'formStart'])->middleware(['auth']);
+Route::get('answer/info/{id}',[AnswerController::class, 'formStart'])->middleware(['auth', 'verified']);
 Route::get('guestAnswer/info/{id}',[AnswerController::class, 'formStart']);
 route::post('guestAnswer/update',[AnswerController::class, 'guestStore'])->name('guestAnswer.updateCreate');
 Route::get('/guestAnswer/create',[AnswerController::class, 'create']);
 
-Route::get('/answer/create',[AnswerController::class, 'create'])->middleware(['auth']);
-Route::get('/answer/edit',[AnswerController::class, 'editForm'])->middleware(['auth']);
-Route::post('/answer/updateForm',[AnswerController::class, 'updateForm'])->middleware(['auth'])->name('answer.updateForm');
+Route::get('/answer/create',[AnswerController::class, 'create'])->middleware(['auth', 'verified']);
+Route::get('/answer/edit',[AnswerController::class, 'editForm'])->middleware(['auth', 'verified']);
+Route::post('/answer/updateForm',[AnswerController::class, 'updateForm'])->middleware(['auth', 'verified'])->name('answer.updateForm');
 
 
 Route::get('/', function () {
@@ -37,21 +37,21 @@ Route::get('/dashboard', function () {
     return view('welcome');
 })->middleware(['auth'])->name('dashboard');
 
-Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth']);
-Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm'])->middleware(['auth'])->name('feedbackForm.storeForm');
+Route::get('feedbackForm/createForm', [FeedbackFormController::class, 'createForm'])->middleware(['auth', 'verified']);
+Route::post('feedbackForm/storeForm', [FeedbackFormController::class, 'storeForm'])->middleware(['auth', 'verified'])->name('feedbackForm.storeForm');
 
-Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])->middleware(['auth']);
-Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth'])->name('feedbackForm.updateForm');
-Route::get('feedbackForm/pdf/{id}', [FeedbackFormController::class, 'makePDF'])->middleware(['auth']);
+Route::get('feedbackForm/editForm', [FeedbackFormController::class, 'editForm'])->middleware(['auth', 'verified']);
+Route::put('feedbackForm/updateForm', [FeedbackFormController::class, 'updateForm'])->middleware(['auth', 'verified'])->name('feedbackForm.updateForm');
+Route::get('feedbackForm/pdf/{id}', [FeedbackFormController::class, 'makePDF'])->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
 
-Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth']);
-Route::resource('answer', AnswerController::class);
-Route::resource('user', UserController::class)->middleware(['auth']);
-Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth'])->name('admin');
+Route::resource('feedbackForm', FeedbackFormController::class)->middleware(['auth', 'verified']);
+Route::resource('answer', AnswerController::class)->middleware(['auth', 'verified']);
+Route::resource('user', UserController::class)->middleware(['auth', 'verified']);
+Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth', 'verified'])->name('admin');
 
-Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth']);
+Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth', 'verified']);
 
 Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
 Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
