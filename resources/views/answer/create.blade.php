@@ -12,7 +12,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form method="POST" action="{{route('answer.store')}}" class="was-validated"
+                    <form method="POST" action="{{route('answer.save')}}" class="was-validated"
                           onsubmit="setFormSubmitting()" name="answerForm">
                         @csrf
                         <b><h4>{{$feedbackForm->title}}</h4></b>
@@ -22,7 +22,7 @@
                             <div class="form-group" style="width: 89%; display: inline-block">
                                 <label for="q1">{{$question->question}}</label><br>
                                 <input type="range" id="answer" class="answer" list="num" placeholder="Question"
-                                       name="answer[]" value="4" min="1" max="5">
+                                       name="answer[]" value="3" min="1" max="5">
                                 <datalist id="num">
                                     <option value="1" label="--">
                                     <option value="2" label="-">

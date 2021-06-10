@@ -25,7 +25,6 @@
                                 {{ session()->get('error') }}
                             </div>
                         @endif
-
                         <x-button class="ml-3" onclick="document.location.href='{{route('feedbackForm.create')}}'">
                             Create Form
                         </x-button>

@@ -8,10 +8,11 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.3/jspdf.min.js"></script>
         <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.6.0/Chart.min.js"></script>
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __($binder->title) }}
-        </h2>
+        <h1 class="font-semibold text-xl text-gray-800 leading-tight">
+            {{ __("My feedback forms") }}
+        </h1>
     </x-slot>
+
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -35,10 +36,25 @@
                 @elseif($formCount != 0)
 
                 <!-- Pagination -->
-                    {{ $feedbackForms->links() }}
-                    <br>
+                    <div style="margin-top: 10px; margin-bottom: 5px;">
+
+                        <h2 class="font-semibold  text-gray-800 leading-tight">
+                            {{ __($binder->title) }}
+                        </h2>
+                        {{ $feedbackForms->links() }}
+                    </div>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
+                        @if(session()->has('message'))
+                            <div class="alert alert-success">
+                                {{ session()->get('message') }}
+                            </div>
+                        @endif
+                            @if(session()->has('error'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('error') }}
+                                </div>
+                            @endif
                             @foreach($feedbackForms as $feedbackForm)
                                 <div class="row">
                                     <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
@@ -60,7 +76,8 @@
                                 Give yourself feedback
                             </x-button>
 
-                            <!-- Form for E-mail -->
+
+                            <!-- Form for sending multiple emails E-mail -->
                             <form class="formEmail was-validated" name="yes"
                                   style="visibility: hidden; padding-top: 20px; padding-left: 16px"
                                   action="/sendmail/test/">
@@ -71,6 +88,16 @@
                                                placeholder="Enter a email" required>
                                         <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
+                                    <!-- Checkbox for guests, when you press it a seperate guest email is being sent instead of a regular one, this is for people without an account -->
+                                    <div class="col-auto">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                                                   name="guest1">
+                                            <label class="form-check-label" for="autoSizingCheck">
+                                                Guest
+                                            </label>
+                                        </div>
+                                    </div>
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
                                         <input type="email" class="form-control mb-2" name="email2"
@@ -79,7 +106,7 @@
                                     <div class="col-auto">
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="autoSizingCheck"
-                                                   name="guest">
+                                                   name="guest2">
                                             <label class="form-check-label" for="autoSizingCheck">
                                                 Guest
                                             </label>
