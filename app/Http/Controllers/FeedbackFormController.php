@@ -80,8 +80,8 @@ class FeedbackFormController extends Controller
     {
         //gathers some needed data
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
-//TODO finish this
-       // dd($feedbackForms->get($index));
+    //TODO finish this
+        
         //if the formPage does not exist yet create one
         if ($feedbackForms->get($index) == NULL) {
             //gets variables from session and returns them in the view
