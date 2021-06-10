@@ -23,6 +23,11 @@
                     <br>
                     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                         <div class="p-6 bg-white border-b border-gray-200">
+                            @if(session()->has('error'))
+                                <div class="alert alert-danger">
+                                    {{ session()->get('error') }}
+                                </div>
+                            @endif
                             @foreach($feedbackForms as $feedbackForm)
                                 <h3>{{$feedbackForm->title}}</h3>
                             @endforeach

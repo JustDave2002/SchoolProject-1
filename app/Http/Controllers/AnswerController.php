@@ -72,7 +72,7 @@ class AnswerController extends Controller
 
         if (answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
-            return redirect('/feedbackForm/'.$public_id)->with('error', 'You have already filled in this form');
+            return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
         else{
             if (Auth::check()){
@@ -261,13 +261,13 @@ class AnswerController extends Controller
      */
     public function show($public_id)
     {
-        $formBinder = formBinder::where('public_id', $public_id)->first();
-        $id = $formBinder->id;
+        $binder = formBinder::where('public_id', $public_id)->first();
+        $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
-        return view('answer.show', ['formCheck'=> $formCheck, 'binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
+        return view('answer.show', compact('formCheck', 'binder', 'feedbackForms'));
     }
 
     /**
