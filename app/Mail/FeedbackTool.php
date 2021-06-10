@@ -28,6 +28,7 @@ class FeedbackTool extends Mailable
      *
      * @return $this
      */
+    // This model sends the given email an appropriate email. This function sends the variable "guest" so the blade can decide what link to give 
     public function build(Request $request)
     {
         $guest=request('guest');
