@@ -31,7 +31,7 @@
                         @endif
                         <br>
                         <br>
-                        <input class="btn btn-primary" style="width: 95%" type="submit" value="Submit">
+                        <input class="btn btn-primary" style="width: 100%" type="submit" value="Submit">
                     </form>
 
                 </div>

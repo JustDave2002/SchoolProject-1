@@ -46,31 +46,7 @@ class AnswerController extends Controller
             if ($formBinders->contains($currentBinder) === false) {
                 $formBinders->push($currentBinder);
             }
-
-            // for ($i=$num; $i < $formBinders.length; $i++) {
-            //     $thisFeedbackform = $feedbackForm[$i];
-            //     if($currentBinder->id === $thisFeedbackform->id);
-            //     $num += 1;
-            //     Log::debug('please werk');
-            // }
-            // if($formBinder->id != $currentBinder->id){
-            //     $formBinders->push($currentBinder);
-            //     Log::debug('adding new instance', (array)$formBinder->id);
-            //     }
-            //}
         }
-        // $page = Input::get('page', 1); // Get the ?page=1 from the url
-        // $perPage = 10; // Number of items per page
-        // $offset = ($page * $perPage) - $perPage;
-
-        // return new LengthAwarePaginator(
-        //     array_slice($formBinders->toArray(), $offset, $perPage, true), // Only grab the items we need
-        //     count($formBinders), // Total items
-        //     $perPage, // Items per page
-        //     $page, // Current page
-        //     ['path' => $request->url(), 'query' => $request->query()] // We need this so we can keep all old query parameters from the url
-        // );
-//        dd($formBinders);
         $formBinders = $formBinders->sortDesc();
         return view('answer.index', ['formBinders' => $formBinders]);
     }
@@ -93,13 +69,24 @@ class AnswerController extends Controller
 
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
 
-        if (Auth::check()){
-            return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder'=>$formBinder, 'counter' => $counter,'index' => $index]);
+
+        if (Auth::check() && answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
+
+            return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
         else{
-            $roles = Role::all();
-            return view('answer.guestCreate',['formBinder' => $formBinder, 'roles' =>$roles]);
+            if (Auth::check()){
+                return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder'=>$formBinder, 'counter' => $counter,'index' => $index]);
+            }
+            else{
+                $roles = Role::all();
+                return view('answer.guestCreate',['formBinder' => $formBinder, 'roles' =>$roles]);
+            }
         }
+
+
+
+
     }
 
 
@@ -219,7 +206,11 @@ class AnswerController extends Controller
 
             } else {
                 $request->session()->decrement('counter');
-                return redirect('/answer/create');
+                if(Auth::check()) {
+                    return redirect('/answer/create');
+                }else{
+                    return redirect('guestAnswer/create');
+                }
             }
         }
     }
@@ -274,14 +265,15 @@ class AnswerController extends Controller
      */
     public function show($public_id)
     {
-        $formBinder = formBinder::where('public_id', $public_id)->first();
-        $id = $formBinder->id;
+        $binder = formBinder::where('public_id', $public_id)->first();
+        $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
-        return view('answer.show', ['formCheck'=> $formCheck, 'binder' => $formBinder, 'feedbackForms' => $feedbackForms]);
+        return view('answer.show', compact('formCheck', 'binder', 'feedbackForms'));
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -289,9 +281,20 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$publicId)
     {
-        //
+        $formBinder = formBinder::where('public_id', $publicId)->first();
+        $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
+        $answerForms = collect([]);
+        foreach ($feedbackForms as $feedbackForm) {
+            $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
+            $answerForms->push($answerForm);
+        }
+
+        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('answerForms', $answerForms);
+        $request->session()->put('counter', $formBinder->form_count);
+        return redirect('answer/create');
     }
 
     /**

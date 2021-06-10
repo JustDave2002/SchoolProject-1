@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\answerForm;
 use App\Models\formBinder;
 use App\Models\Question;
 use Database\Seeders\FormBinderSeeder;
@@ -81,7 +82,7 @@ class FeedbackFormController extends Controller
         //gathers some needed data
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
     //TODO finish this
-        
+
         //if the formPage does not exist yet create one
         if ($feedbackForms->get($index) == NULL) {
             //gets variables from session and returns them in the view
@@ -234,11 +235,17 @@ class FeedbackFormController extends Controller
      */
     public function edit(Request $request, $publicId)
     {
+
 //        dd($request->session());
         $formBinder = formBinder::where('public_id', $publicId)->first();
-        $request->session()->put('formBinder', $formBinder);
-        $request->session()->put('counter', $formBinder->form_count);
-        return redirect('feedbackForm/createForm');
+        $feedbackForm = FeedbackForm::where('form_binder_id', $formBinder->id)->first();
+        if (answerForm::where('feedback_form_id', $feedbackForm->id)->first() == NULL){
+            $request->session()->put('formBinder', $formBinder);
+            $request->session()->put('counter', $formBinder->form_count);
+            return redirect('feedbackForm/createForm');
+        }else{
+            return redirect(url()->previous())->with('error', 'You are unable to edit this form, since someone has already filled it in.');
+        }
     }
 
 
