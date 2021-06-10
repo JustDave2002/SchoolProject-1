@@ -33,7 +33,7 @@
                         </form>
                     </h4>
                 @elseif($formCount != 0)
-                    
+
                 <!-- Pagination -->
                     {{ $feedbackForms->links() }}
                     <br>
@@ -240,8 +240,8 @@
         <!-- ALERT! this code part will only be in the pdf -->
 
             <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
-                 class="canvas_div_pdf{{$form->id}}" id="clipped">
+            <div style="width: 1200px;     display: inline-block;"
+                 class="canvas_div_pdf{{$form->id}}">
                 @if(Auth::user()->id == $binder->user_id)
                     <br>
 
@@ -608,34 +608,38 @@
 
             // gets the sizes from the charts and tables for the PDF
             @foreach($feedbackFormsPDF as $feedbackForm)
-            var HTML_Width = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
-            var HTML_Height = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
-            console.log(HTML_Width, HTML_Height)
-
+            var HTML_Width{{$feedbackForm->id}} = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
+            var HTML_Height{{$feedbackForm->id}} = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
             var top_left_margin = 15;
-            var PDF_Width = HTML_Width + 30;
-            var PDF_Height = HTML_Height + 30;
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
+            var PDF_Width{{$feedbackForm->id}} = HTML_Width{{$feedbackForm->id}} + 30;
+            var PDF_Height{{$feedbackForm->id}} = HTML_Height{{$feedbackForm->id}} + 30;
+            var canvas_image_width{{$feedbackForm->id}} = HTML_Width{{$feedbackForm->id}};
+            var canvas_image_height{{$feedbackForm->id}} = HTML_Height{{$feedbackForm->id}};
             html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {
                 allowTaint: true,
                 scale: 2
             })
                 //generates the PDF
                 .then(function (canvas) {
+                    //gets canvas data ready for PDF
                     canvas.getContext('2d');
                     var imgData = canvas.toDataURL("image/jpeg", 1.0);
+
+                    //creates a new PDF
                     @if ($loop->first)
-                        pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                    console.log('first page generated')
+                        pdf = new jsPDF('p', 'pt', [PDF_Width{{$feedbackForm->id}}, PDF_Height{{$feedbackForm->id}}]);
+                    console.log(`first page generated, Width: ${PDF_Width{{$feedbackForm->id}}} Height: ${PDF_Height{{$feedbackForm->id}}}`)
+
+                    //add new pdf page
                     @else
-                    pdf.addPage(PDF_Width, PDF_Height);
-                    console.log('page generated')
+                    pdf.addPage(PDF_Width{{$feedbackForm->id}}, PDF_Height{{$feedbackForm->id}});
+                    console.log(`page generated, Width: ${PDF_Width{{$feedbackForm->id}}} Height: ${PDF_Height{{$feedbackForm->id}}}`)
                     @endif
 
-                    // saves the PDF
-                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                    //adds page data to the PDF page
+                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width{{$feedbackForm->id}}, canvas_image_height{{$feedbackForm->id}});
 
+                    // saves the PDF
                     @if($loop->last)
                     console.log('saving pdf')
                     pdf.save("{{$binder->title}}.pdf");
