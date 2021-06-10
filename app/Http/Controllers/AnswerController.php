@@ -276,20 +276,9 @@ class AnswerController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$publicId)
+    public function edit($id)
     {
-        $formBinder = formBinder::where('public_id', $publicId)->first();
-        $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
-        $answerForms = collect([]);
-        foreach ($feedbackForms as $feedbackForm) {
-            $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
-            $answerForms->push($answerForm);
-        }
-
-        $request->session()->put('formBinder', $formBinder);
-        $request->session()->put('answerForms', $answerForms);
-        $request->session()->put('counter', $formBinder->form_count);
-        return redirect('answer/create');
+        //
     }
 
     /**

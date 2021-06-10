@@ -45,7 +45,7 @@
                                 </div>
                             @endforeach
                         </div>
-
+                        
                     @else
                         Before you can start making feedback forms you need to edit your account <br>
                         <x-button class="ml-3" onclick="document.location.href='{{route('user.index')}}'">
