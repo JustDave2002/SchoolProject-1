@@ -32,6 +32,11 @@
                                 <h3>{{$feedbackForm->title}}</h3>
                             @endforeach
                             <br>
+                            <!-- Secondary button for editing a form -->
+                            <a class="btn pull-right" style="border-color: #3b82f6"
+                               href="/answer/{{$binder->public_id}}/edit">Edit Feedback</a>
+                            <br>
+                            
                             <!-- PDF section (everything in here will be in the PDF) -->
                             <div class="canvas_div_pdf">
                                 <div class="container">
@@ -43,8 +48,16 @@
                                     You don't have permission to view this Form.
                                 @endif
                             </div>
-                        </div>
+               
+                        
+
+                       
+                        <!-- table with answer information -->
+                        @else
+                            You don't have permission to view this Form.
+                        @endif
                     </div>
+                </div>
         </div>
     </div>
 </x-app-layout>
@@ -62,7 +75,7 @@
                 '{{$question->question}}',
                 @endforeach],
             datasets: [
-                @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
+                    @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
                     label: '{{$answerForm->user->role->name}}',
                     data: [
                         @foreach($answerForm->answers as $answer)
