@@ -270,15 +270,27 @@ class AnswerController extends Controller
         return view('answer.show', compact('formCheck', 'binder', 'feedbackForms'));
     }
 
+
     /**
      * Show the form for editing the specified resource.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request,$publicId)
     {
-        //
+        $formBinder = formBinder::where('public_id', $publicId)->first();
+        $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
+        $answerForms = collect([]);
+        foreach ($feedbackForms as $feedbackForm) {
+            $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
+            $answerForms->push($answerForm);
+        }
+
+        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('answerForms', $answerForms);
+        $request->session()->put('counter', $formBinder->form_count);
+        return redirect('answer/create');
     }
 
     /**
