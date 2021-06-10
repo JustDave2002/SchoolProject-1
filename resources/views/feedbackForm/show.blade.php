@@ -33,6 +33,7 @@
                         </form>
                     </h4>
                 @elseif($formCount != 0)
+                    
                 <!-- Pagination -->
                     {{ $feedbackForms->links() }}
                     <br>
@@ -58,7 +59,6 @@
                             <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
                                 Give yourself feedback
                             </x-button>
-
 
                             <!-- Form for E-mail -->
                             <form class="formEmail was-validated" name="yes"
@@ -155,6 +155,7 @@
                                 </tbody>
                             </table>
                             <br><br>
+
                             <!-- table with comments -->
                             <table class="table" style="  table-layout:fixed; width:100%;">
                                 <thead>
@@ -314,7 +315,7 @@
                         </tbody>
                     </table>
                     <br><br>
-                    <!-- table with comments -->
+                    <!-- table with comments PDF-->
                     <table class="table" style="  table-layout:fixed; width:100%;">
                         <thead>
                         <tr>
@@ -412,31 +413,19 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label
-        :
-        '{{$answerForm->user->name}}',
+                    label:'{{$answerForm->user->name}}',
             @else
-                label
-        :
-        '{{$answerForm->guest->name}}',
+                label:'{{$answerForm->guest->name}}',
             @endif
 
-                data
-        :
-        [
+                data:[
             @foreach($answerForm->answers as $answer)
                 '{{$answer->answer}}',
             @endforeach
         ],
-            borderColor
-        :
-        '#777',
-            backgroundColor
-        :
-        `${color[counter++]}`,
-            borderWidth
-        :
-        1
+            borderColor:'#777',
+            backgroundColor:`${color[counter++]}`,
+            borderWidth:1
         },
         @endif
         @endforeach
@@ -491,18 +480,9 @@
         }
     </script>
 
-    <!-- Script to make email section visible -->
-    <script type="text/javascript">
-        function showElement() {
-            element = document.querySelector('.formEmail');
-            element.style.visibility = 'visible';
-        }
-    </script>
-
     <!-- Script to draw the charts on the pdf -->
     <script>
         const optionsPDF = {
-
 
             animation: {
                 duration: 0
@@ -541,12 +521,14 @@
         let counter{{$feedbackForm->id}} = 0;
         let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
+        //labels are the questions shown in the form
         const data{{$feedbackForm->id}} = {
             labels: [
                 @foreach($feedbackForm->questions as $question)
                     '{{$question->question}}',
                 @endforeach],
 
+            // drawing all the answers and average
             datasets: [
                     @foreach($feedbackForm->answerForms as $answerForm){
 
@@ -587,37 +569,23 @@
                 //after loop first add the rest of the data
                 @else
                     @if($answerForm->guest == NULL)
-                    label
-        :
-        '{{$answerForm->user->name}}',
+                    label:'{{$answerForm->user->name}}',
             @else
-                label
-        :
-        '{{$answerForm->guest->name}}',
+                label:'{{$answerForm->guest->name}}',
             @endif
 
-                data
-        :
-        [
+                data:[
             @foreach($answerForm->answers as $answer)
                 '{{$answer->answer}}',
             @endforeach
         ],
-            borderColor
-        :
-        '#777',
-            backgroundColor
-        :
-        `${color[counter{{$feedbackForm->id}} ++]}`,
-            borderWidth
-        :
-        1
+            borderColor:'#777',
+            backgroundColor:`${color[counter{{$feedbackForm->id}} ++]}`,
+            borderWidth:1
         },
         @endif
         @endforeach
-        ]
-        }
-        ;
+        ]};
 
 
         let massPopChart{{$feedbackForm->id}} = new Chart(myChart{{$feedbackForm->id}}, {
@@ -631,19 +599,20 @@
     <!-- Script for making the PDF download -->
     <script>
         function getPDF() {
+            // scroll to top
             $('html,body').scrollTop(0);
             console.log('generating pdf')
 
 
             let pdf = ''
+
+            // gets the sizes from the charts and tables for the PDF
             @foreach($feedbackFormsPDF as $feedbackForm)
             var HTML_Width = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
             var HTML_Height = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
             console.log(HTML_Width, HTML_Height)
 
             var top_left_margin = 15;
-            // var PDF_Width = HTML_Width + (top_left_margin * 2);
-            // var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
             var PDF_Width = HTML_Width + 30;
             var PDF_Height = HTML_Height + 30;
             var canvas_image_width = HTML_Width;
@@ -651,25 +620,28 @@
             html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {
                 allowTaint: true,
                 scale: 2
-            }).then(function (canvas) {
-                canvas.getContext('2d');
-                var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                @if ($loop->first)
-                    pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                console.log('first page generated')
-                @else
-                pdf.addPage(PDF_Width, PDF_Height);
-                console.log('page generated')
-                @endif
+            })
+                //generates the PDF
+                .then(function (canvas) {
+                    canvas.getContext('2d');
+                    var imgData = canvas.toDataURL("image/jpeg", 1.0);
+                    @if ($loop->first)
+                        pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
+                    console.log('first page generated')
+                    @else
+                    pdf.addPage(PDF_Width, PDF_Height);
+                    console.log('page generated')
+                    @endif
 
-                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                    // saves the PDF
+                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
 
-                @if($loop->last)
-                console.log('saving pdf')
-                pdf.save("{{$binder->title}}.pdf");
-                @endif
+                    @if($loop->last)
+                    console.log('saving pdf')
+                    pdf.save("{{$binder->title}}.pdf");
+                    @endif
 
-            });
+                });
             @endforeach
         }
     </script>
