@@ -33,6 +33,7 @@
                         </form>
                     </h4>
                 @elseif($formCount != 0)
+
                 <!-- Pagination -->
                     {{ $feedbackForms->links() }}
                     <br>
@@ -41,7 +42,7 @@
                             @foreach($feedbackForms as $feedbackForm)
                                 <div class="row">
                                     <div class="col-md-6 text-left"><h3>{{$feedbackForm->title}}</h3></div>
-                                   <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
+                                    <div class="col-md-6 text-right">{{ $binder->created_at->format('m/d/Y')}}</div>
                                 </div>
                             @endforeach
                             <br>
@@ -59,7 +60,6 @@
                                 Give yourself feedback
                             </x-button>
 
-
                             <!-- Form for E-mail -->
                             <form class="formEmail was-validated" name="yes"
                                   style="visibility: hidden; padding-top: 20px; padding-left: 16px"
@@ -69,7 +69,7 @@
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
                                         <input type="email" class="form-control mb-2" name="email"
                                                placeholder="Enter a email" required>
-                                               <div class="invalid-feedback">Email did not meet requirements</div>
+                                        <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
@@ -154,54 +154,59 @@
                                 @endforeach
                                 </tbody>
                             </table>
-<br><br>
-                                <!-- table with comments -->
-                                <table class="table" style="  table-layout:fixed; width:100%;">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">Questions</th>
-                                        @foreach($feedbackForm->answerForms as $answerForm)
-                                                @if($answerForm->guest == NULL)
-                                                    <th scope="col">{{$answerForm->user->name}}
-                                                        - <br>{{$answerForm->user->role->name}}
-                                                        @if($answerForm->user->role_verified)
-                                                            <div class="verified"></div>
-                                                        @else
-                                                            <div class="not_verified"> x</div>
-                                                        @endif
-                                                    </th>
+                            <br><br>
+
+                            <!-- table with comments -->
+                            <table class="table" style="  table-layout:fixed; width:100%;">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Questions</th>
+                                    @foreach($feedbackForm->answerForms as $answerForm)
+                                        @if($answerForm->guest == NULL)
+                                            <th scope="col">{{$answerForm->user->name}}
+                                                - <br>{{$answerForm->user->role->name}}
+                                                @if($answerForm->user->role_verified)
+                                                    <div class="verified"></div>
                                                 @else
-                                                    <th scope="col">{{$answerForm->guest->name}}
-                                                        - {{$answerForm->guest->role->name}} </th>
+                                                    <div class="not_verified"> x</div>
                                                 @endif
+                                            </th>
+                                        @else
+                                            <th scope="col">{{$answerForm->guest->name}}
+                                                - {{$answerForm->guest->role->name}} </th>
+                                        @endif
+                                    @endforeach
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @foreach($feedbackForm->questions as $question)
+                                    <div></div>
+                                    <tr>
+                                        <th scope="row">{{$question->question}}</th>
+                                        @foreach($question->answers as $answer)
+                                            <td>{{$answer->comment}}</td>
                                         @endforeach
                                     </tr>
-                                    </thead>
-                                    <tbody>
-                                    @foreach($feedbackForm->questions as $question)
-                                        <div></div>
-                                        <tr>
-                                            <th scope="row">{{$question->question}}</th>
-                                            @foreach($question->answers as $answer)
-                                                    <td>{{$answer->comment}}</td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                    </tbody>
-                                </table>
+                                @endforeach
+                                </tbody>
+                            </table>
 
-                                <!-- Secondary buttons for edit and delete a form -->
-                            <a class="btn pull-right" style="border-color: #3b82f6"
-                               href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
-
-                            <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
-                                @method('DELETE')
-                                @csrf
-                                <button class="btn pull-right" type="submit"
-                                        onclick="return confirm('Are you sure you want to delete this form?')"
-                                        style="border-color: #3b82f6">Delete this form
-                                </button>
-                            </form>
+                            <!-- Secondary buttons for edit and delete a form -->
+                            <div>
+                                <div></div>
+                                <a class="btn pull-right" style="border-color: #3b82f6"
+                                   href="/feedbackForm/{{$binder->public_id}}/edit">Edit</a>
+                                <div style="display:inline-block">
+                                    <form method="POST" action="{{route('feedbackForm.destroy', $binder->public_id) }}">
+                                        @method('DELETE')
+                                        @csrf
+                                        <button class="btn pull-right" type="submit"
+                                                onclick="return confirm('Are you sure you want to delete this form?')"
+                                                style="border-color: #3b82f6">Delete this form
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
                             <!-- Form error when form does not exists -->
                             @else
                                 <div class="danger">
@@ -234,7 +239,7 @@
 
         <!-- ALERT! this code part will only be in the pdf -->
 
-        <!-- Everything inside this class will be in the PDF -->
+            <!-- Everything inside this class will be in the PDF -->
             <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
                  class="canvas_div_pdf{{$form->id}}" id="clipped">
                 @if(Auth::user()->id == $binder->user_id)
@@ -299,7 +304,7 @@
                                 <th scope="row">{{$question->question}}</th>
                                 @foreach($question->answers as $answer)
                                     @if($loop->first)
-                                            <td>{{$form->avg[$loop->parent->parent->index]}}</td>
+                                        <td>{{$form->avg[$loop->parent->parent->index]}}</td>
                                         <td>{{$answer->answer}}</td>
                                     @else
                                         <td>{{$answer->answer}}</td>
@@ -310,7 +315,7 @@
                         </tbody>
                     </table>
                     <br><br>
-                    <!-- table with comments -->
+                    <!-- table with comments PDF-->
                     <table class="table" style="  table-layout:fixed; width:100%;">
                         <thead>
                         <tr>
@@ -424,7 +429,9 @@
         },
         @endif
         @endforeach
-        ]};
+        ]
+        }
+        ;
 
         // Global Options
         Chart.defaults.global.defaultFontFamily = 'Arial';
@@ -473,18 +480,9 @@
         }
     </script>
 
-    <!-- Script to make email section visible -->
-    <script type="text/javascript">
-        function showElement() {
-            element = document.querySelector('.formEmail');
-            element.style.visibility = 'visible';
-        }
-    </script>
-
     <!-- Script to draw the charts on the pdf -->
     <script>
         const optionsPDF = {
-
 
             animation: {
                 duration: 0
@@ -523,12 +521,14 @@
         let counter{{$feedbackForm->id}} = 0;
         let myChart{{$feedbackForm->id}} = document.getElementById(`myChart{{$feedbackForm->id}}`).getContext('2d');
 
+        //labels are the questions shown in the form
         const data{{$feedbackForm->id}} = {
             labels: [
                 @foreach($feedbackForm->questions as $question)
                     '{{$question->question}}',
                 @endforeach],
 
+            // drawing all the answers and average
             datasets: [
                     @foreach($feedbackForm->answerForms as $answerForm){
 
@@ -599,47 +599,53 @@
     <!-- Script for making the PDF download -->
     <script>
         function getPDF() {
+            // scroll to top
             $('html,body').scrollTop(0);
             console.log('generating pdf')
 
 
-
-
             let pdf = ''
-            @foreach($feedbackFormsPDF as $feedbackForm)
-            var HTML_Width = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
-            var HTML_Height = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
-            console.log(HTML_Width, HTML_Height)
 
+            // gets the sizes from the charts and tables for the PDF
+            @foreach($feedbackFormsPDF as $feedbackForm)
+            var HTML_Width{{$feedbackForm->id}} = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().width;
+            var HTML_Height{{$feedbackForm->id}} = document.querySelector(".canvas_div_pdf{{$feedbackForm->id}}").getBoundingClientRect().height;
             var top_left_margin = 15;
-            // var PDF_Width = HTML_Width + (top_left_margin * 2);
-            // var PDF_Height = (PDF_Width * 1.5) + (top_left_margin * 2);
-            var PDF_Width = HTML_Width + 30;
-            var PDF_Height = HTML_Height + 30;
-            var canvas_image_width = HTML_Width;
-            var canvas_image_height = HTML_Height;
+            var PDF_Width{{$feedbackForm->id}} = HTML_Width{{$feedbackForm->id}} + 30;
+            var PDF_Height{{$feedbackForm->id}} = HTML_Height{{$feedbackForm->id}} + 30;
+            var canvas_image_width{{$feedbackForm->id}} = HTML_Width{{$feedbackForm->id}};
+            var canvas_image_height{{$feedbackForm->id}} = HTML_Height{{$feedbackForm->id}};
             html2canvas($(".canvas_div_pdf{{$feedbackForm->id}}")[0], {
                 allowTaint: true,
                 scale: 2
-            }).then(function (canvas) {
-                canvas.getContext('2d');
-                var imgData = canvas.toDataURL("image/jpeg", 1.0);
-                @if ($loop->first)
-                    pdf = new jsPDF('p', 'pt', [PDF_Width, PDF_Height]);
-                console.log('first page generated')
-                @else
-                pdf.addPage(PDF_Width, PDF_Height);
-                console.log('page generated')
-                @endif
+            })
+                //generates the PDF
+                .then(function (canvas) {
+                    //gets canvas data ready for PDF
+                    canvas.getContext('2d');
+                    var imgData = canvas.toDataURL("image/jpeg", 1.0);
 
-                pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width, canvas_image_height);
+                    //creates a new PDF
+                    @if ($loop->first)
+                        pdf = new jsPDF('p', 'pt', [PDF_Width{{$feedbackForm->id}}, PDF_Height{{$feedbackForm->id}}]);
+                    console.log(`first page generated, Width: ${PDF_Width{{$feedbackForm->id}}} Height: ${PDF_Height{{$feedbackForm->id}}}`)
 
-                @if($loop->last)
-                console.log('saving pdf')
-                pdf.save("{{$binder->title}}.pdf");
-                @endif
+                    //add new pdf page
+                    @else
+                    pdf.addPage(PDF_Width{{$feedbackForm->id}}, PDF_Height{{$feedbackForm->id}});
+                    console.log(`page generated, Width: ${PDF_Width{{$feedbackForm->id}}} Height: ${PDF_Height{{$feedbackForm->id}}}`)
+                    @endif
 
-            });
+                    //adds page data to the PDF page
+                    pdf.addImage(imgData, 'JPG', top_left_margin, top_left_margin, canvas_image_width{{$feedbackForm->id}}, canvas_image_height{{$feedbackForm->id}});
+
+                    // saves the PDF
+                    @if($loop->last)
+                    console.log('saving pdf')
+                    pdf.save("{{$binder->title}}.pdf");
+                    @endif
+
+                });
             @endforeach
         }
     </script>

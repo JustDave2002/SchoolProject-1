@@ -45,7 +45,9 @@
                         </div>
                         <br>
                         <br>
-                        <input class="btn btn-primary" style="width: 95%" type="submit" value="Next">
+                        <input class="btn btn-primary" style="width: 100%" type="submit" value="Next">
+                        <br>
+                        <br>
                     </form>
                     </form>
                 </div>
