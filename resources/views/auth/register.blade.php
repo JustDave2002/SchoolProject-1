@@ -22,8 +22,11 @@
 
             <div>
                 <label for="title">Function</label><br>
+                <a id="error-message" style="color: red; display: none">Functions other than Student must be
+                    verified.</a>
+
                 <div>
-                    <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id" required/>
+                    <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id" onchange="test(this);" required/>
                     @foreach($roles as $role)
                         <option value="{{$role->id}}">{{$role->name}}</option>
                         @endforeach
@@ -69,3 +72,24 @@
         </form>
     </x-auth-card>
 </x-guest-layout>
+<script>
+
+
+    window.test = function (e) {
+        const error = document.getElementById('error-message')
+
+        @foreach($roles as $role)
+            @if($loop->first)
+        if (e.value === '{{$role->id}}') {
+            console.log(e.value);
+            error.style.display = 'none';
+        }
+            @else
+        else if (e.value === '{{$role->id}}') {
+            console.log(e.value);
+            error.style.display = 'block';
+        }
+        @endif
+        @endforeach
+    }
+</script>
