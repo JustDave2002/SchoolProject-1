@@ -17,8 +17,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            @if(Auth::user()->id == $binder->user_id)
                 <div style="margin-top: 10px; margin-bottom: 5px;">
+            @if($validated)
 
                 <h2 class="font-semibold  text-gray-800 leading-tight">
                     {{ __($binder->title) }}
@@ -55,7 +55,7 @@
     </div>
 </x-app-layout>
 
-@if($formCheck != NULL)
+@if($formCheck != NULL && $validated)
     <!-- Script for making the Chart.js -->
     <script>
         let color = ['rgba(255, 0, 0, 0.4)', 'rgba(0, 0, 255, 0.4)', 'rgba(0, 204, 255, 0.4)', 'rgba(204, 102, 255, 0.4)', 'rgba(128, 0, 128, 0.4)'];
@@ -63,7 +63,7 @@
         let myChart = document.getElementById('myChart').getContext('2d');
 
         const data = {
-
+@foreach($feedbackForms as $feedbackForm)
             labels: [@foreach($feedbackForm->questions as $question)
                 '{{$question->question}}',
                 @endforeach],
@@ -80,7 +80,7 @@
                     borderWidth: 1
                 },
                 @endforeach
-
+@endforeach
             ]
         };
 
