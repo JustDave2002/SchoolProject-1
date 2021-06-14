@@ -140,6 +140,7 @@
                                         </div>
                                     </div>
                                     <div class="col-auto float-right">
+                                        <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
                                         <button type="submit" class="btn btn-primary mb-2">Send</button>
                                     </div>
                                 </div>
