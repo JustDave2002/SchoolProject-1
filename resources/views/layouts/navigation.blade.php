@@ -6,7 +6,7 @@
                 <!-- Logo -->
                 <div class="flex-shrink-0 flex items-center">
                     <a href="{{ route('feedbackForm.index') }}">
-                        <img src="https://i.imgur.com/mXPaedC.png" width="35px" height="35px">
+                        <x-application-logo style="width: 35px; height: 35px" class="w-20 h-20 fill-current text-gray-500" />
                     </a>
                 </div>
 
