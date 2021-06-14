@@ -253,12 +253,14 @@ class AnswerController extends Controller
         $answerForm = $answerForms[$index];
 
         $answers = request('answer');
+        $comments = request('comment');
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
         foreach ($answerForm->answers as $answer){
             $currentAnswer = array_shift($answers);
-            $answer->update(['answer' => $currentAnswer]);
+            $currentComment = array_shift($comments);
+            $answer->update(['answer' => $currentAnswer, 'comment' => $currentComment]);
         }
 
         return $this->redirectPage($request);

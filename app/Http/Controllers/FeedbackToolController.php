@@ -23,14 +23,22 @@ class FeedbackToolController extends Controller
             $request->request->add(['guest' => 'ON']);
             Mail::to($this->validateEmail())->send(new FeedbackTool);
         }
-        
-        // This function does the same as above 
+
+        // This function does the same as above
         if ($request->email2 !== NULL && $request->guest2 !== 'on') {
             $request->request->add(['guest' => NULL]);
             Mail::to($this->validateEmail2())->send(new FeedbackTool);
         } else if ($request->email2 !== NULL){
             $request->request->add(['guest' => 'ON']);
             Mail::to($this->validateEmail2())->send(new FeedbackTool);
+        }
+        // This function does the same as above
+        if ($request->email3 !== NULL && $request->guest3 !== 'on') {
+            $request->request->add(['guest' => NULL]);
+            Mail::to($this->validateEmail3())->send(new FeedbackTool);
+        } else if ($request->email3 !== NULL){
+            $request->request->add(['guest' => 'ON']);
+            Mail::to($this->validateEmail3())->send(new FeedbackTool);
         }
 
         return redirect(url()->previous())->with('message', 'The email has been sent!');
@@ -49,4 +57,11 @@ class FeedbackToolController extends Controller
             'email2' => 'nullable|email'
         ]);
     }
+    public function validateEmail3():array
+    {
+        return request()->validate([
+            'email2' => 'nullable|email'
+        ]);
+    }
+
 }

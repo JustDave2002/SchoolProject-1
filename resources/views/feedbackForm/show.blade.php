@@ -64,7 +64,7 @@
                             <br>
 
                             <!-- PDF button -->
-                            <x-button class="ml-3" onclick="getPDF()">
+                            <x-button class="" style="padding-left: 0" onclick="getPDF()">
                                 download PDF
                             </x-button>
                             <!-- email implementation -->
@@ -98,14 +98,14 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <a  class="btn btn-primary mb-2" onclick="showMail(1)">Next</a>
+                                        <a  class="btn btn-primary mb-2" id="button1" onclick="showMail(1)">Next</a>
                                     </div>
                                 </div>
 
-                                <div class="form-row align-items-top" style="margin-bottom: 7px; display: none;" id="mail1">
+                                <div class="form-row align-items-top" style="margin-top: 7px; display: none;" id="mail1">
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                        <input type="email" class="form-control mb-2 align-middle" name="email2" value=""
+                                        <input type="email" id="input1" class="form-control mb-2 align-middle" name="email2" value=""
                                                placeholder="Enter another email">
                                         <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
@@ -119,28 +119,69 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <a  class="btn btn-primary mb-2">Send</a>
+                                        <a  class="btn btn-primary mb-2" id="button2" onclick="showLastMail(2)">Next</a>
                                     </div>
                                 </div>
-                                    <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
-                                    <div class="col-auto">
+
+                                <div class="form-row align-items-top" style="margin-top: 7px; ">
+                                    <div class="col-auto mail2" id="mail2" style="visibility: hidden">
+                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
+                                        <input type="email" id="input2" class="form-control mb-2 align-middle" name="email3" value=""
+                                               placeholder="Enter another email">
+                                        <div class="invalid-feedback">Email did not meet requirements</div>
+                                    </div>
+                                    <div class="col-auto mail2" id="mail2" style="margin-top: 8px; visibility: hidden">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoSizingCheck"
+                                                   name="guest3">
+                                            <label class="form-check-label" for="autoSizingCheck">
+                                                Guest
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-auto float-right">
                                         <button type="submit" class="btn btn-primary mb-2">Send</button>
                                     </div>
+                                </div>
                             </form>
 
                             <script>
-                                let shown = 0
+                                let shown1 = 0
+                                let shown2 = 0
 
                                 function showMail(index) {
-                                    let commentField = document.getElementById(`mail${index}`)
-                                    if (shown === 0){
-                                        commentField.style.display = '';
-                                        shown = 1
+                                    let commentDiv = document.getElementById(`mail${index}`);
+                                    let button = document.getElementById(`button${index}`);
+                                    let commentField = document.getElementById(`input${index}`);
+                                    if (shown1 === 0){
+                                        commentDiv.style.display = '';
+                                        button.innerHTML = 'Undo';
+                                        shown1 = 1;
                                     } else {
-                                        commentField.style.display = 'none';
-                                        shown = 0
+                                        commentDiv.style.display = 'none';
+                                        button.innerHTML = 'Next';
+                                        commentField.value = '';
+                                        shown1 = 0;
                                     }
                                 }
+                                function showLastMail(index){
+                                    let commentDiv = document.getElementsByClassName(`mail${index}`);
+                                    let button = document.getElementById(`button${index}`);
+                                    let commentField = document.getElementById(`input${index}`);
+                                    if (shown2 === 0){
+                                        commentDiv[0].style.visibility = '';
+                                        commentDiv[1].style.visibility = '';
+                                        button.innerHTML = 'Undo';
+                                        shown2 = 1;
+                                    } else {
+                                        commentDiv[0].style.visibility = 'hidden';
+                                        commentDiv[1].style.visibility = 'hidden';
+                                        commentField.value = '';
+                                        button.innerHTML = 'Next';
+                                        shown2 = 0;
+                                    }
+                                }
+
                             </script>
 
                             <div class="container" style="margin-bottom: 40px;">

@@ -22,7 +22,7 @@
                         <b><h4>{{$feedbackForm->title}}</h4></b>
                         <br>
                         @foreach($feedbackForm->questions as $question)
-                            <div class="form-group">
+                            <div class="form-group" style="width: 89%; display: inline-block">
                                 <label for="q1">{{$question->question}}</label><br>
                                 <input type="range" id="answer" class="answer" list="num" placeholder="Question 1"
                                        name="answer[]"
@@ -35,6 +35,19 @@
                                     <option value="4" label="+">
                                     <option value="5" label="++">
                                 </datalist>
+                            </div>
+                            <div style="display: inline-block; vertical-align:top">
+                                <a class="btn btn-primary pull-right" onclick="showComment({{$loop->index}})" style="margin-top: 25px">Comment</a>
+                            </div>
+                            <div class="form-group" id="field{{$loop->index}}" style="@if ($question->answers->where('answer_form_id', $answerForm->id)->first()->comment == NULL)display: none @endif">
+                                <label style="margin: 0px" for="title">Extra feedback</label><br>
+                                <input type="text" value="{{$question->answers->where('answer_form_id', $answerForm->id)->first()->comment}}"
+                                       id="comment" class="form-control {{$errors->has('answer') ? 'is_danger' : ''}}" placeholder="Type some extra feedback or clarification here" name="comment[]"maxlength="200">
+
+                                @if ($errors->has('answer'))
+                                    <p class="help is-danger">{{ $errors->first('answer') }}</p>
+                                @endif
+                                <div class="valid-feedback"><br></div>
                             </div>
                             <br>
                         @endforeach
@@ -67,7 +80,22 @@
 
 </x-app-layout>
 
+
 <script>
+    let shown = 0
+
+    function showComment(index) {
+        let commentField = document.getElementById(`field${index}`)
+        if (shown === 0){
+            commentField.style.display = 'block';
+            shown = 1
+        } else {
+            commentField.style.display = 'none';
+            shown = 0
+        }
+    }
+
+
     let formSubmitting = false;
     let setFormSubmitting = function () {
         formSubmitting = true;
