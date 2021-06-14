@@ -280,7 +280,16 @@ class AnswerController extends Controller
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
             ->orderBy('created_at', 'asc')
             ->paginate(1);
-        return view('answer.show', compact('formCheck', 'binder', 'feedbackForms'));
+            
+        $userIds = [];
+        foreach ($feedbackForms as $feedbackForm){
+           foreach ($feedbackForm->answerForms as $answerForm) {
+               array_push($userIds, $answerForm->user_id);
+           }
+        }
+        $validated = in_array(Auth::user()->id, $userIds);
+//        dd($feedbackForms);
+        return view('answer.show', compact('formCheck','binder', 'feedbackForms', 'validated'));
     }
 
 
