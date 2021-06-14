@@ -3,7 +3,7 @@
       crossorigin="anonymous">
 {{--<h1>HZ 360° Feedback tool</h1>--}}
 <body style="background-color: #e6e6e6">
-<img style='margin-left: 250px' src="https://i.imgur.com/QLIdRkh.png" height="100 px">
+<img style='margin-left: 250px' src="https://i.imgur.com/qnfiPKC.png" height="100 px">
 <div style="background-color: white; border-radius: 10px; padding: 15px; margin: 30px; margin-top: 0px">
 
     <H2>Hello, {{$name}} wants feedback from you!</H2>

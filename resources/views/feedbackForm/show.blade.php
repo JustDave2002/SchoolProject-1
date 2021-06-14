@@ -81,15 +81,14 @@
                             <form class="formEmail was-validated" name="yes"
                                   style="visibility: hidden; padding-top: 20px; padding-left: 16px"
                                   action="/sendmail/test/">
-                                <div class="form-row align-items-center">
+                                <div class="form-row align-items-top">
                                     <div class="col-auto">
                                         <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                        <input type="email" class="form-control mb-2" name="email"
-                                               placeholder="Enter a email" required>
+                                        <input type="email" class="form-control mb-2 align-middle" name="email"
+                                               placeholder="Enter email" required>
                                         <div class="invalid-feedback">Email did not meet requirements</div>
                                     </div>
-                                    <!-- Checkbox for guests, when you press it a seperate guest email is being sent instead of a regular one, this is for people without an account -->
-                                    <div class="col-auto">
+                                    <div class="col-auto" style="margin-top: 8px">
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="autoSizingCheck"
                                                    name="guest1">
@@ -99,11 +98,18 @@
                                         </div>
                                     </div>
                                     <div class="col-auto">
-                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
-                                        <input type="email" class="form-control mb-2" name="email2"
-                                               placeholder="Enter a email">
+                                        <a  class="btn btn-primary mb-2" onclick="showMail(1)">Next</a>
                                     </div>
+                                </div>
+
+                                <div class="form-row align-items-top" style="margin-bottom: 7px; display: none;" id="mail1">
                                     <div class="col-auto">
+                                        <label class="sr-only" for="inlineFormInput">E-mail</label>
+                                        <input type="email" class="form-control mb-2 align-middle" name="email2" value=""
+                                               placeholder="Enter another email">
+                                        <div class="invalid-feedback">Email did not meet requirements</div>
+                                    </div>
+                                    <div class="col-auto" style="margin-top: 8px">
                                         <div class="form-check mb-2">
                                             <input class="form-check-input" type="checkbox" id="autoSizingCheck"
                                                    name="guest2">
@@ -112,18 +118,39 @@
                                             </label>
                                         </div>
                                     </div>
+                                    <div class="col-auto">
+                                        <a  class="btn btn-primary mb-2">Send</a>
+                                    </div>
+                                </div>
                                     <input style="display:none;" value="{{$binder->public_id}}" name="public_id">
                                     <div class="col-auto">
                                         <button type="submit" class="btn btn-primary mb-2">Send</button>
                                     </div>
-                                </div>
                             </form>
 
-                            <div class="container">
+                            <script>
+                                let shown = 0
+
+                                function showMail(index) {
+                                    let commentField = document.getElementById(`mail${index}`)
+                                    if (shown === 0){
+                                        commentField.style.display = '';
+                                        shown = 1
+                                    } else {
+                                        commentField.style.display = 'none';
+                                        shown = 0
+                                    }
+                                }
+                            </script>
+
+                            <div class="container" style="margin-bottom: 40px;">
                                 <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
 
                             <!-- table with answer information -->
+                            <h3>
+                                Answers
+                            </h3>
                             <table class="table">
                                 <thead>
                                 <tr>
@@ -183,6 +210,9 @@
                             </table>
                             <br><br>
 
+                            <h3>
+                                Comments
+                            </h3>
                             <!-- table with comments -->
                             <table class="table" style="  table-layout:fixed; width:100%;">
                                 <thead>
@@ -285,6 +315,9 @@
                                 style="margin-bottom: 200px; width:1110px; height:740px"></canvas>
                     </div>
 
+                    <h3>
+                        Answers
+                    </h3>
                     <!-- table with answer information PDF -->
                     <table class="table">
                         <thead>
@@ -342,6 +375,10 @@
                         </tbody>
                     </table>
                     <br><br>
+
+                    <h3>
+                        Comments
+                    </h3>
                     <!-- table with comments PDF-->
                     <table class="table" style="  table-layout:fixed; width:100%;">
                         <thead>
