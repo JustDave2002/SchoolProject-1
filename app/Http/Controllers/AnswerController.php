@@ -92,11 +92,13 @@ class AnswerController extends Controller
 
     public function guestStore(Request $request)
     {
+        $this->validateGuestName($request);
         $guest = Guest::create([
             'name' => request('name'),
             'role_id' => request('role_id')
         ]);
         $request->session()->put('guest_id', $guest->id);
+
 
         return redirect('guestAnswer/create');
     }
@@ -137,6 +139,10 @@ class AnswerController extends Controller
     {
         //$this->validatePoints($request);
 
+        //validate answers
+        $this->validateAnswers($request);
+
+
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId) = $this->prevPageLogic($request);
 
         if(Auth::check()){
@@ -153,9 +159,6 @@ class AnswerController extends Controller
         ]);
 
         $request->session()->push('answerForms', $form);
-
-
-        //TODO validate function
 
 
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
@@ -222,10 +225,14 @@ class AnswerController extends Controller
      */
     public function editForm(Request $request)
     {
+        //validate answers
+        $this->validateAnswers($request);
+
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms) = $this->prevPageLogic($request);
 
         //dd($answerForms);
         $answerForm = $answerForms[$index];
+
 
         return view('answer/edit',compact('feedbackForm','formBinder', 'answerForm','index', 'counter'));
     }
@@ -238,11 +245,13 @@ class AnswerController extends Controller
      */
     public function updateForm(Request $request)
     {
+        //validate answers
+        $this->validateAnswers($request);
 
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms) = $this->prevPageLogic($request);
 
         $answerForm = $answerForms[$index];
-//TODO validate function
+
         $answers = request('answer');
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
@@ -341,6 +350,22 @@ class AnswerController extends Controller
         $request->session()->put('index', $index);
         $request->session()->put('feedbackForm', $feedbackForm);
         return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder,$guestId, $answerForms);
+    }
+    private function validateAnswers(Request $request)
+    {
+        return $request->validate([
+            'comment' => 'required|array|max:6',
+            'comment.*' => 'string|nullable|max:200',
+            'answer' => 'required|array|min:6',
+            'answer.*' =>  'required|numeric'
+        ]);
+    }
+
+    private function validateGuestName(Request $request)
+    {
+        return $request->validate([
+            'name' => 'required|string'
+        ]);
     }
 
 }
