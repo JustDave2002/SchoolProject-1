@@ -71,8 +71,8 @@
                     @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
                     label: '{{$answerForm->user->name}}',
                     data: [
-                        @foreach($answerForm->answers as $answer)
-                            '{{$answer->answer}}',
+                        @foreach ($feedbackForm->questions as $question)
+                            '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
                         @endforeach
                     ],
                     borderColor: '#777',

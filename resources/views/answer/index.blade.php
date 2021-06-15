@@ -45,7 +45,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        
+
                     @else
                         Before you can start making feedback forms you need to edit your account <br>
                         <x-button class="ml-3" onclick="document.location.href='{{route('user.index')}}'">
@@ -109,8 +109,8 @@
                 @foreach($feedbackForm->answerForms->where('user_id', Auth::user()->id) as $answerForm){
                 label: '{{$answerForm->user->role->name}}',
                 data: [
-                    @foreach($answerForm->answers as $answer)
-                        '{{$answer->answer}}',
+                    @foreach ($feedbackForm->questions as $question)
+                        '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
                     @endforeach
                 ],
                 borderColor: '#000',

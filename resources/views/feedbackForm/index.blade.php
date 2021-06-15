@@ -116,8 +116,8 @@
                 label: '{{$answerForm->guest->role->name}}',
                 @endif
                 data: [
-                    @foreach($answerForm->answers as $answer)
-                        '{{$answer->answer}}',
+                    @foreach ($feedbackForm->questions as $question)
+                        '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
                     @endforeach
                 ],
                 borderColor: '#000',
