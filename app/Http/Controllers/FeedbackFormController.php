@@ -225,7 +225,7 @@ class FeedbackFormController extends Controller
         $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
         $answers = Answer::where('answer_form_id', $answerForm->id)->get('answer');
 
-        dd('FFPDF', $feedbackFormsPDF, 'FFs', $feedbackForms, 'binder', $binder, 'count', $formCount,'FF', $feedbackForm, 'Avg', $average, 'answers', $answers);
+//        dd('FFPDF', $feedbackFormsPDF, 'FFs', $feedbackForms, 'binder', $binder, 'count', $formCount,'FF', $feedbackForm, 'Avg', $average, 'answers', $answers);
 
         return view('feedbackForm.show', compact('binder', 'formCount', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
     }
