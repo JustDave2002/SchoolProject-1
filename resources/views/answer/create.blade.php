@@ -75,16 +75,14 @@
 </x-app-layout>
 
 <script>
-    let shown = 0
+
 
     function showComment(index) {
         let commentField = document.getElementById(`field${index}`)
-        if (shown === 0){
+        if (commentField.style.display == 'none'){
             commentField.style.display = 'block';
-            shown = 1
         } else {
             commentField.style.display = 'none';
-            shown = 0
         }
     }
 
