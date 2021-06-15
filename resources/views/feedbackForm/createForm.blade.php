@@ -15,6 +15,7 @@
                     <form method="POST"
                           action="{{route('feedbackForm.storeForm')}}" onsubmit="setFormSubmitting()"
                           class="needs-validation"
+                          id="needs-validation"
                           onsubmit="setFormSubmitting()"
                           name="feedbackForm"
                           novalidate
@@ -99,6 +100,7 @@
 
 <script>
     // Example starter JavaScript for disabling form submissions if there are invalid fields
+    const form = document.getElementById('needs-validation');
     (function() {
         'use strict';
         window.addEventListener('load', function() {
@@ -117,20 +119,26 @@
         }, false);
     })();
 
+
+    function goBack() {
+        if (form.checkValidity() === false) {
+            event.preventDefault();
+            event.stopPropagation();
+        } else{
+            document.getElementById('goBack').value = 1
+            formSubmitting = true;
+            console.log(formSubmitting)
+            document.feedbackForm.submit()
+        }
+        form.classList.add('was-validated');
+    }
+
     //previous page logic
     let formSubmitting = false;
     let setFormSubmitting = function () {
         formSubmitting = true;
     };
 
-
-    function goBack() {
-        form.classList.add('was-validated');
-        document.getElementById('goBack').value = 1
-        formSubmitting = true;
-        console.log(formSubmitting)
-        document.feedbackForm.submit()
-    }
 
     window.onload = function () {
         window.addEventListener("beforeunload", function (e) {
