@@ -510,9 +510,12 @@
                     @endif
 
                     data: [
-                        @foreach($answerForm->answers as $answer)
-                            '{{$answer->answer}}',
+                        @foreach ($feedbackForm->questions as $question)
+                            '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
                         @endforeach
+{{--                        @foreach($answerForm->answers as $answer)--}}
+{{--                            '{{$answer->answer}}',--}}
+{{--                        @endforeach--}}
                     ],
                     borderColor: '#777',
                     backgroundColor: `${color[counter++]}`,
@@ -528,7 +531,7 @@
 
                 data:[
                     @foreach ($feedbackForm->questions as $question)
-                        '{{$question->answer::where('answer_form_id', $answerForm->id)}}',
+                        '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
                     @endforeach
 {{--            @foreach($answerForm->answers as $answer)--}}
 {{--                '{{$answer->answer}}',--}}
