@@ -339,7 +339,7 @@
         <!-- ALERT! this code part will only be in the pdf -->
 
             <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px;   position: absolute; display: inline-block;"
+                <div style="width: 1200px;   position: absolute;  display: inline-block;"
                  class="canvas_div_pdf{{$form->id}}" >
 {{--                <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"--}}
 {{--                 class="canvas_div_pdf{{$form->id}}" id="clipped">--}}
@@ -511,7 +511,9 @@
 
                     data: [
                         @foreach ($feedbackForm->questions as $question)
+                            @if ($question->answers->where('answer_form_id', $answerForm->id)->first()->answer ?? NULL != NULL)
                             '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
+                        @endif
                         @endforeach
                     ],
                     borderColor: '#777',
@@ -527,9 +529,11 @@
             @endif
 
                 data:[
-                    @foreach ($feedbackForm->questions as $question)
-                        '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
-                    @endforeach
+            @foreach ($feedbackForm->questions as $question)
+                @if ($question->answers->where('answer_form_id', $answerForm->id)->first()->answer ?? NULL != NULL)
+                '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
+            @endif
+            @endforeach
         ],
             borderColor:'#777',
             backgroundColor:`${color[counter++]}`,
@@ -666,8 +670,10 @@
                     @endif
 
                     data: [
-                        @foreach($answerForm->answers as $answer)
-                            '{{$answer->answer}}',
+                        @foreach ($feedbackForm->questions as $question)
+                            @if ($question->answers->where('answer_form_id', $answerForm->id)->first()->answer ?? NULL != NULL)
+                            '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
+                        @endif
                         @endforeach
                     ],
                     borderColor: '#777',
@@ -683,8 +689,10 @@
             @endif
 
                 data:[
-            @foreach($answerForm->answers as $answer)
-                '{{$answer->answer}}',
+            @foreach ($feedbackForm->questions as $question)
+                @if ($question->answers->where('answer_form_id', $answerForm->id)->first()->answer ?? NULL != NULL)
+                '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
+            @endif
             @endforeach
         ],
             borderColor:'#777',

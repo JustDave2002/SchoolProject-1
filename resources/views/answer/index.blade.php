@@ -110,7 +110,9 @@
                 label: '{{$answerForm->user->role->name}}',
                 data: [
                     @foreach ($feedbackForm->questions as $question)
+                        @if ($question->answers->where('answer_form_id', $answerForm->id)->first()->answer ?? NULL != NULL)
                         '{{$question->answers->where('answer_form_id', $answerForm->id)->first()->answer}}',
+                    @endif
                     @endforeach
                 ],
                 borderColor: '#000',

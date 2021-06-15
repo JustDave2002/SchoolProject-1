@@ -197,7 +197,6 @@ class FeedbackFormController extends Controller
 //dd($feedbackForms);
         $feedbackFormsPDF = FeedbackForm::where('form_binder_id', $binder->id)->get();
 
-        $average = [];
         foreach ($feedbackFormsPDF as $feedbackForm) {
             if (count($feedbackForm->answerForms) != 0) {
                 $avg = [];
@@ -221,11 +220,6 @@ class FeedbackFormController extends Controller
                 $average = $avg;
             }
         };
-        $feedbackForm = FeedbackForm::where('form_binder_id', $id)->first();
-        $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
-        $answers = Answer::where('answer_form_id', $answerForm->id)->get('answer');
-
-//        dd('FFPDF', $feedbackFormsPDF, 'FFs', $feedbackForms, 'binder', $binder, 'count', $formCount,'FF', $feedbackForm, 'Avg', $average, 'answers', $answers);
 
         return view('feedbackForm.show', compact('binder', 'formCount', 'formCheck', 'feedbackForms', 'feedbackFormsPDF'));
     }
