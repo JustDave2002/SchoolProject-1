@@ -4,7 +4,7 @@
               integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z"
               crossorigin="anonymous">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('New Feedback Form') }}
+            {{ __('Edit form page') }}
         </h2>
     </x-slot>
 

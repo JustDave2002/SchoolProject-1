@@ -338,8 +338,10 @@
         <!-- ALERT! this code part will only be in the pdf -->
 
             <!-- Everything inside this class will be in the PDF -->
-            <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"
-                 class="canvas_div_pdf{{$form->id}}" id="clipped">
+            <div style="width: 1200px;   position: absolute; display: inline-block;"
+                 class="canvas_div_pdf{{$form->id}}" >
+{{--                <div style="width: 1200px;   position: absolute; left: -10000px; display: inline-block;"--}}
+{{--                 class="canvas_div_pdf{{$form->id}}" id="clipped">--}}
                 @if(Auth::user()->id == $binder->user_id)
                     <br>
 
@@ -405,7 +407,7 @@
                                 <th scope="row">{{$question->question}}</th>
                                 @foreach($question->answers as $answer)
                                     @if($loop->first)
-                                        <td>{{$form->avg[$loop->parent->parent->index]}}</td>
+                                        <td>{{$form->avg[$loop->parent->index]}}</td>
                                         <td>{{$answer->answer}}</td>
                                     @else
                                         <td>{{$answer->answer}}</td>

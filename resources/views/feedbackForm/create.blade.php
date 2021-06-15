@@ -15,6 +15,7 @@
 
                         <div>
                             <label class="container" style="padding: 0px; margin: 0px" for="checkBox"> <h5 style="margin-bottom: 5px">Do you want a collection of multiple feedback forms?</h5>
+                                <a>Each form has a total of 6 questions.</a>
                             <br>
                             <input type="checkbox" id="checkBox" onclick="showElement()">
                             <span class="checkmark"></span>

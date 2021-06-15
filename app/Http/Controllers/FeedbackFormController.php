@@ -298,7 +298,7 @@ class FeedbackFormController extends Controller
             'title' => 'required|string',
             'form_binder_id' => 'required|numeric',
             'question' => 'required|array|min:6',
-            'question.*' => 'required|string',
+            'question.*' => 'required|string|max:100',
         ]);
     }
 

@@ -193,7 +193,7 @@ class AnswerController extends Controller
         } else {
             //if its the last page
             $count = $request->session()->get('counter');
-            if ($count < 1) {
+            if ($count == 1) {
                 //forgets variables
                 //TODO forget all variables
                 $request->session()->forget('counter');

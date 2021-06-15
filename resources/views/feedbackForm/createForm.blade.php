@@ -14,14 +14,15 @@
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST"
                           action="{{route('feedbackForm.storeForm')}}" onsubmit="setFormSubmitting()"
-                          class="was-validated"
+                          class="needs-validation"
                           onsubmit="setFormSubmitting()"
                           name="feedbackForm"
+                          novalidate
                     >
                         @csrf
                         <div class="form-group">
                             <label for="title">Title</label><br>
-                            <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title"
+                            <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" maxlength="150"
                                    required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
@@ -29,42 +30,42 @@
                         <div class="form-group">
                             <label for="q1">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 1"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                             <label for="q2">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 2"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                             <label for="q3">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 3"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                             <label for="q4">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 4"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                             <label for="q5">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 5"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
                         <div class="form-group">
                             <label for="q6">Question</label><br>
                             <input type="text" id="title" class="form-control" placeholder="Question 6"
-                                   name="question[]" required>
+                                   name="question[]" maxlength="100" required>
                             <div class="valid-feedback"><br></div>
                             <div class="invalid-feedback">Please fill out this field.</div>
                         </div>
@@ -97,6 +98,26 @@
 </x-app-layout>
 
 <script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    if (form.checkValidity() === false) {
+                        event.preventDefault();
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
+
+    //previous page logic
     let formSubmitting = false;
     let setFormSubmitting = function () {
         formSubmitting = true;
@@ -104,6 +125,7 @@
 
 
     function goBack() {
+        form.classList.add('was-validated');
         document.getElementById('goBack').value = 1
         formSubmitting = true;
         console.log(formSubmitting)
