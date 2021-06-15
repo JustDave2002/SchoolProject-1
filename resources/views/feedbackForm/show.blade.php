@@ -147,6 +147,7 @@
                             </form>
 
                             <script>
+                                //feedback form hiding css
                                 let shown1 = 0
                                 let shown2 = 0
 
@@ -519,16 +520,19 @@
                 },
                 //after loop first add the rest of the data
                 @else
-                    @if($answerForm->guest == NULL)
-                    label:'{{$answerForm->user->name}}',
+            @if($answerForm->guest == NULL)
+                label:'{{$answerForm->user->name}}',
             @else
                 label:'{{$answerForm->guest->name}}',
             @endif
 
                 data:[
-            @foreach($answerForm->answers as $answer)
-                '{{$answer->answer}}',
-            @endforeach
+                    @foreach ($feedbackForm->questions as $question)
+                        '{{$question->answer::where('answer_form_id', $answerForm->id)}}',
+                    @endforeach
+{{--            @foreach($answerForm->answers as $answer)--}}
+{{--                '{{$answer->answer}}',--}}
+{{--            @endforeach--}}
         ],
             borderColor:'#777',
             backgroundColor:`${color[counter++]}`,
