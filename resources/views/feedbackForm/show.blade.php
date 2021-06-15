@@ -69,7 +69,7 @@
                             </x-button>
                             <!-- email implementation -->
                             <x-button class="ml-3" onclick="showElement()">
-                                ask feedback
+                                Send email
                             </x-button>
                             <!-- Give yourself feedback button -->
                             <x-button class="ml-3" onclick="location.href='/answer/info/{{$binder->public_id}}'">
@@ -312,8 +312,7 @@
                                     <h3>Uh oh! <br><br></h3>
                                     <h4>
                                         It looks like something went wrong in the making of this form!
-                                        It is best to delete this form and try again. If the problem persists, we
-                                        fucked up.<br>
+                                        It is best to delete this form and try again. If the problem persists, there might be a problem on our end.<br>
                                     </h4>
 
                                     <form method="POST"

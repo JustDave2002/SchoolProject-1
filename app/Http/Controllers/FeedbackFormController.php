@@ -81,7 +81,6 @@ class FeedbackFormController extends Controller
     {
         //gathers some needed data
         list($index, $feedbackForms, $feedbackForm, $counter) = $this->prevPageLogic($request);
-    //TODO finish this
 
         //if the formPage does not exist yet create one
         if ($feedbackForms->get($index) == NULL) {
@@ -308,7 +307,7 @@ class FeedbackFormController extends Controller
     {
         return $request->validate([
             'user_id' => 'required|numeric',
-            'title' => 'required|string',
+            'title' => 'required|string|max:150',
             'form_count' => 'required|numeric'
         ]);
     }

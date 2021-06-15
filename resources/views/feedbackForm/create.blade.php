@@ -25,7 +25,7 @@
                             <br>
                             <div>
                                 <label style="margin: 0px" for="title">Form Title</label><br>
-                                <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" required>
+                                <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="Placeholder Title" maxlength="150" required>
                                 <div class="valid-feedback"><br></div>
                                 <div class="invalid-feedback">Please fill out this field.</div>
 
@@ -58,13 +58,15 @@
 
 <script type="text/javascript">
     function showElement() {
-        element = document.querySelector('.categoryForm');
-        dropdown = document.getElementById('dropdown');
-        checkbox = document.getElementById("checkBox");
+        const element = document.querySelector('.categoryForm');
+        const dropdown = document.getElementById('dropdown');
+        const checkbox = document.getElementById("checkBox");
+        const title = document.getElementById("title");
 
         if (checkbox.checked === true) {
             element.style.visibility = 'visible';
             element.style.display = 'block';
+            title.value = '';
             dropdown.value = 2;
 
         }
@@ -72,6 +74,7 @@
         if (checkbox.checked === false) {
             element.style.visibility = 'hidden';
             element.style.display = 'none';
+            title.value = 'Placeholder title';
             dropdown.value = 1;
         }
     }
