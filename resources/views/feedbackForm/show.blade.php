@@ -237,14 +237,14 @@
                                     <div></div>
                                     <tr>
                                         <th scope="row">{{$question->question}}</th>
-                                        @foreach($question->answers as $answer)
+                                        @foreach($feedbackForm->answerForms as $answerForm)
                                             @if($loop->first)
                                                 @foreach($feedbackFormsPDF->where('id', $feedbackForm->id) as $form)
                                                     <td>{{$form->avg[$loop->parent->parent->index]}}</td>
                                                 @endforeach
-                                                <td>{{$answer->answer}}</td>
+                                                <td>{{$answerForm->answers->where('question_id', $question->id)->first()->answer}}</td>
                                             @else
-                                                <td>{{$answer->answer}}</td>
+                                                <td>{{$answerForm->answers->where('question_id', $question->id)->first()->answer}}</td>
                                             @endif
                                         @endforeach
                                     </tr>
@@ -283,8 +283,8 @@
                                     <div></div>
                                     <tr>
                                         <th scope="row">{{$question->question}}</th>
-                                        @foreach($question->answers as $answer)
-                                            <td>{{$answer->comment}}</td>
+                                        @foreach($feedbackForm->answerForms as $answerForm)
+                                            <td>{{$answerForm->answers->where('question_id', $question->id)->first()->comment}}</td>
                                         @endforeach
                                     </tr>
                                 @endforeach
