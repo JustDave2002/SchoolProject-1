@@ -17,6 +17,6 @@ class Answer extends Model
         return $this->belongsTo(Guest::class);
     }
     public function answerForm(){
-        return $this->belongsTo(answerForm::class);
+        return $this->belongsTo(AnswerForm::class);
     }
 }

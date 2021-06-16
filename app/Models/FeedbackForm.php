@@ -11,7 +11,7 @@ class FeedbackForm extends Model
     use HasFactory;
 
     public function formBinders(){
-        return $this->belongsTo(formBinder::class);
+        return $this->belongsTo(FormBinder::class);
     }
 
     public function questions(){
@@ -19,6 +19,6 @@ class FeedbackForm extends Model
     }
 
     public function answerForms(){
-        return $this->hasMany(answerForm::class);
+        return $this->hasMany(AnswerForm::class);
     }
 }

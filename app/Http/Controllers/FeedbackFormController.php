@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\answerForm;
-use App\Models\formBinder;
+use App\Models\AnswerForm;
+use App\Models\FormBinder;
 use App\Models\Question;
 use Database\Seeders\FormBinderSeeder;
 use Illuminate\Http\Request;
@@ -58,7 +58,7 @@ class FeedbackFormController extends Controller
         $this->validateFormBinder($request);
 
         //make formBinder
-        $formBinder = formBinder::create([
+        $formBinder = FormBinder::create([
             'public_id' => Uuid::uuid4(),
             'user_id' => request('user_id'),
             'title' => request('title'),
@@ -181,12 +181,12 @@ class FeedbackFormController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param \App\Models\formBinder $formBinder
+     * @param \App\Models\FormBinder $formBinder
      * @return \Illuminate\Http\Response
      */
     public function show($public_id)
     {
-        $binder = formBinder::where('public_id', $public_id)->first();
+        $binder = FormBinder::where('public_id', $public_id)->first();
         $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $formCount = count(FeedbackForm::where('form_binder_id', $id)->get());
@@ -235,9 +235,9 @@ class FeedbackFormController extends Controller
     {
 
 //        dd($request->session());
-        $formBinder = formBinder::where('public_id', $publicId)->first();
+        $formBinder = FormBinder::where('public_id', $publicId)->first();
         $feedbackForm = FeedbackForm::where('form_binder_id', $formBinder->id)->first();
-        if (answerForm::where('feedback_form_id', $feedbackForm->id)->first() == NULL){
+        if (AnswerForm::where('feedback_form_id', $feedbackForm->id)->first() == NULL){
             $request->session()->put('formBinder', $formBinder);
             $request->session()->put('counter', $formBinder->form_count);
             return redirect('feedbackForm/createForm');
@@ -265,12 +265,12 @@ class FeedbackFormController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param \App\Models\formBinder $formBinder
+     * @param \App\Models\FormBinder $formBinder
      * @return \Illuminate\Http\Response
      */
     public function destroy($publicId)
     {
-        $formBinder = formBinder::where('public_id', $publicId)->first();
+        $formBinder = FormBinder::where('public_id', $publicId)->first();
         if (isEmpty(FeedbackForm::where('form_binder_id', $formBinder->id)->first())) {
         } else {
             $feedbackForms = FeedbackForm::select('form_binder_id', $formBinder->id)->get();
@@ -285,7 +285,7 @@ class FeedbackFormController extends Controller
 
     public function makePDF($id)
     {
-        $formBinder = formBinder::where('public_id', $id)->first();
+        $formBinder = FormBinder::where('public_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
         return view('feedbackForm/pdf', compact('formBinder', 'feedbackForms'));
     }

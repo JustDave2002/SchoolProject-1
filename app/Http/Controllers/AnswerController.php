@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackForm;
-use App\Models\answerForm;
+use App\Models\AnswerForm;
 use App\Models\Answer;
-use App\Models\formBinder;
+use App\Models\FormBinder;
 use App\Models\Question;
 use App\Models\Role;
 use App\Models\Guest;
@@ -29,7 +29,7 @@ class AnswerController extends Controller
         // Get all the posts ordered by published date
         $id = Auth::user()->id;
 
-        $answerForms = answerform::where('user_id', $id)->get();
+        $answerForms = AnswerForm::where('user_id', $id)->get();
 
         $formBinders = collect([]);
 
@@ -57,7 +57,7 @@ class AnswerController extends Controller
     public function formStart (Request $request, $public_id)
     {
         $request->session()->forget('answerForms');
-        $formBinder = formBinder::where('public_id', $public_id)->first();
+        $formBinder = FormBinder::where('public_id', $public_id)->first();
 
         //sets item in session
         $request->session()->put('counter', $formBinder->form_count);
@@ -67,7 +67,7 @@ class AnswerController extends Controller
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
 
         //checks if a user has already answered this feedback form and redirects with an error
-        if (Auth::check() && answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
+        if (Auth::check() && AnswerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
             return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
@@ -149,7 +149,7 @@ class AnswerController extends Controller
         }else{}
 
         //create answerForm
-        $form = answerForm::create([
+        $form = AnswerForm::create([
             'user_id' => request('user_id'),
             'guest_id' => $guestId,
             'feedback_form_id' => $feedbackForm->id,
@@ -273,7 +273,7 @@ class AnswerController extends Controller
      */
     public function show($public_id)
     {
-        $binder = formBinder::where('public_id', $public_id)->first();
+        $binder = FormBinder::where('public_id', $public_id)->first();
         $id = $binder->id;
         $formCheck = FeedbackForm::where('form_binder_id', $id)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)
@@ -300,11 +300,11 @@ class AnswerController extends Controller
      */
     public function edit(Request $request,$publicId)
     {
-        $formBinder = formBinder::where('public_id', $publicId)->first();
+        $formBinder = FormBinder::where('public_id', $publicId)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
         $answerForms = collect([]);
         foreach ($feedbackForms as $feedbackForm) {
-            $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
+            $answerForm = AnswerForm::where('feedback_form_id', $feedbackForm->id)->first();
             $answerForms->push($answerForm);
         }
 

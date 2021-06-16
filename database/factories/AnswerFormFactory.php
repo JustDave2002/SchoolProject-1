@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Models\answerForm;
+use App\Models\AnswerForm;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class AnswerFormFactory extends Factory
@@ -12,7 +12,7 @@ class AnswerFormFactory extends Factory
      *
      * @var string
      */
-    protected $model = answerForm::class;
+    protected $model = AnswerForm::class;
 
     /**
      * Define the model's default state.
