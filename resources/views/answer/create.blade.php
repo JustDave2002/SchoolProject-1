@@ -13,7 +13,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="{{route('answer.save')}}" class="was-validated"
-                          onsubmit="setFormSubmitting()" name="answerForm">
+                          onsubmit="setFormSubmitting(); document.getElementById('button1').disabled=true; document.getElementById('button2').disabled=true;"
+                          name="answerForm">
                         @csrf
                         <b><h4>{{$feedbackForm->title}}</h4></b>
                         <br>
@@ -60,11 +61,11 @@
                             </div>
                             @if($counter == 1)
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary" id="button1">Submit</button>
                                 </div>
                             @else
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-primary">Next</button>
+                                    <button type="submit" class="btn btn-primary" id="button2">Next</button>
                                 </div>
                         @endif
                     </form>
@@ -76,7 +77,7 @@
 
 <script>
 
-
+    //function to display the comments
     function showComment(index) {
         let commentField = document.getElementById(`field${index}`)
         if (commentField.style.display == 'none'){

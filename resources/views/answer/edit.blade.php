@@ -15,7 +15,7 @@
                     <form method="POST"
                           action="{{route('answer.updateForm')}}"
                           name="answerForm"
-                          onsubmit="setFormSubmitting()"
+                          onsubmit="setFormSubmitting(); document.getElementById('button1').disabled=true; document.getElementById('button2').disabled=true;"
                           class="was-validated"
                     >
                         @csrf
@@ -63,11 +63,11 @@
                             </div>
                             @if($counter == 1)
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary" id="button1">Submit</button>
                                 </div>
                             @else
                                 <div class="col-md-6 text-right">
-                                    <button type="submit" class="btn btn-primary">Next</button>
+                                    <button type="submit" class="btn btn-primary" id="button2">Next</button>
                                 </div>
                         @endif
                     </form>
