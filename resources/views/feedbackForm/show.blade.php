@@ -146,46 +146,6 @@
                                 </div>
                             </form>
 
-                            <script>
-                                //feedback form hiding css
-                                let shown1 = 0
-                                let shown2 = 0
-
-                                function showMail(index) {
-                                    let commentDiv = document.getElementById(`mail${index}`);
-                                    let button = document.getElementById(`button${index}`);
-                                    let commentField = document.getElementById(`input${index}`);
-                                    if (shown1 === 0){
-                                        commentDiv.style.display = '';
-                                        button.innerHTML = 'Undo';
-                                        shown1 = 1;
-                                    } else {
-                                        commentDiv.style.display = 'none';
-                                        button.innerHTML = 'Next';
-                                        commentField.value = '';
-                                        shown1 = 0;
-                                    }
-                                }
-                                function showLastMail(index){
-                                    let commentDiv = document.getElementsByClassName(`mail${index}`);
-                                    let button = document.getElementById(`button${index}`);
-                                    let commentField = document.getElementById(`input${index}`);
-                                    if (shown2 === 0){
-                                        commentDiv[0].style.visibility = '';
-                                        commentDiv[1].style.visibility = '';
-                                        button.innerHTML = 'Undo';
-                                        shown2 = 1;
-                                    } else {
-                                        commentDiv[0].style.visibility = 'hidden';
-                                        commentDiv[1].style.visibility = 'hidden';
-                                        commentField.value = '';
-                                        button.innerHTML = 'Next';
-                                        shown2 = 0;
-                                    }
-                                }
-
-                            </script>
-
                             <div class="container" style="margin-bottom: 40px;">
                                 <canvas id="myChart" width="1500" height="1000"></canvas>
                             </div>
@@ -463,6 +423,7 @@
     @endif
 </x-app-layout>
 
+@if(Auth::user()->id == $binder->user_id)
 @if($binder->form_count == $formCount)
 
     <!-- Script for making the Chart.js -->
@@ -710,6 +671,46 @@
         @endforeach
     </script>
 
+    <script>
+        //feedback form hiding css
+        let shown1 = 0
+        let shown2 = 0
+
+        function showMail(index) {
+            let commentDiv = document.getElementById(`mail${index}`);
+            let button = document.getElementById(`button${index}`);
+            let commentField = document.getElementById(`input${index}`);
+            if (shown1 === 0){
+                commentDiv.style.display = '';
+                button.innerHTML = 'Undo';
+                shown1 = 1;
+            } else {
+                commentDiv.style.display = 'none';
+                button.innerHTML = 'Next';
+                commentField.value = '';
+                shown1 = 0;
+            }
+        }
+        function showLastMail(index){
+            let commentDiv = document.getElementsByClassName(`mail${index}`);
+            let button = document.getElementById(`button${index}`);
+            let commentField = document.getElementById(`input${index}`);
+            if (shown2 === 0){
+                commentDiv[0].style.visibility = '';
+                commentDiv[1].style.visibility = '';
+                button.innerHTML = 'Undo';
+                shown2 = 1;
+            } else {
+                commentDiv[0].style.visibility = 'hidden';
+                commentDiv[1].style.visibility = 'hidden';
+                commentField.value = '';
+                button.innerHTML = 'Next';
+                shown2 = 0;
+            }
+        }
+
+    </script>
+
     <!-- Script for making the PDF download -->
     <script>
         function getPDF() {
@@ -771,4 +772,4 @@
         }
     </style>
 @endif
-
+@endif
