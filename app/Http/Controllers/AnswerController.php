@@ -31,7 +31,15 @@ class AnswerController extends Controller
 
         $answerForms = AnswerForm::where('user_id', $id)->get();
 
-        $formBinders = collect([]);
+        $feedbackForms = [];
+//        foreach ($answerForms as $answerForm) {
+//            $feedbackForm = FeedbackForm::where('id', $answerForm->feedback_form_id)->first();
+//
+//        }
+
+
+
+        $binder = collect([]);
 
         //requests all forms filled in by a specific user
         foreach ($answerForms as $answerForm) {
@@ -40,11 +48,19 @@ class AnswerController extends Controller
             $formBinderId = $feedbackForm->form_binder_id;
             $currentBinder = FormBinder::where('id', $formBinderId)->first();
 
-            if ($formBinders->contains($currentBinder) === false) {
-                $formBinders->push($currentBinder);
+            if ($binder->contains($currentBinder) === false) {
+                array_push($feedbackForms, $feedbackForm->form_binder_id);
+                $binder->push($currentBinder);
             }
         }
-        $formBinders = $formBinders->sortDesc();
+       // dd($feedbackForms);
+//        $binder = $binder->sortDesc();
+
+
+        $formBinders = FormBinder::whereIn('id', $feedbackForms)
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
         return view('answer.index', ['formBinders' => $formBinders]);
     }
 
@@ -54,7 +70,7 @@ class AnswerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function formStart (Request $request, $public_id)
+    public function formStart(Request $request, $public_id)
     {
         $request->session()->forget('answerForms');
         $formBinder = FormBinder::where('public_id', $public_id)->first();
@@ -69,21 +85,17 @@ class AnswerController extends Controller
         //checks if a user has already answered this feedback form and redirects with an error
         if (Auth::check() && AnswerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
-            return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
-        }
-        else{
+            return redirect('/answer/' . $public_id)->with('error', 'You have already filled in this form');
+        } else {
             //if a user is logged in go to first form page
-            if (Auth::check()){
-                return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder'=>$formBinder, 'counter' => $counter,'index' => $index]);
-            }
-            //if user is a guest, go to page to get name and function
-            else{
+            if (Auth::check()) {
+                return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder' => $formBinder, 'counter' => $counter, 'index' => $index]);
+            } //if user is a guest, go to page to get name and function
+            else {
                 $roles = Role::all();
-                return view('answer.guestCreate',['formBinder' => $formBinder, 'roles' =>$roles]);
+                return view('answer.guestCreate', ['formBinder' => $formBinder, 'roles' => $roles]);
             }
         }
-
-
 
 
     }
@@ -118,20 +130,19 @@ class AnswerController extends Controller
         //checks if answerform exists
         $formTest = $answerForms[$index] ?? NULL;
         if ($formTest == NULL) {
-            return view('answer.create',compact('formBinder', 'feedbackForm', 'counter','index'));
+            return view('answer.create', compact('formBinder', 'feedbackForm', 'counter', 'index'));
         } //go to the edit form page
         else {
             $answerForm = $answerForms[$index];
-            return view('answer/edit',compact('feedbackForm','formBinder', 'answerForm','index', 'counter'));
+            return view('answer/edit', compact('feedbackForm', 'formBinder', 'answerForm', 'index', 'counter'));
         }
     }
-
 
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -142,11 +153,12 @@ class AnswerController extends Controller
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId) = $this->prevPageLogic($request);
 
         //if user is logged in, set user id in session and guest id null
-        if(Auth::check()){
+        if (Auth::check()) {
             $user_id = Auth::user()->id;
             $request->request->add(['user_id' => $user_id]);
             $guestId = NULL;
-        }else{}
+        } else {
+        }
 
         //create answerForm
         $form = AnswerForm::create([
@@ -164,7 +176,7 @@ class AnswerController extends Controller
         $comments = request('comment');
 
         //save each question individually
-        foreach ($questions as $question){
+        foreach ($questions as $question) {
             $answer = Answer::create([
                 'question_id' => $question->id,
                 'answer_form_id' => $form->id,
@@ -175,6 +187,7 @@ class AnswerController extends Controller
 
         return $this->redirectPage($request);
     }
+
     /**
      * Function which has all redirects, and based on some variables, redirects the user to the right next step
      *
@@ -198,17 +211,17 @@ class AnswerController extends Controller
                 $request->session()->forget('');
 
                 //checks where to redirect the guest/user
-                if(Auth::check()){
+                if (Auth::check()) {
                     return redirect('feedbackForm')->with('message', 'Your feedback has been submitted!');
-                }else{
+                } else {
                     return redirect('/')->with('message', 'Your feedback has been submitted!');
                 }
                 //goes to the next page in form
             } else {
                 $request->session()->decrement('counter');
-                if(Auth::check()) {
+                if (Auth::check()) {
                     return redirect('/answer/create');
-                }else{
+                } else {
                     return redirect('guestAnswer/create');
                 }
             }
@@ -230,7 +243,7 @@ class AnswerController extends Controller
         //dd($answerForms);
         $answerForm = $answerForms[$index];
 
-        return view('answer/edit',compact('feedbackForm','formBinder', 'answerForm','index', 'counter'));
+        return view('answer/edit', compact('feedbackForm', 'formBinder', 'answerForm', 'index', 'counter'));
     }
 
 
@@ -254,7 +267,7 @@ class AnswerController extends Controller
         $comments = request('comment');
 
         //updates all answers
-        foreach ($answerForm->answers as $answer){
+        foreach ($answerForm->answers as $answer) {
             $currentAnswer = array_shift($answers);
             $currentComment = array_shift($comments);
             $answer->update(['answer' => $currentAnswer, 'comment' => $currentComment]);
@@ -264,11 +277,10 @@ class AnswerController extends Controller
     }
 
 
-
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function show($public_id)
@@ -281,24 +293,24 @@ class AnswerController extends Controller
             ->paginate(1);
 
         $userIds = [];
-        foreach ($feedbackForms as $feedbackForm){
-           foreach ($feedbackForm->answerForms as $answerForm) {
-               array_push($userIds, $answerForm->user_id);
-           }
+        foreach ($feedbackForms as $feedbackForm) {
+            foreach ($feedbackForm->answerForms as $answerForm) {
+                array_push($userIds, $answerForm->user_id);
+            }
         }
         $validated = in_array(Auth::user()->id, $userIds);
 //        dd($feedbackForms);
-        return view('answer.show', compact('formCheck','binder', 'feedbackForms', 'validated'));
+        return view('answer.show', compact('formCheck', 'binder', 'feedbackForms', 'validated'));
     }
 
 
     /**
      * Sets the variables to be able to hook into the editForm function
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request,$publicId)
+    public function edit(Request $request, $publicId)
     {
         $formBinder = FormBinder::where('public_id', $publicId)->first();
         $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
@@ -317,8 +329,8 @@ class AnswerController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
@@ -329,7 +341,7 @@ class AnswerController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -338,34 +350,34 @@ class AnswerController extends Controller
     }
 
 
-
     /**
      * @param Request $request
      * @return array
      */
     public function prevPageLogic(Request $request): array
     {
-        $formBinder= $request->session()->get('formBinder');
+        $formBinder = $request->session()->get('formBinder');
         $index = $request->session()->get('formBinder')->form_count - $request->session()->get('counter');
         $counter = $request->session()->get('counter');
         $id = $request->session()->get('formBinder')->id;
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)->get();
         $feedbackForm = $feedbackForms->get($index);
         $guestId = $request->session()->get('guest_id');
-        $answerForms =$request->session()->get('answerForms');
+        $answerForms = $request->session()->get('answerForms');
 //        dd($answerForms);
 
         $request->session()->put('index', $index);
         $request->session()->put('feedbackForm', $feedbackForm);
-        return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder,$guestId, $answerForms);
+        return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms);
     }
+
     private function validateAnswers(Request $request)
     {
         return $request->validate([
             'comment' => 'required|array|max:6',
             'comment.*' => 'string|nullable|max:200',
             'answer' => 'required|array|min:6',
-            'answer.*' =>  'required|numeric'
+            'answer.*' => 'required|numeric'
         ]);
     }
 
