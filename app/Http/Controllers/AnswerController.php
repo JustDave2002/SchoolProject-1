@@ -26,21 +26,18 @@ class AnswerController extends Controller
      */
     public function index()
     {
-        // Get all the posts ordered by published date and paginated
+        // Get all the posts ordered by published date
         $id = Auth::user()->id;
 
         $answerForms = answerform::where('user_id', $id)->get();
 
         $formBinders = collect([]);
 
-
-        $num = 0;
-
+        //requests all forms filled in by a specific user
         foreach ($answerForms as $answerForm) {
             $feedbackForm = FeedbackForm::where('id', $answerForm->feedback_form_id)->first();
 
             $formBinderId = $feedbackForm->form_binder_id;
-
             $currentBinder = FormBinder::where('id', $formBinderId)->first();
 
             if ($formBinders->contains($currentBinder) === false) {
@@ -60,24 +57,26 @@ class AnswerController extends Controller
     public function formStart (Request $request, $public_id)
     {
         $request->session()->forget('answerForms');
-        //TODO refactor this into a first page, where the counter is set, and if statement decides if user goes to guest page or not
         $formBinder = formBinder::where('public_id', $public_id)->first();
-        //dd($public_id);
-        $id = $formBinder->id;
+
+        //sets item in session
         $request->session()->put('counter', $formBinder->form_count);
         $request->session()->put('formBinder', $formBinder);
 
+        //list of useful variables
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
 
-
+        //checks if a user has already answered this feedback form and redirects with an error
         if (Auth::check() && answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
             return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
         else{
+            //if a user is logged in go to first form page
             if (Auth::check()){
                 return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder'=>$formBinder, 'counter' => $counter,'index' => $index]);
             }
+            //if user is a guest, go to page to get name and function
             else{
                 $roles = Role::all();
                 return view('answer.guestCreate',['formBinder' => $formBinder, 'roles' =>$roles]);
@@ -93,12 +92,15 @@ class AnswerController extends Controller
     public function guestStore(Request $request)
     {
         $this->validateGuestName($request);
+
+        //creates the guest entry
         $guest = Guest::create([
             'name' => request('name'),
             'role_id' => request('role_id')
         ]);
-        $request->session()->put('guest_id', $guest->id);
 
+        //stores guest in session
+        $request->session()->put('guest_id', $guest->id);
 
         return redirect('guestAnswer/create');
     }
@@ -111,11 +113,8 @@ class AnswerController extends Controller
      */
     public function create(Request $request)
     {
-//TODO add a function that sends you to the guestAnswerPage, giving you, before you fill in a form, the guest info page
-//TODO split guest info form from feedback answer form
-        //TODO add the logic from feedbackFormController to this controller to allow multiple pages and previous page button
-
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms) = $this->prevPageLogic($request);
+
         //checks if answerform exists
         $formTest = $answerForms[$index] ?? NULL;
         if ($formTest == NULL) {
@@ -137,37 +136,34 @@ class AnswerController extends Controller
      */
     public function store(Request $request)
     {
-        //$this->validatePoints($request);
-
         //validate answers
         $this->validateAnswers($request);
 
-
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId) = $this->prevPageLogic($request);
 
+        //if user is logged in, set user id in session and guest id null
         if(Auth::check()){
             $user_id = Auth::user()->id;
             $request->request->add(['user_id' => $user_id]);
             $guestId = NULL;
-        }else{
+        }else{}
 
-        }
+        //create answerForm
         $form = answerForm::create([
             'user_id' => request('user_id'),
             'guest_id' => $guestId,
             'feedback_form_id' => $feedbackForm->id,
         ]);
 
+        //set answerForm in session
         $request->session()->push('answerForms', $form);
 
-
+        //get arrays of answers, questions and comments
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
-
         $answers = request('answer');
         $comments = request('comment');
-        //dd($answers);
-        //dd($questions, $request->all(), $form, $guestId);
-        //dd($form->id);
+
+        //save each question individually
         foreach ($questions as $question){
             $answer = Answer::create([
                 'question_id' => $question->id,
@@ -180,6 +176,8 @@ class AnswerController extends Controller
         return $this->redirectPage($request);
     }
     /**
+     * Function which has all redirects, and based on some variables, redirects the user to the right next step
+     *
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
      */
@@ -187,7 +185,6 @@ class AnswerController extends Controller
     {
         //if user requested previous page
         if (request('goBack') == 1) {
-            //TODO implement goBack function
             $request->session()->increment('counter');
             return redirect('/answer/edit');
         } else {
@@ -206,7 +203,7 @@ class AnswerController extends Controller
                 }else{
                     return redirect('/')->with('message', 'Your feedback has been submitted!');
                 }
-
+                //goes to the next page in form
             } else {
                 $request->session()->decrement('counter');
                 if(Auth::check()) {
@@ -233,7 +230,6 @@ class AnswerController extends Controller
         //dd($answerForms);
         $answerForm = $answerForms[$index];
 
-
         return view('answer/edit',compact('feedbackForm','formBinder', 'answerForm','index', 'counter'));
     }
 
@@ -250,13 +246,14 @@ class AnswerController extends Controller
 
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms) = $this->prevPageLogic($request);
 
+        //gets the current answerform
         $answerForm = $answerForms[$index];
 
+        //gets all answers and comments
         $answers = request('answer');
         $comments = request('comment');
-        //dd($answers);
-        //dd($questions, $request->all(), $form, $guestId);
-        //dd($form->id);
+
+        //updates all answers
         foreach ($answerForm->answers as $answer){
             $currentAnswer = array_shift($answers);
             $currentComment = array_shift($comments);
@@ -296,7 +293,7 @@ class AnswerController extends Controller
 
 
     /**
-     * Show the form for editing the specified resource.
+     * Sets the variables to be able to hook into the editForm function
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
