@@ -31,15 +31,8 @@ class AnswerController extends Controller
 
         $answerForms = AnswerForm::where('user_id', $id)->get();
 
-        $feedbackForms = [];
-//        foreach ($answerForms as $answerForm) {
-//            $feedbackForm = FeedbackForm::where('id', $answerForm->feedback_form_id)->first();
-//
-//        }
-
-
-
-        $binder = collect([]);
+        $formBinderIds = [];
+        $binderTest = collect([]);
 
         //requests all forms filled in by a specific user
         foreach ($answerForms as $answerForm) {
@@ -48,16 +41,17 @@ class AnswerController extends Controller
             $formBinderId = $feedbackForm->form_binder_id;
             $currentBinder = FormBinder::where('id', $formBinderId)->first();
 
-            if ($binder->contains($currentBinder) === false) {
-                array_push($feedbackForms, $feedbackForm->form_binder_id);
-                $binder->push($currentBinder);
+            //checks if binder already exists
+            if ($binderTest->contains($currentBinder) === false) {
+                $binderTest->push($currentBinder);
+                array_push($formBinderIds, $feedbackForm->form_binder_id);
             }
         }
-       // dd($feedbackForms);
-//        $binder = $binder->sortDesc();
+       // dd($formBinderIds);
+//        $binderTest = $binderTest->sortDesc();
 
 
-        $formBinders = FormBinder::whereIn('id', $feedbackForms)
+        $formBinders = FormBinder::whereIn('id', $formBinderIds)
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
