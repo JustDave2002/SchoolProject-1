@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 
-class answerForm extends Model
+class AnswerForm extends Model
 {
     protected $guarded =[];
     use HasFactory;

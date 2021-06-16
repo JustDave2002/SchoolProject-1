@@ -10,7 +10,7 @@ class Guest extends Model
     protected $guarded =[];
     use HasFactory;
     public function answerForm(){
-        return $this->hasOne(answerForm::class);
+        return $this->hasOne(AnswerForm::class);
     }
     public function role(){
         return $this->belongsTo(Role::class);

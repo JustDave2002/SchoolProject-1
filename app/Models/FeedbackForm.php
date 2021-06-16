@@ -19,6 +19,6 @@ class FeedbackForm extends Model
     }
 
     public function answerForms(){
-        return $this->hasMany(answerForm::class);
+        return $this->hasMany(AnswerForm::class);
     }
 }

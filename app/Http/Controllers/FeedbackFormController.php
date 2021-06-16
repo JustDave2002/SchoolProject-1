@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\answerForm;
+use App\Models\AnswerForm;
 use App\Models\formBinder;
 use App\Models\Question;
 use Database\Seeders\FormBinderSeeder;
@@ -237,7 +237,7 @@ class FeedbackFormController extends Controller
 //        dd($request->session());
         $formBinder = formBinder::where('public_id', $publicId)->first();
         $feedbackForm = FeedbackForm::where('form_binder_id', $formBinder->id)->first();
-        if (answerForm::where('feedback_form_id', $feedbackForm->id)->first() == NULL){
+        if (AnswerForm::where('feedback_form_id', $feedbackForm->id)->first() == NULL){
             $request->session()->put('formBinder', $formBinder);
             $request->session()->put('counter', $formBinder->form_count);
             return redirect('feedbackForm/createForm');

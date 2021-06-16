@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\FeedbackForm;
-use App\Models\answerForm;
+use App\Models\AnswerForm;
 use App\Models\Answer;
 use App\Models\formBinder;
 use App\Models\Question;
@@ -29,7 +29,7 @@ class AnswerController extends Controller
         // Get all the posts ordered by published date and paginated
         $id = Auth::user()->id;
 
-        $answerForms = answerform::where('user_id', $id)->get();
+        $answerForms = AnswerForm::where('user_id', $id)->get();
 
         $formBinders = collect([]);
 
@@ -70,14 +70,17 @@ class AnswerController extends Controller
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
 
 
-        if (Auth::check() && answerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
+        //if youve already given feedback in the feedback form, return with error message.
+        if (Auth::check() && AnswerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->exists()) {
 
             return redirect('/answer/'.$public_id)->with('error', 'You have already filled in this form');
         }
         else{
+            //if user is logged in return the answer create view
             if (Auth::check()){
                 return view('answer.create', ['feedbackForm' => $feedbackForm, 'formBinder'=>$formBinder, 'counter' => $counter,'index' => $index]);
             }
+            // if user is a guest then return the guest create view
             else{
                 $roles = Role::all();
                 return view('answer.guestCreate',['formBinder' => $formBinder, 'roles' =>$roles]);
@@ -149,17 +152,16 @@ class AnswerController extends Controller
             $user_id = Auth::user()->id;
             $request->request->add(['user_id' => $user_id]);
             $guestId = NULL;
-        }else{
+        } else {
 
         }
-        $form = answerForm::create([
+        $form = AnswerForm::create([
             'user_id' => request('user_id'),
             'guest_id' => $guestId,
             'feedback_form_id' => $feedbackForm->id,
         ]);
 
         $request->session()->push('answerForms', $form);
-
 
         $questions = Question::where('feedback_form_id', $feedbackForm->id)->get('id');
 
@@ -168,6 +170,7 @@ class AnswerController extends Controller
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
+        //saves questions individually
         foreach ($questions as $question){
             $answer = Answer::create([
                 'question_id' => $question->id,
@@ -179,6 +182,8 @@ class AnswerController extends Controller
 
         return $this->redirectPage($request);
     }
+
+
     /**
      * @param Request $request
      * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
@@ -257,6 +262,7 @@ class AnswerController extends Controller
         //dd($answers);
         //dd($questions, $request->all(), $form, $guestId);
         //dd($form->id);
+        //questions updated individually
         foreach ($answerForm->answers as $answer){
             $currentAnswer = array_shift($answers);
             $currentComment = array_shift($comments);
@@ -307,7 +313,7 @@ class AnswerController extends Controller
         $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
         $answerForms = collect([]);
         foreach ($feedbackForms as $feedbackForm) {
-            $answerForm = answerForm::where('feedback_form_id', $feedbackForm->id)->first();
+            $answerForm = AnswerForm::where('feedback_form_id', $feedbackForm->id)->first();
             $answerForms->push($answerForm);
         }
 
