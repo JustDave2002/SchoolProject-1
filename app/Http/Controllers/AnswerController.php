@@ -304,7 +304,7 @@ class AnswerController extends Controller
         $feedbackForms = FeedbackForm::where('form_binder_id', $formBinder->id)->get();
         $answerForms = collect([]);
         foreach ($feedbackForms as $feedbackForm) {
-            $answerForm = AnswerForm::where('feedback_form_id', $feedbackForm->id)->first();
+            $answerForm = AnswerForm::where('feedback_form_id', $feedbackForm->id)->where('user_id', Auth::user()->id)->first();
             $answerForms->push($answerForm);
         }
 
