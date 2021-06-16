@@ -72,17 +72,16 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-//        dd($user);
-//        dd($request->all());
         $this->validateUser($request);
-        if ($request->role_id==1){
-            $role_verified=TRUE;
-        } else {
-            $role_verified=FALSE;
+        if (Auth::user()->role_id != $request->role_id){
+            if ($request->role_id==1){
+                $role_verified=TRUE;
+            } else {
+                $role_verified=FALSE;
+            }
+            $request->request->add(['role_verified' => $role_verified]);
         }
 
-//        dd($role_verified);
-        $request->request->add(['role_verified' => $role_verified]);
         $user->update($request->all());
         return redirect('/user');
     }
@@ -102,7 +101,7 @@ class UserController extends Controller
         return $request->validate([
             'role_id' => 'required|numeric',
             'admin' => 'prohibited',
-            'name' => 'prohibited',
+            'name' => 'required|max:50|string',
             'email' => 'prohibited',
             'password' => 'prohibited',
         ]);
@@ -131,6 +130,20 @@ class UserController extends Controller
         $user->update(['role_id'=>1, 'role_verified'=>TRUE]);
         return redirect(url()->previous());
 
+    }
+
+    public function setAdmin($id)
+    {
+        $user=User::where('id',$id)->first();
+        $user->update(['admin'=>1]);
+        return redirect(url()->previous());
+    }
+
+    public function revokeAdmin($id)
+    {
+        $user=User::where('id',$id)->first();
+        $user->update(['admin'=>0]);
+        return redirect(url()->previous());
     }
 }
 

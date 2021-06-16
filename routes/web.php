@@ -56,6 +56,8 @@ Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middlew
 
 Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
 Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
+Route::get('/adminPage/admin/{id}', [UserController::class,'setAdmin'])->name('adminPage.admin');
+Route::get('/adminPage/revokeAdmin/{id}', [UserController::class,'revokeAdmin'])->name('adminPage.revokeAdmin');
 
 require __DIR__.'/auth.php';
 

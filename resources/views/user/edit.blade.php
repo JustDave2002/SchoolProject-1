@@ -13,27 +13,30 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <form method="POST" action="/user/{{ $user->id }}" class="was-validated">
-                    @csrf
-                    @method('PUT')
-                    {{--                        <div class="form-group">--}}
-                    {{--                            <label for="title">Title</label><br>--}}
-                    {{--                            <input type="text" id="title" class="form-control" placeholder="Enter Title" name="title" value="Feedback for Tom" required>--}}
-                    {{--                            <div class="valid-feedback"><br></div>--}}
-                    {{--                            <div class="invalid-feedback">Please fill out this field.</div>--}}
-                    {{--                        </div>--}}
+                        @csrf
+                        @method('PUT')
+                        <div class="form-group">
+                            <label for="name">Name</label><br>
+                            <input type="text" id="name" class="form-control" placeholder="Enter your name" name="name"
+                                   value="{{Auth::user()->name}}" required maxlength="50">
+                            <div class="valid-feedback"><br></div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
 
-                    <!-- Function -->
+                        <!-- Function -->
                         <div class="form-group">
                             <label for="title">Function</label><br>
-                            <a id="error-message" style="color: red; display: @if(Auth::user()->role_id == 1)none @else block @endif">Functions other than Student must be
+                            <a id="error-message"
+                               style="color: red; display: @if(Auth::user()->role_id == 1)none @else block @endif">Functions
+                                other than Student must be
                                 verified.</a>
                             <select id="role_id" class="block mt-1 w-full" style="margin-bottom: 30px" name="role_id"
                                     required onchange="test(this);"/>
                             @foreach($roles as $role)
                                 @if($role->id == Auth::user()->role_id)
-                                    <option value="{{$role->id}}"selected="selected" disabled>{{$role->name}}</option>
+                                    <option value="{{$role->id}}" selected="selected">{{$role->name}}</option>
                                 @else
-                                <option value="{{$role->id}}">{{$role->name}}</option>
+                                    <option value="{{$role->id}}">{{$role->name}}</option>
                                 @endif
                             @endforeach
                             <div style='margin-top: 10%'></div>
@@ -55,20 +58,20 @@
 
 
     window.test = function (e) {
-     const error = document.getElementById('error-message')
+        const error = document.getElementById('error-message')
 
-    @foreach($roles as $role)
-        @if($loop->first)
-            if (e.value === '{{$role->id}}') {
-                console.log(e.value);
-                error.style.display = 'none';
-            }
-        @else
-            else if (e.value === '{{$role->id}}') {
-                console.log(e.value);
-                error.style.display = 'block';
-            }
+        @foreach($roles as $role)
+            @if($loop->first)
+        if (e.value === '{{$role->id}}') {
+            console.log(e.value);
+            error.style.display = 'none';
+        }
+            @else
+        else if (e.value === '{{$role->id}}') {
+            console.log(e.value);
+            error.style.display = 'block';
+        }
         @endif
-    @endforeach
+        @endforeach
     }
 </script>

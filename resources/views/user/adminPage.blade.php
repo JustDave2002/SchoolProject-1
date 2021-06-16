@@ -12,6 +12,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            @if(Auth::user()->admin == 1)
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
                     <h4>Incoming Role Requests</h4>
@@ -82,6 +83,7 @@
                                 <th scope="col" class="sort" data-sort="role"> Role</th>
                                 <th scope="col" class="sort" data-sort="admin">Admin</th>
                                 <th scope="col" class="sort" data-sort="verified_mail">Email Verified</th>
+                                <th scope="col"></th>
                             </tr>
                             </thead>
                             <tbody class="list tbody">
@@ -110,6 +112,21 @@
                                             verified
                                         @endif
                                     </td>
+                                    <td>
+                                        @if($user->admin == 0)
+                                        <form method="get"
+                                              action="{{route('adminPage.admin', ['id' => $user->id])}}">
+                                            <button class="btn btn-primary">Give Admin
+                                            </button>
+                                        </form>
+                                        @else
+                                            <form method="get"
+                                                  action="{{route('adminPage.revokeAdmin', ['id' => $user->id])}}">
+                                                <button class="btn pull-right" style="border-color: #3b82f6;">Revoke Admin
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </td>
                                 </tr>
                             @endforeach
                             </tbody>
@@ -117,6 +134,9 @@
                     </div>
                 </div>
             </div>
+            @else
+                You are not authorized to view this page.
+            @endif
         </div>
     </div>
 
