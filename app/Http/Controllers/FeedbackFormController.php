@@ -272,7 +272,7 @@ class FeedbackFormController extends Controller
     {
         $formBinder = FormBinder::where('public_id', $publicId)->first();
         if (FeedbackForm::where('form_binder_id', $formBinder->id)->get()->count()) {
-        } else {
+        } elseif (FeedbackForm::where('form_binder_id', $formBinder->id)->get()->count()) {
             $feedbackForms = FeedbackForm::select('form_binder_id', $formBinder->id)->get();
             foreach ($feedbackForms as $feedbackForm) {
                 $feedbackForm->delete();
