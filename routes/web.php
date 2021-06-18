@@ -54,10 +54,10 @@ Route::get('/admin', [UserController::class, 'showAdmin'])->middleware(['auth', 
 
 Route::get('/sendmail/test/', [FeedbackToolController::class, 'store'])->middleware(['auth', 'verified']);
 
-Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified');
-Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined');
-Route::get('/adminPage/admin/{id}', [UserController::class,'setAdmin'])->name('adminPage.admin');
-Route::get('/adminPage/revokeAdmin/{id}', [UserController::class,'revokeAdmin'])->name('adminPage.revokeAdmin');
+Route::get('/adminPage/verified/{id}', [UserController::class,'verifyAdmin'])->name('adminPage.verified')->middleware(['auth', 'verified']);
+Route::get('/adminPage/declined/{id}', [UserController::class,'declineAdmin'])->name('adminPage.declined')->middleware(['auth', 'verified']);
+Route::get('/adminPage/admin/{id}', [UserController::class,'setAdmin'])->name('adminPage.admin')->middleware(['auth', 'verified']);
+Route::get('/adminPage/revokeAdmin/{id}', [UserController::class,'revokeAdmin'])->name('adminPage.revokeAdmin')->middleware(['auth', 'verified']);
 
 require __DIR__.'/auth.php';
 
