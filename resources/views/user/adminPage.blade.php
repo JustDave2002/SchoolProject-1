@@ -82,7 +82,7 @@
                                 <th scope="col" class="sort" data-sort="email">Email</th>
                                 <th scope="col" class="sort" data-sort="role"> Role</th>
                                 <th scope="col" class="sort" data-sort="admin">Admin</th>
-                                <th scope="col" class="sort" data-sort="verified_mail">Email Verified</th>
+                                <th scope="col" class="sort" data-sort="email_verified">Email Verified</th>
                                 <th scope="col"></th>
                             </tr>
                             </thead>
