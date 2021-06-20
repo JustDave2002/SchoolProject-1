@@ -66,12 +66,14 @@ class AnswerController extends Controller
      */
     public function formStart(Request $request, $public_id)
     {
+        //TODO tighten down the forgetting of session variables
+        //TODO change the name of the session variables to be different from feedbackform controller
         $request->session()->forget('answerForms');
         $formBinder = FormBinder::where('public_id', $public_id)->first();
 
         //sets item in session
-        $request->session()->put('counter', $formBinder->form_count);
-        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('answerCounter', $formBinder->form_count);
+        $request->session()->put('answerFormBinder', $formBinder);
 
         //list of useful variables
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder) = $this->prevPageLogic($request);
@@ -145,7 +147,7 @@ class AnswerController extends Controller
         $this->validateAnswers($request);
 
         list($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId) = $this->prevPageLogic($request);
-
+        
         //if user is logged in, set user id in session and guest id null
         if (Auth::check()) {
             $user_id = Auth::user()->id;
@@ -192,16 +194,16 @@ class AnswerController extends Controller
     {
         //if user requested previous page
         if (request('goBack') == 1) {
-            $request->session()->increment('counter');
+            $request->session()->increment('answerCounter');
             return redirect('/answer/edit');
         } else {
             //if its the last page
-            $count = $request->session()->get('counter');
+            $count = $request->session()->get('answerCounter');
             if ($count == 1) {
                 //forgets variables
                 //TODO forget all variables
-                $request->session()->forget('counter');
-                $request->session()->forget('formBinder');
+                $request->session()->forget('answerCounter');
+                $request->session()->forget('answerFormBinder');
                 $request->session()->forget('');
 
                 //checks where to redirect the guest/user
@@ -212,7 +214,7 @@ class AnswerController extends Controller
                 }
                 //goes to the next page in form
             } else {
-                $request->session()->decrement('counter');
+                $request->session()->decrement('answerCounter');
                 if (Auth::check()) {
                     return redirect('/answer/create');
                 } else {
@@ -314,9 +316,9 @@ class AnswerController extends Controller
             $answerForms->push($answerForm);
         }
 
-        $request->session()->put('formBinder', $formBinder);
+        $request->session()->put('answerFormBinder', $formBinder);
         $request->session()->put('answerForms', $answerForms);
-        $request->session()->put('counter', $formBinder->form_count);
+        $request->session()->put('answerCounter', $formBinder->form_count);
         return redirect('answer/create');
     }
 
@@ -350,18 +352,16 @@ class AnswerController extends Controller
      */
     public function prevPageLogic(Request $request): array
     {
-        $formBinder = $request->session()->get('formBinder');
-        $index = $request->session()->get('formBinder')->form_count - $request->session()->get('counter');
-        $counter = $request->session()->get('counter');
-        $id = $request->session()->get('formBinder')->id;
+        $formBinder = $request->session()->get('answerFormBinder');
+        $index = $request->session()->get('answerFormBinder')->form_count - $request->session()->get('answerCounter');
+        $counter = $request->session()->get('answerCounter');
+        $id = $request->session()->get('answerFormBinder')->id;
         $feedbackForms = FeedbackForm::where('form_binder_id', $id)->get();
         $feedbackForm = $feedbackForms->get($index);
         $guestId = $request->session()->get('guest_id');
         $answerForms = $request->session()->get('answerForms');
 //        dd($answerForms);
 
-        $request->session()->put('index', $index);
-        $request->session()->put('feedbackForm', $feedbackForm);
         return array($index, $feedbackForms, $feedbackForm, $counter, $formBinder, $guestId, $answerForms);
     }
 

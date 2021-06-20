@@ -50,6 +50,7 @@ class FeedbackFormController extends Controller
      */
     public function store(Request $request)
     {
+//        abort(500);
         //request logged in user for later use
         $user_id = Auth::user()->id;
         $request->request->add(['user_id' => $user_id]);
