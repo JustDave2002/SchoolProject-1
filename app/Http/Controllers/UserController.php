@@ -94,7 +94,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+        return redirect(url()->previous())->with('message', 'The user account has been deleted');
     }
 
     public function validateUser(Request $request){

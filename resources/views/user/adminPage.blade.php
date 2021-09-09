@@ -83,7 +83,8 @@
                                 <th scope="col" class="sort" data-sort="role"> Role</th>
                                 <th scope="col" class="sort" data-sort="admin">Admin</th>
                                 <th scope="col" class="sort" data-sort="email_verified">Email Verified</th>
-                                <th scope="col"></th>
+                                <th scope="col">Admin access</th>
+                                <th scope="col">Delete user</th>
                             </tr>
                             </thead>
                             <tbody class="list tbody">
@@ -115,17 +116,29 @@
                                     <td>
                                         @if($user->admin == 0)
                                         <form method="get"
-                                              action="{{route('adminPage.admin', ['id' => $user->id])}}">
-                                            <button class="btn btn-primary">Give Admin
+                                              action="{{route('adminPage.admin', ['id' => $user->id])}}"
+                                              onsubmit="return confirmBox('makeAdmin','{{$user->name}}' )">
+                                            <button class="btn btn-primary" >Give Admin
                                             </button>
                                         </form>
                                         @else
                                             <form method="get"
-                                                  action="{{route('adminPage.revokeAdmin', ['id' => $user->id])}}">
+                                                  action="{{route('adminPage.revokeAdmin', ['id' => $user->id])}}"
+                                                  onsubmit="return confirmBox('revokeAdmin','{{$user->name}}' )">
                                                 <button class="btn pull-right" style="border-color: #3b82f6;">Revoke Admin
                                                 </button>
                                             </form>
                                         @endif
+                                    </td>
+                                    <td>
+                                        <form method="post"
+                                              action="/user/{{ $user->id }}"
+                                              onsubmit="return confirmBox('deleteUser','{{$user->name}}' )">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger">Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @endforeach
@@ -150,6 +163,17 @@
 
     let userLists = new List('users', options);
     let userList = new List('user', options);
+
+    function confirmBox (value, name) {
+        if (value === "makeAdmin") {
+            return confirm(`Are you sure you want to give admin functionality to the account of ${name}?`);
+        } else if(value === "revokeAdmin") {
+            return confirm(`Are you sure you want to remove admin functionality from the account of ${name}?`);
+
+        } else if(value === "deleteUser"){
+            return confirm(`Are you sure you want to delete the account of ${name}? `);
+        }
+    }
 </script>
 <style>
     .table td:nth-child(n+2) {
