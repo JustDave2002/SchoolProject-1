@@ -1,3 +1,3 @@
 <a href="/">
-    <img src="https://i.imgur.com/mXPaedC.png" width="60px" >
+    <img src="https://i.imgur.com/SEh3yyp.png" width="60px" >
 </a>

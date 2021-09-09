@@ -6,7 +6,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
         <title>360º FeedbackTool</title>
-        <link rel="icon" href="https://i.imgur.com/mXPaedC.png" type="image/x-icon">
+        <link rel="icon" href="https://i.imgur.com/SEh3yyp.png" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap">
