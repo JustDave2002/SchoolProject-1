@@ -34,5 +34,9 @@ We would like to thank our teachers, and our quality control testers for helping
 
 
 ## License
-
+/* Copyright (C) Jan Marius Elshout daveelshout@hotmail.com, Rohán Phaff 2505rohan@gmail.com - All Rights Reserved
+* Unauthorized copying of this file, via any medium is strictly prohibited
+* Proprietary and confidential
+* Written by Jan Marius Elshout daveelshout@hotmail.com, Rohán Phaff 2505rohan@gmail.com, 2021
+  */
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
